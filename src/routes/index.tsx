@@ -37,7 +37,7 @@ import certificateAsset from "@/assets/1m-ai-superstars-certificate.png";
 // import claudeLogo from "@/assets/tools/claude-new.png.asset.json";
 // import canvaLogo from "@/assets/tools/canva.jpg.asset.json";
 // import notebooklmLogo from "@/assets/tools/notebooklm-new.png.asset.json";
-// import lovableLogo from "@/assets/tools/lovable.jpg.asset.json";
+
 // import flowLogo from "@/assets/tools/flow.png.asset.json";
 // import heygenLogo from "@/assets/tools/heygen.png.asset.json";
 // import aiStudioLogo from "@/assets/tools/ai-studio-new.png.asset.json";
