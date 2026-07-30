@@ -125,7 +125,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body className="relative w-full overflow-x-hidden font-sans antialiased text-foreground bg-background">
         {children}
         <Scripts />
       </body>
@@ -158,11 +158,11 @@ function RootComponent() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        className="fixed z-50 grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
+        className="fixed z-[60] grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
         style={{
           backgroundColor: "#25D366",
-          right: "16px",
-          bottom: "calc(16px + env(safe-area-inset-bottom))",
+          right: "24px",
+          bottom: "calc(24px + env(safe-area-inset-bottom))",
         }}
       >
         <svg viewBox="0 0 32 32" className="h-7 w-7 md:h-8 md:w-8" fill="currentColor" aria-hidden>

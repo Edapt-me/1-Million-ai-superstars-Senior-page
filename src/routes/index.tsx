@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -29,6 +29,7 @@ import {
   PlayCircle,
   Info,
   Headset,
+  ArrowRight,
 } from "lucide-react";
 import certificateAsset from "@/assets/1m-ai-superstars-certificate.png";
 // Replaced by CMS
@@ -84,9 +85,9 @@ function LandingPage() {
 
       <main>
         <Hero />
+        <AboutSection />
         <InitiativeBySection />
         <CertificateSection />
-        <AboutSection />
         <CurriculumSection />
         <CurriculumUpdateNotice />
         <ToolsSection />
@@ -135,17 +136,17 @@ function Hero() {
   ];
 
   return (
-    <section id="hero" className="hero-bg relative overflow-hidden pt-52 sm:pt-56 md:pt-64">
-      <div className="pointer-events-none absolute inset-0 -z-10">
+    <section id="hero" className="hero-bg relative overflow-hidden pt-20 sm:pt-28 md:pt-36">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <motion.div
           animate={{ y: [0, 30, 0], x: [0, 20, 0] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -left-20 top-20 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(31,10,119,0.22),transparent_70%)] blur-3xl"
+          className="absolute -left-20 top-20 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(31,10,119,0.22),transparent_70%)] blur-2xl will-change-transform md:blur-3xl"
         />
         <motion.div
           animate={{ y: [0, -40, 0], x: [0, -20, 0] }}
           transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute right-0 top-40 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(75,45,214,0.22),transparent_70%)] blur-3xl"
+          className="absolute right-0 top-40 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(75,45,214,0.22),transparent_70%)] blur-2xl will-change-transform md:blur-3xl"
         />
       </div>
 
@@ -191,17 +192,6 @@ function Hero() {
               }}
             />
 
-            {settings?.hero_trust_counter && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2 }}
-                className="mt-4 font-semibold text-primary/90 text-lg md:text-xl"
-              >
-                {settings.hero_trust_counter}
-              </motion.div>
-            )}
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -223,23 +213,30 @@ function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35 }}
-              className="mt-10 flex flex-col items-stretch justify-start gap-3 sm:flex-row sm:items-center md:mt-12 md:justify-center md:gap-4"
+              className="mt-10 flex flex-col flex-wrap items-stretch justify-start gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-12 md:gap-4"
             >
               <a
                 href={regUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary inline-flex h-14 items-center justify-center rounded-full px-8 text-[17px] font-semibold sm:min-w-60"
+                className="btn-primary inline-flex h-14 items-center justify-center rounded-full px-6 text-[16px] font-semibold sm:min-w-[200px] sm:px-8 sm:text-[17px]"
               >
                 {settings?.hero_primary_button_text || "Register Now"}
               </a>
               <a
                 href="#curriculum"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-8 text-[17px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-60"
+                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[200px] sm:px-8 sm:text-[17px]"
               >
                 <PlayCircle className="h-5 w-5" />
                 {settings?.hero_secondary_button_text || "View Curriculum"}
               </a>
+              <Link
+                to="/projects"
+                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[200px] sm:px-8 sm:text-[17px]"
+              >
+                <Briefcase className="h-5 w-5" />
+                Student Projects
+              </Link>
             </motion.div>
 
             <motion.div
@@ -255,6 +252,10 @@ function Hero() {
               <div className="flex items-center gap-1.5">
                 <PlayCircle className="h-4 w-4 text-primary" />
                 <span>1-Year Recording Access</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Users className="h-4 w-4 text-primary" />
+                <span>{settings?.hero_trust_counter || "5000+ Students"}</span>
               </div>
             </motion.div>
           </div>
@@ -303,6 +304,24 @@ function InitiativeBySection() {
             </div>
           </div>
         </FadeIn>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
+          className="mt-8 flex justify-center md:mt-9"
+        >
+          <Link
+            to="/about"
+            className="group inline-flex items-center justify-center gap-1.5 rounded-full border border-[rgba(31,10,119,0.08)] bg-[#EEF2FF] px-4 py-2 text-[13px] font-medium text-[#1F0A77] transition-all duration-[250ms] hover:scale-[1.02] hover:bg-[#E6EBFF]"
+            aria-label="Learn more about the organizations behind this initiative"
+          >
+            <Sparkles className="h-3.5 w-3.5 shrink-0" />
+            <span>About the Initiative</span>
+            <ArrowRight className="h-3.5 w-3.5 shrink-0 transition-transform duration-[250ms] group-hover:translate-x-1" />
+          </Link>
+        </motion.div>
       </div>
     </section>
   );
@@ -711,14 +730,14 @@ function WhyJoinSection() {
 
 /* ---------- Who Can Join ---------- */
 const AUDIENCES = [
-  { icon: BookOpen, label: "Teachers" },
+  { icon: Sparkles, label: "AI Enthusiasts" },
   { icon: Briefcase, label: "Business Owners" },
   { icon: Users, label: "Professionals" },
-  { icon: PenTool, label: "Freelancers" },
-  { icon: Search, label: "Job Seekers" },
   { icon: Home, label: "Housewives" },
+  { icon: Search, label: "Job Seekers" },
   { icon: Video, label: "Content Creators" },
-  { icon: Sparkles, label: "AI Enthusiasts" },
+  { icon: BookOpen, label: "Teachers" },
+  { icon: PenTool, label: "Freelancers" },
 ];
 
 function WhoCanJoinSection() {
@@ -837,7 +856,7 @@ function ContactSection() {
             <div className="grid grid-cols-1 md:grid-cols-[40%_60%] lg:grid-cols-[35%_65%]">
               
               {/* Left Side: Illustration */}
-              <div className="relative flex flex-col items-center justify-center border-b border-[#ECEEF5] bg-slate-50/50 p-10 md:border-b-0 md:border-r">
+              <div className="relative flex flex-col items-center justify-center border-b border-[#ECEEF5] bg-slate-50/50 py-8 px-6 md:border-b-0 md:border-r md:p-10">
                 {/* Dotted background pattern */}
                 <div
                   className="absolute inset-0 opacity-[0.03]"
@@ -851,84 +870,95 @@ function ContactSection() {
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  className="relative flex h-40 w-40 items-center justify-center rounded-full bg-white shadow-xl shadow-primary/10"
+                  className="relative flex h-32 w-32 items-center justify-center rounded-full bg-white shadow-xl shadow-primary/10 md:h-40 md:w-40"
                 >
                   <div className="absolute inset-0 rounded-full border border-primary/10" />
                   <div className="absolute -inset-4 rounded-full border border-primary/5" />
-                  <Headset className="h-16 w-16 text-primary" strokeWidth={1.5} />
+                  <Headset className="h-12 w-12 text-primary md:h-16 md:w-16" strokeWidth={1.5} />
                   
                   {/* Decorative blobs */}
-                  <div className="absolute -right-2 -top-2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-emerald-500 shadow-md">
-                    <Check className="h-5 w-5" />
+                  <div className="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-emerald-500 shadow-md md:h-10 md:w-10">
+                    <Check className="h-4 w-4 md:h-5 md:w-5" />
                   </div>
-                  <div className="absolute -bottom-2 -left-2 flex h-10 w-10 items-center justify-center rounded-full bg-white text-blue-500 shadow-md">
-                    <MessageCircle className="h-5 w-5" />
+                  <div className="absolute -bottom-2 -left-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-blue-500 shadow-md md:h-10 md:w-10">
+                    <MessageCircle className="h-4 w-4 md:h-5 md:w-5" />
                   </div>
                 </motion.div>
               </div>
 
               {/* Right Side: Content */}
-              <div className="flex flex-col p-8 md:p-12 lg:p-14">
+              <div className="flex flex-col p-5 sm:p-8 md:p-12 lg:p-14">
                 {/* Badge */}
-                <div className="mb-6 flex">
+                <div className="mb-5 flex">
                   <div className="inline-flex cursor-default items-center gap-2 rounded-full bg-primary/10 px-4 py-1.5 text-[13px] font-semibold tracking-wide text-primary transition-transform hover:scale-105">
                     <span>📞</span> Admission Enquiry
                   </div>
                 </div>
 
-                <h2 className="text-balance text-3xl font-bold leading-tight tracking-tight text-foreground md:text-[34px]" lang="ml">
-                  ഈ പ്രോഗ്രാം നിങ്ങൾക്ക് എങ്ങനെ ഉപകാരപ്പെടും?{" "}
-                  <span className="gradient-text whitespace-nowrap">കൂടുതൽ അറിയണോ?</span>
+                <h2 className="w-full text-[26px] font-bold leading-[1.2] text-foreground sm:text-[30px] md:text-[36px]" lang="ml">
+                  ഈ പ്രോഗ്രാം നിങ്ങൾക്ക് എങ്ങനെ ഉപകാരപ്പെടും?
+                  <span className="mt-1 block whitespace-nowrap text-[24px] sm:text-[28px] md:text-[32px] gradient-text">കൂടുതൽ അറിയണോ?</span>
                 </h2>
                 
-                <p className="mt-4 text-[17px] leading-relaxed text-muted-foreground" lang="ml">
+                <p className="mt-[18px] text-[16px] leading-[1.6] text-muted-foreground/90" lang="ml">
                   ഞങ്ങളുടെ അഡ്മിഷൻ ടീമുമായി സംസാരിച്ച് നിങ്ങളുടെ എല്ലാ സംശയങ്ങൾക്കും മറുപടി നേടൂ.
                 </p>
 
                 {/* Contact Card */}
-                <div className="mt-8 rounded-2xl border border-border bg-slate-50/50 p-6 transition-all hover:border-primary/40 hover:bg-white hover:shadow-lg hover:shadow-primary/5">
-                  <span className="mb-2 block text-[13px] font-medium tracking-wide text-muted-foreground uppercase">
-                    Call us directly
-                  </span>
-                  <a
-                    href={phoneHref}
-                    className="inline-block text-3xl font-bold tracking-tight text-foreground transition-colors hover:text-primary sm:text-4xl"
-                    style={{ userSelect: "all" }}
-                  >
-                    {phone}
-                  </a>
+                <div className="mt-6 flex items-center gap-4 rounded-[18px] border border-border bg-white p-4 shadow-[var(--shadow-soft)] transition-all hover:border-primary/40 hover:shadow-[var(--shadow-glow)] sm:gap-5 sm:p-5">
+                  <div className="flex h-[56px] w-[56px] shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-md">
+                    <Phone className="h-6 w-6" strokeWidth={2} />
+                  </div>
+                  <div className="flex flex-col justify-center">
+                    <span className="mb-1 block text-[11px] font-semibold tracking-wider text-muted-foreground uppercase sm:text-[12px]">
+                      Call us directly
+                    </span>
+                    <a
+                      href={phoneHref}
+                      className="inline-block text-[24px] font-bold tracking-tight text-foreground transition-colors hover:text-primary sm:text-[26px]"
+                      style={{ userSelect: "all" }}
+                    >
+                      {phone}
+                    </a>
+                  </div>
                 </div>
 
                 {/* CTA Buttons */}
-                <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+                <div className="mt-5 flex flex-col gap-3">
                   <a
                     href={whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex h-[58px] flex-1 items-center justify-center gap-2.5 rounded-2xl bg-[#25D366] px-6 text-[16px] font-semibold text-white shadow-lg shadow-[#25D366]/20 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-[#25D366]/30"
+                    className="group flex h-[54px] w-full items-center justify-between rounded-[16px] bg-[#25D366] px-6 text-[16px] font-semibold text-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-md sm:h-[56px]"
                   >
-                    <MessageCircle className="h-5 w-5 transition-transform group-hover:scale-110" />
-                    WhatsApp Us
+                    <span className="flex items-center gap-2.5">
+                      <MessageCircle className="h-[20px] w-[20px]" />
+                      WhatsApp Us
+                    </span>
+                    <ArrowRight className="h-[20px] w-[20px] transition-transform group-hover:translate-x-1" />
                   </a>
                   <a
                     href={phoneHref}
-                    className="group flex h-[58px] flex-1 items-center justify-center gap-2.5 rounded-2xl bg-primary px-6 text-[16px] font-semibold text-white shadow-lg shadow-primary/20 transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-primary/30"
+                    className="group flex h-[54px] w-full items-center justify-between rounded-[16px] bg-primary px-6 text-[16px] font-semibold text-white shadow-sm transition-all hover:-translate-y-1 hover:shadow-md sm:h-[56px]"
                   >
-                    <Phone className="h-5 w-5 transition-transform group-hover:scale-110 group-hover:rotate-12" />
-                    Call Now
+                    <span className="flex items-center gap-2.5">
+                      <Phone className="h-[20px] w-[20px]" />
+                      Call Now
+                    </span>
+                    <ArrowRight className="h-[20px] w-[20px] transition-transform group-hover:translate-x-1" />
                   </a>
                 </div>
 
                 {/* Trust Strip */}
-                <div className="mt-10 flex flex-wrap items-center gap-4 border-t border-border pt-6 text-[14px] font-medium text-muted-foreground sm:gap-6">
+                <div className="mt-6 flex h-[60px] items-center justify-center gap-4 border-t border-border pt-4 text-[13px] font-medium text-muted-foreground sm:h-[64px] sm:gap-6 sm:text-[14px]">
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-primary/70" />
-                    Trusted by Thousands
+                    <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
+                    <span className="leading-snug">Trusted by<br className="sm:hidden" /> Thousands</span>
                   </div>
-                  <div className="hidden h-4 w-px bg-border sm:block" />
+                  <div className="h-8 w-px shrink-0 bg-border" />
                   <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-primary/70" />
-                    Expert Admission Guidance
+                    <Users className="h-5 w-5 shrink-0 text-primary" />
+                    <span className="leading-snug">Expert Admission<br className="sm:hidden" /> Guidance</span>
                   </div>
                 </div>
                 
