@@ -1,10 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { z } from "zod";
-
-import { Phone, MessageCircle, Mail, Instagram, Facebook, Send } from "lucide-react";
-import { PageHero } from "@/components/layout/PageShell";
-import { programConfig } from "@/lib/programConfig";
+import { Send, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -13,7 +11,7 @@ export const Route = createFileRoute("/contact")({
       {
         name: "description",
         content:
-          "Reach the 1 Million AI Superstars team via WhatsApp, phone or email. We're here to help you enroll.",
+          "Talk to the 1 Million AI Superstars team about admissions, corporate batches, and partnerships.",
       },
       { property: "og:title", content: "Contact | 1 Million AI Superstars" },
       {
@@ -50,10 +48,9 @@ type ContactForm = z.infer<typeof contactSchema>;
 type FieldErrors = Partial<Record<keyof ContactForm, string>>;
 
 function ContactPage() {
-  const [status, setStatus] = useState<"idle" | "sent">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [form, setForm] = useState<ContactForm>({ name: "", email: "", phone: "", message: "" });
-  const { contact, social } = programConfig;
 
   const update = (key: keyof ContactForm, value: string) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -61,7 +58,7 @@ function ContactPage() {
     setStatus("idle");
   };
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const parsed = contactSchema.safeParse(form);
     if (!parsed.success) {
@@ -74,124 +71,82 @@ function ContactPage() {
       setStatus("idle");
       return;
     }
-    // TODO: Wire to Lovable Cloud in Phase 3.
+    
     setErrors({});
-    setStatus("sent");
-    setForm({ name: "", email: "", phone: "", message: "" });
+    setStatus("sending");
+
+    try {
+      await fetch("https://script.google.com/macros/s/AKfycbzUpY8OJcLPXWUum-m8Fjg5Rs3NuGad0IxXmQZ7FPESjy9uuXIEa2zmVkhldKU1k4yH1g/exec", {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: form.name,
+          phone: form.phone,
+          email: form.email,
+          message: form.message
+        })
+      });
+
+      setStatus("sent");
+      setForm({ name: "", email: "", phone: "", message: "" });
+      toast.success("Message sent successfully! We'll get back to you soon.");
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setStatus("error");
+      toast.error("Something went wrong. Please try again.");
+    }
   };
 
   return (
     <>
-      <PageHero
-        eyebrow="Contact"
-        title="Let's talk"
-        subtitle="Questions about the program, admissions, or partnerships? We're just a message away."
-      />
+      <section className="relative overflow-hidden hero-bg pb-6 pt-[88px] sm:pt-[104px] md:pb-8 md:pt-[120px]">
+        <div className="mx-auto max-w-4xl px-5 text-left md:text-center sm:px-6 lg:px-8">
+          <h1 className="text-balance text-[28px] font-bold leading-[1.15] tracking-tight sm:text-4xl md:text-5xl lg:text-[56px]">
+            <span className="gradient-text">Let's talk</span>
+          </h1>
+          <p className="mt-3 md:mx-auto md:mt-4 max-w-2xl text-[15px] leading-[1.5] text-muted-foreground sm:text-[16px] md:text-[17px]">
+            Questions about the program, admissions, or partnerships? We're just a message away.
+          </p>
+        </div>
+      </section>
 
-      <section className="pb-24">
-        <div className="mx-auto grid max-w-6xl gap-10 px-4 sm:px-6 md:grid-cols-5 lg:px-8">
-          <div className="md:col-span-2">
-            <h2 className="text-2xl font-semibold">Reach us directly</h2>
-            <p className="mt-2 text-[15px] text-muted-foreground">
-              We respond fastest on WhatsApp during working hours.
-            </p>
-            <ul className="mt-6 space-y-4 text-[15px]">
-              <li>
-                <a
-                  href={contact.whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group inline-flex items-center gap-3 text-foreground hover:text-primary"
-                >
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-secondary text-primary transition-all group-hover:gradient-bg group-hover:text-white">
-                    <MessageCircle className="h-4 w-4" />
-                  </span>
-                  WhatsApp: {contact.phone}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={contact.phoneHref}
-                  className="group inline-flex items-center gap-3 text-foreground hover:text-primary"
-                >
-                  <span className="grid h-10 w-10 place-items-center rounded-full bg-secondary text-primary transition-all group-hover:gradient-bg group-hover:text-white">
-                    <Phone className="h-4 w-4" />
-                  </span>
-                  Call {contact.phone}
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`mailto:${contact.email}`}
-                  className="group inline-flex items-center gap-3 break-all text-foreground hover:text-primary"
-                >
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-secondary text-primary transition-all group-hover:gradient-bg group-hover:text-white">
-                    <Mail className="h-4 w-4" />
-                  </span>
-                  {contact.email}
-                </a>
-              </li>
-            </ul>
-
-            <div className="mt-8">
-              <div className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
-                Follow us
-              </div>
-              <div className="mt-3 flex gap-3">
-                <a
-                  href={social.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Instagram"
-                  className="grid h-11 w-11 place-items-center rounded-full border border-border bg-white text-primary transition-all hover:gradient-bg hover:text-white"
-                >
-                  <Instagram className="h-4 w-4" />
-                </a>
-                <a
-                  href={social.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="grid h-11 w-11 place-items-center rounded-full border border-border bg-white text-primary transition-all hover:gradient-bg hover:text-white"
-                >
-                  <Facebook className="h-4 w-4" />
-                </a>
-              </div>
-            </div>
-          </div>
-
+      <section className="pb-16 md:pb-24">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
           <form
             onSubmit={onSubmit}
-            className="md:col-span-3 rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-soft)] md:p-8"
+            className="rounded-2xl sm:rounded-3xl border border-border bg-white p-5 sm:p-6 shadow-[var(--shadow-soft)] md:p-8"
           >
-            <h2 className="text-2xl font-semibold">Send us a message</h2>
-            <p className="mt-2 text-[15px] text-muted-foreground">
+            <h2 className="text-[20px] sm:text-2xl font-semibold">Send us a message</h2>
+            <p className="mt-1.5 sm:mt-2 text-[14px] sm:text-[15px] text-muted-foreground">
               Share your details and we'll get back to you.
             </p>
 
-            <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <div className="mt-5 sm:mt-6 grid gap-4 sm:grid-cols-2">
               <label className="block">
-                <span className="mb-1.5 block text-[13px] font-medium text-foreground">Name</span>
+                <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">Name</span>
                 <input
                   value={form.name}
                   onChange={(e) => update("name", e.target.value)}
                   aria-invalid={!!errors.name}
                   aria-describedby={errors.name ? "err-name" : undefined}
-                  className={`w-full rounded-xl border bg-white px-4 py-3 text-[15px] outline-none transition focus:ring-4 focus:ring-primary/15 ${errors.name ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"}`}
+                  className={`w-full rounded-xl border bg-white px-3.5 py-2.5 sm:px-4 sm:py-3 text-[14px] sm:text-[15px] outline-none transition focus:ring-4 focus:ring-primary/15 ${errors.name ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"}`}
                   placeholder="Your full name"
                 />
                 {errors.name && (
                   <span
                     id="err-name"
                     role="alert"
-                    className="mt-1.5 block text-[13px] text-destructive"
+                    className="mt-1 block text-[12px] sm:text-[13px] text-destructive"
                   >
                     {errors.name}
                   </span>
                 )}
               </label>
               <label className="block">
-                <span className="mb-1.5 block text-[13px] font-medium text-foreground">
+                <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">
                   Phone <span className="text-muted-foreground">(optional)</span>
                 </span>
                 <input
@@ -199,42 +154,42 @@ function ContactPage() {
                   onChange={(e) => update("phone", e.target.value)}
                   aria-invalid={!!errors.phone}
                   aria-describedby={errors.phone ? "err-phone" : undefined}
-                  className={`w-full rounded-xl border bg-white px-4 py-3 text-[15px] outline-none transition focus:ring-4 focus:ring-primary/15 ${errors.phone ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"}`}
+                  className={`w-full rounded-xl border bg-white px-3.5 py-2.5 sm:px-4 sm:py-3 text-[14px] sm:text-[15px] outline-none transition focus:ring-4 focus:ring-primary/15 ${errors.phone ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"}`}
                   placeholder="+91 …"
                 />
                 {errors.phone && (
                   <span
                     id="err-phone"
                     role="alert"
-                    className="mt-1.5 block text-[13px] text-destructive"
+                    className="mt-1 block text-[12px] sm:text-[13px] text-destructive"
                   >
                     {errors.phone}
                   </span>
                 )}
               </label>
               <label className="block sm:col-span-2">
-                <span className="mb-1.5 block text-[13px] font-medium text-foreground">Email</span>
+                <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">Email</span>
                 <input
                   type="email"
                   value={form.email}
                   onChange={(e) => update("email", e.target.value)}
                   aria-invalid={!!errors.email}
                   aria-describedby={errors.email ? "err-email" : undefined}
-                  className={`w-full rounded-xl border bg-white px-4 py-3 text-[15px] outline-none transition focus:ring-4 focus:ring-primary/15 ${errors.email ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"}`}
+                  className={`w-full rounded-xl border bg-white px-3.5 py-2.5 sm:px-4 sm:py-3 text-[14px] sm:text-[15px] outline-none transition focus:ring-4 focus:ring-primary/15 ${errors.email ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"}`}
                   placeholder="you@example.com"
                 />
                 {errors.email && (
                   <span
                     id="err-email"
                     role="alert"
-                    className="mt-1.5 block text-[13px] text-destructive"
+                    className="mt-1 block text-[12px] sm:text-[13px] text-destructive"
                   >
                     {errors.email}
                   </span>
                 )}
               </label>
               <label className="block sm:col-span-2">
-                <span className="mb-1.5 block text-[13px] font-medium text-foreground">
+                <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">
                   Message
                 </span>
                 <textarea
@@ -243,14 +198,14 @@ function ContactPage() {
                   onChange={(e) => update("message", e.target.value)}
                   aria-invalid={!!errors.message}
                   aria-describedby={errors.message ? "err-message" : undefined}
-                  className={`w-full resize-none rounded-xl border bg-white px-4 py-3 text-[15px] outline-none transition focus:ring-4 focus:ring-primary/15 ${errors.message ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"}`}
+                  className={`w-full resize-none rounded-xl border bg-white px-3.5 py-2.5 sm:px-4 sm:py-3 text-[14px] sm:text-[15px] outline-none transition focus:ring-4 focus:ring-primary/15 ${errors.message ? "border-destructive focus:border-destructive" : "border-border focus:border-primary"}`}
                   placeholder="How can we help?"
                 />
                 {errors.message && (
                   <span
                     id="err-message"
                     role="alert"
-                    className="mt-1.5 block text-[13px] text-destructive"
+                    className="mt-1 block text-[12px] sm:text-[13px] text-destructive"
                   >
                     {errors.message}
                   </span>
@@ -260,15 +215,21 @@ function ContactPage() {
 
             <button
               type="submit"
-              className="mt-6 inline-flex items-center gap-2 rounded-full gradient-bg px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_28px_-10px_rgba(31,10,119,0.55)] transition-transform hover:-translate-y-0.5"
+              disabled={status === "sending"}
+              className="mt-6 inline-flex items-center gap-2 rounded-full gradient-bg px-6 py-3 text-sm font-semibold text-white shadow-[0_10px_28px_-10px_rgba(31,10,119,0.55)] transition-transform hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-70"
             >
-              <Send className="h-4 w-4" />
-              Send message
+              {status === "sending" ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Sending...
+                </>
+              ) : (
+                <>
+                  <Send className="h-4 w-4" />
+                  Send message
+                </>
+              )}
             </button>
-
-            {status === "sent" && (
-              <p className="mt-4 text-sm text-primary">Thanks, we'll get back to you shortly.</p>
-            )}
           </form>
         </div>
       </section>

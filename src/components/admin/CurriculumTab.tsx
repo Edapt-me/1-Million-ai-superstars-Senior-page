@@ -110,10 +110,7 @@ export function CurriculumTab() {
           </label>
           <div className="block sm:col-span-2">
             <span className="mb-1.5 block text-[13px] font-medium">Description</span>
-            <RichTextEditor
-              value={form.description}
-              onChange={(val) => set("description", val)}
-            />
+            <RichTextEditor value={form.description} onChange={(val) => set("description", val)} />
           </div>
           <label className="block">
             <span className="mb-1.5 block text-[13px] font-medium">Week Number / Session</span>

@@ -35,7 +35,7 @@ export const programConfig = {
     whatsappNumber: "918138010166",
     whatsappUrl: "https://wa.me/918138010166",
     // Placeholder — official support email to be provided.
-    email: "1millionaisuperstars2026@gmail.com",
+    email: "info@1millionaisuperstars.com",
     adminEmail: "edapt.me@gmail.com",
   },
   social: {

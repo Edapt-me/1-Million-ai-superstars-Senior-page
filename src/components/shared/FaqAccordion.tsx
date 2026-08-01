@@ -39,7 +39,7 @@ export function FaqAccordion({ items }: { items: readonly { q: string; a: string
                   transition={{ duration: 0.3 }}
                   className="overflow-hidden"
                 >
-                  <div 
+                  <div
                     className="px-6 pb-6 text-[16px] leading-relaxed text-muted-foreground prose prose-base prose-p:my-0 prose-headings:my-2 max-w-none prose-a:text-primary"
                     dangerouslySetInnerHTML={{ __html: f.a }}
                   />

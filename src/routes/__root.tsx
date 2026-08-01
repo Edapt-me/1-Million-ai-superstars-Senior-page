@@ -1,4 +1,4 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "@tanstack/react-query";
 import {
   Outlet,
   Link,
@@ -16,6 +16,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { programConfig } from "@/lib/programConfig";
+import { getWebsiteSettings } from "@/lib/cms";
 
 function NotFoundComponent() {
   return (
@@ -125,11 +126,42 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
       </head>
-      <body className="relative w-full overflow-x-hidden font-sans antialiased text-foreground bg-background">
+      <body className="relative w-full overflow-x-hidden bg-background font-sans text-foreground antialiased">
         {children}
         <Scripts />
       </body>
     </html>
+  );
+}
+
+function FloatingCTA() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { data: settings } = useQuery({
+    queryKey: ["website-settings"],
+    queryFn: getWebsiteSettings,
+  });
+
+  // Do not show on the Contact page
+  if (pathname === "/contact" || pathname === "/contact/") return null;
+
+  const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
+
+  return (
+    <a
+      href={regUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="sticky-cta-float fixed left-1/2 z-50 inline-flex items-center justify-center rounded-full gradient-bg px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(31,10,119,0.55)] backdrop-blur-sm md:hidden transition-transform active:scale-95"
+      style={{
+        bottom: "calc(20px + env(safe-area-inset-bottom))",
+        width: "25vw",
+        minWidth: "140px",
+        maxWidth: "220px",
+        transform: "translateX(-50%)",
+      }}
+    >
+      Register
+    </a>
   );
 }
 
@@ -152,6 +184,7 @@ function RootComponent() {
         </motion.main>
       </AnimatePresence>
       <SiteFooter />
+      <FloatingCTA />
 
       <a
         href={programConfig.contact.whatsappUrl}

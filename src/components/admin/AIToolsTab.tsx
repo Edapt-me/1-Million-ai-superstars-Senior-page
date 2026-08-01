@@ -105,7 +105,7 @@ export function AIToolsTab() {
         className="mb-8 rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-soft)]"
       >
         <h3 className="mb-4 text-lg font-semibold">{editingId ? "Edit Tool" : "Add Tool"}</h3>
-        
+
         <div className="mb-6 border-b border-border pb-6">
           <div className="mb-4 flex flex-wrap items-center gap-3">
             {isImageUploadConfigured() ? (
@@ -134,7 +134,11 @@ export function AIToolsTab() {
           </label>
           {form.tool_logo && (
             <div className="mt-4 flex h-24 w-24 items-center justify-center rounded-xl border border-border bg-secondary p-2">
-              <img src={form.tool_logo} alt="Preview" className="max-h-full max-w-full object-contain" />
+              <img
+                src={form.tool_logo}
+                alt="Preview"
+                className="max-h-full max-w-full object-contain"
+              />
             </div>
           )}
         </div>

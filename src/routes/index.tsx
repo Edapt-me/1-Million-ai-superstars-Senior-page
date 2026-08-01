@@ -47,7 +47,12 @@ import edaptLogo from "@/assets/partners/edapt.png";
 import fkcLogo from "@/assets/partners/fkc.png";
 import manoramaLogo from "@/assets/partners/manorama.png";
 import { programConfig } from "@/lib/programConfig";
-import { getWebsiteSettings, getPublishedCurriculum, getPublishedFAQs, getPublishedAITools } from "@/lib/cms";
+import {
+  getWebsiteSettings,
+  getPublishedCurriculum,
+  getPublishedFAQs,
+  getPublishedAITools,
+} from "@/lib/cms";
 import { optimizedImage } from "@/services/media";
 
 export const Route = createFileRoute("/")({
@@ -99,21 +104,7 @@ function LandingPage() {
         <FAQSection />
       </main>
 
-      <a
-        href={regUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="sticky-cta-float fixed left-1/2 z-50 inline-flex items-center justify-center rounded-full gradient-bg px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(31,10,119,0.55)] backdrop-blur-sm md:hidden"
-        style={{
-          bottom: "calc(20px + env(safe-area-inset-bottom))",
-          width: "25vw",
-          minWidth: "140px",
-          maxWidth: "220px",
-          transform: "translateX(-50%)",
-        }}
-      >
-        Register
-      </a>
+
     </div>
   );
 }
@@ -136,7 +127,7 @@ function Hero() {
   ];
 
   return (
-    <section id="hero" className="hero-bg relative overflow-hidden pt-20 sm:pt-28 md:pt-36">
+    <section id="hero" className="hero-bg relative overflow-hidden pt-[104px] sm:pt-[120px] md:pt-[144px]">
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <motion.div
           animate={{ y: [0, 30, 0], x: [0, 20, 0] }}
@@ -150,14 +141,14 @@ function Hero() {
         />
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 pb-14 sm:px-6 md:pb-20 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pb-4 sm:px-6 md:pb-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <div className="flex justify-center md:block md:text-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-4 py-2 text-[13px] font-semibold text-primary shadow-sm backdrop-blur"
+              className="mb-5 md:mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-3 py-1.5 md:px-4 md:py-2 text-[12px] md:text-[13px] font-semibold text-primary shadow-sm backdrop-blur"
             >
               <Sparkles className="h-3.5 w-3.5" />
               {badgesStr}
@@ -169,7 +160,7 @@ function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.05 }}
-              className="text-balance text-[42px] font-bold leading-[1.12] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.08] lg:text-[64px]"
+              className="text-balance text-[38px] font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.08] lg:text-[64px]"
             >
               {settings?.hero_title ? (
                 settings.hero_title
@@ -185,56 +176,42 @@ function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="mt-7 max-w-2xl text-pretty text-[18px] font-normal leading-relaxed text-muted-foreground sm:text-[19px] md:mx-auto md:mt-8 md:text-[21px] prose prose-lg prose-p:my-0 prose-headings:my-0 max-w-none prose-a:text-primary text-left md:text-center"
+              className="mt-5 max-w-2xl text-pretty text-[16px] font-normal leading-relaxed text-muted-foreground sm:text-[18px] md:mx-auto md:mt-6 md:text-[20px] prose prose-lg prose-p:my-0 prose-headings:my-0 max-w-none prose-a:text-primary text-left md:text-center"
               dangerouslySetInnerHTML={{
-                __html: settings?.hero_subtitle ||
+                __html:
+                  settings?.hero_subtitle ||
                   "<p>Whether you are an employee, business owner, teacher, homemaker or beginner, this program helps you confidently use AI in your daily life and work.</p>",
               }}
             />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.25 }}
-              className="mt-8 flex flex-wrap items-center justify-start gap-2.5 md:mt-10 md:justify-center"
-            >
-              {badges.map((b) => (
-                <span
-                  key={b}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-white/85 px-3.5 py-2 text-[13px] font-medium text-foreground shadow-sm backdrop-blur"
-                >
-                  <Check className="h-3.5 w-3.5 text-primary" />
-                  {b}
-                </span>
-              ))}
-            </motion.div>
+
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.35 }}
-              className="mt-10 flex flex-col flex-wrap items-stretch justify-start gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-12 md:gap-4"
+              className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-10 md:gap-4"
             >
               <a
                 href={regUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-primary inline-flex h-14 items-center justify-center rounded-full px-6 text-[16px] font-semibold sm:min-w-[200px] sm:px-8 sm:text-[17px]"
+                className="btn-primary inline-flex h-12 md:h-14 items-center justify-center rounded-full px-6 text-[15px] md:text-[16px] font-semibold sm:min-w-[180px] sm:px-8"
               >
                 {settings?.hero_primary_button_text || "Register Now"}
               </a>
               <a
                 href="#curriculum"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[200px] sm:px-8 sm:text-[17px]"
+                className="inline-flex h-12 md:h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[15px] md:text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[180px] sm:px-8"
               >
-                <PlayCircle className="h-5 w-5" />
+                <PlayCircle className="h-4 w-4 md:h-5 md:w-5" />
                 {settings?.hero_secondary_button_text || "View Curriculum"}
               </a>
               <Link
                 to="/projects"
-                className="inline-flex h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[200px] sm:px-8 sm:text-[17px]"
+                className="inline-flex h-12 md:h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[15px] md:text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[180px] sm:px-8"
               >
-                <Briefcase className="h-5 w-5" />
+                <Briefcase className="h-4 w-4 md:h-5 md:w-5" />
                 Student Projects
               </Link>
             </motion.div>
@@ -243,19 +220,38 @@ function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.8 }}
-              className="mt-10 flex flex-col flex-wrap items-start justify-start gap-3 text-[13px] text-muted-foreground sm:flex-row sm:gap-6 md:mt-14 md:items-center md:justify-center"
+              className="mt-10 mx-auto w-full max-w-[420px] md:max-w-2xl md:mt-14"
             >
-              <div className="flex items-center gap-1.5">
-                <ShieldCheck className="h-4 w-4 text-primary" />
-                <span>Official Digital Certificate</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <PlayCircle className="h-4 w-4 text-primary" />
-                <span>1-Year Recording Access</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Users className="h-4 w-4 text-primary" />
-                <span>{settings?.hero_trust_counter || "5000+ Students"}</span>
+              <div className="grid grid-cols-3 divide-x divide-border/60 rounded-3xl p-2 sm:p-4 md:px-6">
+                {/* Column 1 */}
+                <div className="flex flex-col items-center justify-start text-center px-1 md:px-4">
+                  <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-3 sm:mb-4">
+                    <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </span>
+                  <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
+                    Official<br />Certificate
+                  </div>
+                </div>
+
+                {/* Column 2 */}
+                <div className="flex flex-col items-center justify-start text-center px-1 md:px-4">
+                  <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-3 sm:mb-4">
+                    <PlayCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </span>
+                  <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
+                    1-Year<br />Access
+                  </div>
+                </div>
+
+                {/* Column 3 */}
+                <div className="flex flex-col items-center justify-start text-center px-1 md:px-4">
+                  <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-3 sm:mb-4">
+                    <Users className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </span>
+                  <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
+                    {settings?.hero_trust_counter?.replace(/[^0-9+]/g, '') || "5,000+"}<br />Learners
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
@@ -284,7 +280,7 @@ function InitiativeBySection() {
             <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
               Initiative By
             </div>
-            <div className="mt-7 flex flex-wrap items-center justify-center gap-x-10 gap-y-8 sm:gap-x-14 md:gap-x-20">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-6 sm:gap-x-14 md:gap-x-20 md:mt-7 md:gap-y-8">
               {PARTNERS.map((p) => (
                 <motion.div
                   key={p.name}
@@ -296,7 +292,7 @@ function InitiativeBySection() {
                     src={p.logo}
                     alt={`${p.name} logo`}
                     loading="lazy"
-                    style={{ maxHeight: p.maxH, width: "auto", height: "auto", maxWidth: "180px" }}
+                    style={{ maxHeight: p.maxH, width: "auto", height: "auto", maxWidth: "160px" }}
                     className="object-contain"
                   />
                 </motion.div>
@@ -314,7 +310,7 @@ function InitiativeBySection() {
         >
           <Link
             to="/about"
-            className="group inline-flex items-center justify-center gap-1.5 rounded-full border border-[rgba(31,10,119,0.08)] bg-[#EEF2FF] px-4 py-2 text-[13px] font-medium text-[#1F0A77] transition-all duration-[250ms] hover:scale-[1.02] hover:bg-[#E6EBFF]"
+            className="group inline-flex h-10 items-center justify-center gap-1.5 rounded-full border border-[rgba(31,10,119,0.08)] bg-[#EEF2FF] px-4 text-[13px] font-medium text-[#1F0A77] transition-all duration-[250ms] hover:scale-[1.02] hover:bg-[#E6EBFF]"
             aria-label="Learn more about the organizations behind this initiative"
           >
             <Sparkles className="h-3.5 w-3.5 shrink-0" />
@@ -339,7 +335,7 @@ function CertificateSection() {
         />
 
         <FadeIn delay={0.1}>
-          <div className="relative mt-10">
+          <div className="relative mt-8 md:mt-10">
             <div className="pointer-events-none absolute inset-0 -z-10 mx-auto max-w-4xl">
               <div className="absolute inset-x-8 top-10 h-full rounded-[40px] bg-[radial-gradient(60%_80%_at_50%_20%,rgba(75,45,214,0.18),transparent_70%)] blur-2xl" />
             </div>
@@ -350,14 +346,14 @@ function CertificateSection() {
               className="float-cert group mx-auto max-w-4xl"
             >
               <div
-                className="relative rounded-[32px] p-4 sm:p-5 md:p-6"
+                className="relative rounded-[24px] sm:rounded-[32px] p-3 sm:p-5 md:p-6"
                 style={{
                   background: "linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #1a1a1a 100%)",
                   boxShadow:
                     "0 30px 80px -20px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.6)",
                 }}
               >
-                <div className="overflow-hidden rounded-[20px] border border-black/60 bg-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
+                <div className="overflow-hidden rounded-[16px] sm:rounded-[20px] border border-black/60 bg-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
                   <img
                     src={certificateAsset}
                     alt="Sample Certificate of Completion"
@@ -379,16 +375,16 @@ function CertificateSection() {
 /* ---------- About ---------- */
 function AboutSection() {
   return (
-    <section id="about" className="relative py-14 md:py-20">
+    <section id="about" className="relative pb-12 pt-4 md:pb-20 md:pt-8">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <FadeIn>
-          <div className="glass-card gradient-border-hover rounded-3xl p-8 md:p-14">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full gradient-bg px-3.5 py-1.5 text-[12px] font-semibold text-white">
+          <div className="glass-card gradient-border-hover rounded-3xl p-6 sm:p-8 md:p-14">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold text-white md:mb-6">
               <Sparkles className="h-3.5 w-3.5" />
               Why AI, Why Now
             </div>
             <div
-              className="space-y-5 text-[18px] leading-relaxed text-foreground md:text-[20px]"
+              className="space-y-4 text-[16px] leading-relaxed text-foreground sm:text-[18px] md:space-y-5 md:text-[20px]"
               lang="ml"
             >
               <p>ഇന്ന് ലോകം മുഴുവൻ മാറ്റിമറിച്ചുകൊണ്ടിരിക്കുന്ന സാങ്കേതികവിദ്യയാണ് AI.</p>
@@ -441,41 +437,42 @@ function CurriculumSection() {
   return (
     <section
       id="curriculum"
-      className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-14 md:py-20"
+      className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white pb-12 pt-6 md:pb-16 md:pt-10"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Curriculum"
           title={<>ഈ പദ്ധതിയിലൂടെ നിങ്ങൾ എന്തെല്ലാം പഠിച്ചെടുക്കും?</>}
           malayalamTitle
+          titleMaxWidth="max-w-4xl"
           subtitle="Live sessions covering practical AI skills you need in daily life & work."
         />
 
-        <div className="relative mt-10">
+        <div className="relative mt-5 md:mt-8">
           <div className="absolute left-4 top-0 h-full w-0.5 gradient-bg md:left-1/2 md:-translate-x-1/2" />
 
-          <div className="space-y-6 md:space-y-10">
+          <div className="space-y-4 sm:space-y-6 md:space-y-10">
             {curriculum.map((item, i) => {
               const isOpen = open === i;
               const align = i % 2 === 0 ? "md:pr-[52%]" : "md:pl-[52%]";
               return (
                 <FadeIn key={i} delay={i * 0.05}>
-                  <div className={`relative pl-12 md:pl-0 ${align}`}>
-                    <div className="absolute left-4 top-6 z-10 grid h-9 w-9 -translate-x-1/2 place-items-center rounded-full gradient-bg text-white shadow-[var(--shadow-glow)] md:left-1/2">
-                      <BookOpen className="h-4 w-4" />
+                  <div className={`relative pl-10 sm:pl-12 md:pl-0 ${align}`}>
+                    <div className="absolute left-4 top-6 z-10 grid h-8 w-8 sm:h-9 sm:w-9 -translate-x-1/2 place-items-center rounded-full gradient-bg text-white shadow-[var(--shadow-glow)] md:left-1/2">
+                      <BookOpen className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                     </div>
 
                     <button
                       onClick={() => setOpen(isOpen ? null : i)}
                       aria-expanded={isOpen}
-                      className="glass-card gradient-border-hover group w-full rounded-3xl p-6 text-left transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] md:p-7"
+                      className="glass-card gradient-border-hover group w-full rounded-2xl sm:rounded-3xl p-5 sm:p-6 text-left transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)] md:p-7"
                     >
-                      <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start justify-between gap-3 sm:gap-4">
                         <div className="min-w-0 flex-1">
-                          <span className="inline-block rounded-full gradient-bg px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+                          <span className="inline-block rounded-full gradient-bg px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wide text-white">
                             Session {item.week_number}
                           </span>
-                          <h3 className="mt-3 text-[22px] font-semibold tracking-tight">
+                          <h3 className="mt-2.5 sm:mt-3 text-[18px] sm:text-[20px] md:text-[22px] font-semibold tracking-tight leading-snug">
                             {item.title}
                           </h3>
                         </div>
@@ -493,12 +490,12 @@ function CurriculumSection() {
                             transition={{ duration: 0.3 }}
                             className="overflow-hidden"
                           >
-                            <div className="mt-5 grid gap-3">
+                            <div className="mt-4 sm:mt-5 grid gap-3">
                               <div className="rounded-2xl border border-border/60 bg-white/80 p-4">
                                 <div
-                                  className="text-[15px] leading-relaxed text-muted-foreground prose prose-sm prose-p:my-0 prose-headings:my-2 max-w-none prose-a:text-primary"
+                                  className="text-[14px] sm:text-[15px] leading-relaxed text-muted-foreground prose prose-sm prose-p:my-0 prose-headings:my-2 max-w-none prose-a:text-primary"
                                   lang="ml"
-                                  dangerouslySetInnerHTML={{ __html: item.description }}
+                                  dangerouslySetInnerHTML={{ __html: item.description || "" }}
                                 />
                               </div>
                             </div>
@@ -519,7 +516,7 @@ function CurriculumSection() {
 
 function CurriculumUpdateNotice() {
   return (
-    <section className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white pb-8 pt-2 md:pb-12 md:pt-4">
+    <section className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white pb-4 pt-2 md:pb-6 md:pt-4">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <div className="flex items-start gap-4 rounded-2xl border-l-4 border-[#1F0A77] bg-[#EEF2FF] p-5 shadow-[var(--shadow-soft)] md:items-center md:gap-5 md:rounded-3xl md:p-6">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#1F0A77]/10 text-[#1F0A77] md:h-11 md:w-11">
@@ -548,19 +545,18 @@ function ToolsSection() {
   });
 
   return (
-    <section id="tools" className="relative py-14 md:py-20">
+    <section id="tools" className="relative pb-12 pt-6 md:pb-16 md:pt-8">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="AI Tools"
           title="പഠിക്കുന്ന പ്രധാന AI Tools"
           malayalamTitle
+          titleMaxWidth="max-w-3xl whitespace-nowrap overflow-hidden text-ellipsis sm:whitespace-normal sm:overflow-visible"
           subtitle="15+ hands-on tools you'll master through live practical sessions."
         />
-        <div className="mt-10">
+        <div className="mt-5 md:mt-8">
           {isLoading ? (
-            <div className="flex justify-center py-12 text-muted-foreground">
-              Loading tools...
-            </div>
+            <div className="flex justify-center py-12 text-muted-foreground">Loading tools...</div>
           ) : tools.length === 0 ? (
             <div className="flex justify-center py-12 text-[15px] font-medium text-muted-foreground">
               No AI tools available.
@@ -569,8 +565,8 @@ function ToolsSection() {
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
               {tools.map((t, i) => (
                 <FadeIn key={t.id} delay={i * 0.03}>
-                  <div className="glass-card gradient-border-hover group flex h-full flex-col items-center justify-between rounded-3xl px-5 pb-6 pt-8 text-center transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                    <div className="flex h-24 w-full items-center justify-center bg-transparent transition-transform duration-300 ease-out group-hover:scale-[1.08] md:h-28">
+                  <div className="glass-card gradient-border-hover group flex h-full flex-col items-center justify-between rounded-2xl sm:rounded-3xl px-4 pb-5 pt-6 sm:px-5 sm:pb-6 sm:pt-8 text-center transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+                    <div className="flex h-20 w-full items-center justify-center bg-transparent transition-transform duration-300 ease-out group-hover:scale-[1.08] sm:h-24 md:h-28">
                       <img
                         src={optimizedImage(t.tool_logo)}
                         alt={`${t.tool_name} logo`}
@@ -578,7 +574,9 @@ function ToolsSection() {
                         className="max-h-full max-w-full object-contain"
                       />
                     </div>
-                    <div className="mt-5 text-[15px] font-medium text-foreground">{t.tool_name}</div>
+                    <div className="mt-4 sm:mt-5 text-[14px] sm:text-[15px] font-medium text-foreground">
+                      {t.tool_name}
+                    </div>
                   </div>
                 </FadeIn>
               ))}
@@ -611,7 +609,7 @@ function ProgramSection() {
   return (
     <section
       id="program"
-      className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-14 md:py-20"
+      className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20"
     >
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
@@ -619,17 +617,17 @@ function ProgramSection() {
           title="Program Specifications"
           subtitle="Everything you need to know at a glance."
         />
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-8 md:mt-10 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {SPECS.map((s, i) => {
             const Icon = s.icon;
             return (
               <FadeIn key={s.label} delay={i * 0.04}>
-                <div className="glass-card gradient-border-hover group h-full rounded-3xl p-7 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                  <div className="mb-5 flex items-center gap-3">
-                    <div className="grid h-12 w-12 place-items-center rounded-2xl gradient-bg text-white shadow-[var(--shadow-soft)]">
-                      <Icon className="h-5 w-5" />
+                <div className="glass-card gradient-border-hover group h-full rounded-2xl sm:rounded-3xl p-5 sm:p-7 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+                  <div className="mb-4 sm:mb-5 flex items-center gap-3">
+                    <div className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-xl sm:rounded-2xl gradient-bg text-white shadow-[var(--shadow-soft)]">
+                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                     </div>
-                    <div className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
+                    <div className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
                       {s.label}
                     </div>
                   </div>
@@ -700,24 +698,24 @@ const WHY_JOIN = [
 
 function WhyJoinSection() {
   return (
-    <section className="relative py-14 md:py-20">
+    <section className="relative py-12 md:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Benefits"
           title="Why Join This Program?"
           subtitle="Six reasons this program transforms the way you live and work with AI."
         />
-        <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 md:mt-10 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {WHY_JOIN.map((w, i) => {
             const Icon = w.icon;
             return (
               <FadeIn key={w.title} delay={i * 0.05}>
-                <div className="glass-card gradient-border-hover group h-full rounded-3xl p-7 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                  <div className="mb-5 grid h-13 w-13 place-items-center rounded-2xl gradient-bg p-3 text-white shadow-[var(--shadow-soft)] transition-transform group-hover:scale-110">
-                    <Icon className="h-6 w-6" />
+                <div className="glass-card gradient-border-hover group h-full rounded-2xl sm:rounded-3xl p-5 sm:p-7 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+                  <div className="mb-4 sm:mb-5 grid h-11 w-11 sm:h-13 sm:w-13 place-items-center rounded-xl sm:rounded-2xl gradient-bg p-2.5 sm:p-3 text-white shadow-[var(--shadow-soft)] transition-transform group-hover:scale-110">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
-                  <h3 className="text-[22px] font-semibold tracking-tight">{w.title}</h3>
-                  <p className="mt-3 text-[17px] leading-relaxed text-muted-foreground">{w.body}</p>
+                  <h3 className="text-[18px] sm:text-[22px] font-semibold tracking-tight">{w.title}</h3>
+                  <p className="mt-2.5 sm:mt-3 text-[15px] sm:text-[17px] leading-relaxed text-muted-foreground">{w.body}</p>
                 </div>
               </FadeIn>
             );
@@ -742,23 +740,23 @@ const AUDIENCES = [
 
 function WhoCanJoinSection() {
   return (
-    <section className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-14 md:py-20">
+    <section className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Audience"
           title="Who Can Join?"
           subtitle="This program is designed for anyone curious about AI, regardless of background."
         />
-        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-3">
+        <div className="mt-8 md:mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3">
           {AUDIENCES.map((a, i) => {
             const Icon = a.icon;
             return (
               <FadeIn key={a.label} delay={i * 0.04}>
-                <div className="glass-card gradient-border-hover group flex h-full min-h-[160px] flex-col items-center justify-center gap-3 rounded-3xl p-6 text-center transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                  <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl gradient-bg text-white shadow-[var(--shadow-soft)] transition-transform group-hover:scale-110">
-                    <Icon className="h-6 w-6" />
+                <div className="glass-card gradient-border-hover group flex h-full min-h-[140px] sm:min-h-[160px] flex-col items-center justify-center gap-2.5 sm:gap-3 rounded-2xl sm:rounded-3xl p-4 sm:p-6 text-center transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+                  <div className="grid h-12 w-12 sm:h-14 sm:w-14 shrink-0 place-items-center rounded-xl sm:rounded-2xl gradient-bg text-white shadow-[var(--shadow-soft)] transition-transform group-hover:scale-110">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
-                  <div className="text-[16px] font-semibold leading-tight sm:text-[17px]">
+                  <div className="text-[14px] font-semibold leading-tight sm:text-[17px]">
                     {a.label}
                   </div>
                 </div>
@@ -783,14 +781,14 @@ function FAQSection() {
       : DEFAULT_FAQS;
 
   return (
-    <section id="faq" className="relative py-14 md:py-20">
+    <section id="faq" className="relative py-12 md:py-20">
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="FAQ"
           title="Frequently Asked Questions"
           subtitle="Everything you need to know before you register."
         />
-        <div className="mt-10 space-y-3">
+        <div className="mt-8 md:mt-10 space-y-3">
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
@@ -801,9 +799,9 @@ function FAQSection() {
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
-                    className="flex w-full items-center justify-between gap-4 p-6 text-left"
+                    className="flex w-full items-center justify-between gap-3 sm:gap-4 p-5 sm:p-6 text-left"
                   >
-                    <span className={`text-[17px] font-semibold ${isOpen ? "gradient-text" : ""}`}>
+                    <span className={`text-[15px] sm:text-[17px] font-semibold ${isOpen ? "gradient-text" : ""}`}>
                       {f.q}
                     </span>
                     <ChevronDown
@@ -819,8 +817,8 @@ function FAQSection() {
                         transition={{ duration: 0.3 }}
                         className="overflow-hidden"
                       >
-                        <div 
-                          className="px-6 pb-6 text-[16px] leading-relaxed text-muted-foreground prose prose-base prose-p:my-0 prose-headings:my-2 max-w-none prose-a:text-primary"
+                        <div
+                          className="px-5 pb-5 sm:px-6 sm:pb-6 text-[14px] sm:text-[16px] leading-relaxed text-muted-foreground prose prose-base prose-p:my-0 prose-headings:my-2 max-w-none prose-a:text-primary"
                           dangerouslySetInnerHTML={{ __html: f.a }}
                         />
                       </motion.div>
@@ -854,7 +852,6 @@ function ContactSection() {
         <FadeIn>
           <div className="group relative overflow-hidden rounded-[28px] border border-[#ECEEF5] bg-white shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-glow)]">
             <div className="grid grid-cols-1 md:grid-cols-[40%_60%] lg:grid-cols-[35%_65%]">
-              
               {/* Left Side: Illustration */}
               <div className="relative flex flex-col items-center justify-center border-b border-[#ECEEF5] bg-slate-50/50 py-8 px-6 md:border-b-0 md:border-r md:p-10">
                 {/* Dotted background pattern */}
@@ -866,7 +863,7 @@ function ContactSection() {
                   }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent" />
-                
+
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
@@ -875,7 +872,7 @@ function ContactSection() {
                   <div className="absolute inset-0 rounded-full border border-primary/10" />
                   <div className="absolute -inset-4 rounded-full border border-primary/5" />
                   <Headset className="h-12 w-12 text-primary md:h-16 md:w-16" strokeWidth={1.5} />
-                  
+
                   {/* Decorative blobs */}
                   <div className="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-white text-emerald-500 shadow-md md:h-10 md:w-10">
                     <Check className="h-4 w-4 md:h-5 md:w-5" />
@@ -895,12 +892,20 @@ function ContactSection() {
                   </div>
                 </div>
 
-                <h2 className="w-full text-[26px] font-bold leading-[1.2] text-foreground sm:text-[30px] md:text-[36px]" lang="ml">
+                <h2
+                  className="w-full text-[26px] font-bold leading-[1.2] text-foreground sm:text-[30px] md:text-[36px]"
+                  lang="ml"
+                >
                   ഈ പ്രോഗ്രാം നിങ്ങൾക്ക് എങ്ങനെ ഉപകാരപ്പെടും?
-                  <span className="mt-1 block whitespace-nowrap text-[24px] sm:text-[28px] md:text-[32px] gradient-text">കൂടുതൽ അറിയണോ?</span>
+                  <span className="mt-1 block whitespace-nowrap text-[24px] sm:text-[28px] md:text-[32px] gradient-text">
+                    കൂടുതൽ അറിയണോ?
+                  </span>
                 </h2>
-                
-                <p className="mt-[18px] text-[16px] leading-[1.6] text-muted-foreground/90" lang="ml">
+
+                <p
+                  className="mt-[18px] text-[16px] leading-[1.6] text-muted-foreground/90"
+                  lang="ml"
+                >
                   ഞങ്ങളുടെ അഡ്മിഷൻ ടീമുമായി സംസാരിച്ച് നിങ്ങളുടെ എല്ലാ സംശയങ്ങൾക്കും മറുപടി നേടൂ.
                 </p>
 
@@ -953,15 +958,20 @@ function ContactSection() {
                 <div className="mt-6 flex h-[60px] items-center justify-center gap-4 border-t border-border pt-4 text-[13px] font-medium text-muted-foreground sm:h-[64px] sm:gap-6 sm:text-[14px]">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
-                    <span className="leading-snug">Trusted by<br className="sm:hidden" /> Thousands</span>
+                    <span className="leading-snug">
+                      Trusted by
+                      <br className="sm:hidden" /> Thousands
+                    </span>
                   </div>
                   <div className="h-8 w-px shrink-0 bg-border" />
                   <div className="flex items-center gap-2">
                     <Users className="h-5 w-5 shrink-0 text-primary" />
-                    <span className="leading-snug">Expert Admission<br className="sm:hidden" /> Guidance</span>
+                    <span className="leading-snug">
+                      Expert Admission
+                      <br className="sm:hidden" /> Guidance
+                    </span>
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -1036,27 +1046,33 @@ function SectionHeader({
   title,
   subtitle,
   malayalamTitle = false,
+  titleMaxWidth = "max-w-2xl",
 }: {
   eyebrow: string;
   title: React.ReactNode;
   subtitle?: string;
   malayalamTitle?: boolean;
+  titleMaxWidth?: string;
 }) {
   return (
     <FadeIn>
-      <div className="mx-auto max-w-2xl text-center">
-        <div className="mb-5 inline-flex items-center gap-2 rounded-full gradient-bg px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-wider text-white">
+      <div className={`mx-auto text-center ${titleMaxWidth}`}>
+        <div className="mb-2.5 md:mb-3 inline-flex items-center gap-2 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-white">
           <Sparkles className="h-3.5 w-3.5" />
           {eyebrow}
         </div>
         <h2
-          className={`text-balance text-[32px] font-semibold tracking-tight md:text-[40px] lg:text-[44px] ${malayalamTitle ? "font-malayalam leading-tight" : ""}`}
+          className={`text-balance font-semibold tracking-tight ${
+            malayalamTitle
+              ? "font-malayalam text-[clamp(22px,5vw,32px)] leading-[1.2] md:text-[36px] md:leading-[1.15]"
+              : "text-[28px] leading-[1.15] sm:text-[32px] md:text-[40px] lg:text-[44px]"
+          }`}
           lang={malayalamTitle ? "ml" : undefined}
         >
           <span className="gradient-text">{title}</span>
         </h2>
         {subtitle && (
-          <p className="mt-5 text-[18px] leading-relaxed text-muted-foreground md:text-[20px]">
+          <p className="mx-auto mt-2.5 max-w-[90%] text-[15px] leading-relaxed text-muted-foreground sm:max-w-full sm:text-[16px] md:mt-3 md:text-[18px]">
             {subtitle}
           </p>
         )}

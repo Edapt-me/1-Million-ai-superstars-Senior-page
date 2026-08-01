@@ -68,6 +68,105 @@ export type Database = {
         };
         Relationships: [];
       };
+      ai_tools: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          tool_name: string;
+          tool_logo: string;
+          description: string | null;
+          category: string;
+          display_order: number;
+          published: boolean;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          tool_name: string;
+          tool_logo: string;
+          description?: string | null;
+          category?: string;
+          display_order?: number;
+          published?: boolean;
+        };
+        Update: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          tool_name?: string;
+          tool_logo?: string;
+          description?: string | null;
+          category?: string;
+          display_order?: number;
+          published?: boolean;
+        };
+        Relationships: [];
+      };
+      faqs: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          question: string;
+          answer: string;
+          order_index: number;
+          published: boolean;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          question: string;
+          answer: string;
+          order_index?: number;
+          published?: boolean;
+        };
+        Update: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          question?: string;
+          answer?: string;
+          order_index?: number;
+          published?: boolean;
+        };
+        Relationships: [];
+      };
+      curriculum: {
+        Row: {
+          id: string;
+          created_at: string;
+          updated_at: string;
+          week_number: number;
+          title: string;
+          description: string | null;
+          order_index: number;
+          published: boolean;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          week_number: number;
+          title: string;
+          description?: string | null;
+          order_index?: number;
+          published?: boolean;
+        };
+        Update: {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+          week_number?: number;
+          title?: string;
+          description?: string | null;
+          order_index?: number;
+          published?: boolean;
+        };
+        Relationships: [];
+      };
       user_roles: {
         Row: {
           created_at: string;

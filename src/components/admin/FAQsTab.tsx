@@ -101,10 +101,7 @@ export function FAQsTab() {
           </label>
           <div className="block sm:col-span-2">
             <span className="mb-1.5 block text-[13px] font-medium">Answer</span>
-            <RichTextEditor
-              value={form.answer}
-              onChange={(val) => set("answer", val)}
-            />
+            <RichTextEditor value={form.answer} onChange={(val) => set("answer", val)} />
           </div>
           <label className="block">
             <span className="mb-1.5 block text-[13px] font-medium">Order Index (Sort)</span>

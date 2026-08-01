@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   LogOut,
   LayoutDashboard,
@@ -9,16 +9,14 @@ import {
   MessageCircleQuestion,
   Wrench,
 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { isCurrentUserAdmin } from "@/lib/projects";
 import { DashboardTab } from "@/components/admin/DashboardTab";
 import { SettingsTab } from "@/components/admin/SettingsTab";
 import { ProjectsTab } from "@/components/admin/ProjectsTab";
 import { CurriculumTab } from "@/components/admin/CurriculumTab";
 import { FAQsTab } from "@/components/admin/FAQsTab";
 import { AIToolsTab } from "@/components/admin/AIToolsTab";
-import { PageHero } from "@/components/layout/PageShell";
 import { useQueryClient } from "@tanstack/react-query";
+import { logoutServerFn } from "@/server-auth";
 
 export const Route = createFileRoute("/_authenticated/admin")({
   head: () => ({
@@ -41,48 +39,13 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
 function AdminPage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [admin, setAdmin] = useState<boolean | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>("dashboard");
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => {
-      if (!data.user) return setAdmin(false);
-      isCurrentUserAdmin(data.user.id).then(setAdmin);
-    });
-  }, []);
 
   async function signOut() {
     await queryClient.cancelQueries();
     queryClient.clear();
-    await supabase.auth.signOut();
+    await logoutServerFn();
     navigate({ to: "/auth", replace: true });
-  }
-
-  if (admin === null) {
-    return (
-      <section className="grid min-h-[60vh] place-items-center text-muted-foreground">
-        Checking access…
-      </section>
-    );
-  }
-
-  if (!admin) {
-    return (
-      <>
-        <PageHero eyebrow="Admin" title="Access restricted" subtitle="" />
-        <section className="pb-24">
-          <div className="mx-auto max-w-md px-4 text-center text-[15px] text-muted-foreground">
-            <p>This account does not have administrator access.</p>
-            <button
-              onClick={signOut}
-              className="mt-6 rounded-full border border-border px-5 py-2.5 text-[14px] font-medium hover:bg-secondary"
-            >
-              Sign out
-            </button>
-          </div>
-        </section>
-      </>
-    );
   }
 
   return (
@@ -128,11 +91,11 @@ function AdminPage() {
           {/* Main Content */}
           <main className="flex-1 min-w-0">
             {activeTab === "dashboard" && <DashboardTab />}
-            { activeTab === "settings" && <SettingsTab /> }
-            { activeTab === "projects" && <ProjectsTab /> }
-            { activeTab === "ai_tools" && <AIToolsTab /> }
-            { activeTab === "curriculum" && <CurriculumTab /> }
-            { activeTab === "faqs" && <FAQsTab /> }
+            {activeTab === "settings" && <SettingsTab />}
+            {activeTab === "projects" && <ProjectsTab />}
+            {activeTab === "ai_tools" && <AIToolsTab />}
+            {activeTab === "curriculum" && <CurriculumTab />}
+            {activeTab === "faqs" && <FAQsTab />}
           </main>
         </div>
       </div>

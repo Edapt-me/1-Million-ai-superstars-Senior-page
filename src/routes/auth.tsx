@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { loginServerFn } from "@/server-auth";
 import { PageHero } from "@/components/layout/PageShell";
 
 export const Route = createFileRoute("/auth")({
@@ -32,13 +32,14 @@ function AuthPage() {
     e.preventDefault();
     setBusy(true);
     setError(null);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setBusy(false);
-    if (error) {
-      setError(error.message);
-      return;
+    try {
+      await loginServerFn({ data: { email, password } });
+      navigate({ to: "/admin", replace: true });
+    } catch (err: any) {
+      setError(err.message || "An error occurred during sign in.");
+    } finally {
+      setBusy(false);
     }
-    navigate({ to: "/admin", replace: true });
   }
 
   return (

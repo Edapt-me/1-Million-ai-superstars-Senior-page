@@ -5,28 +5,28 @@ import { programConfig } from "@/lib/programConfig";
 export function SiteFooter() {
   const { contact, social } = programConfig;
   return (
-    <footer className="border-t border-border bg-white pb-28 pt-20 md:pb-16">
+    <footer className="border-t border-border bg-white pb-[80px] pt-12 md:pb-6 md:pt-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-12 md:grid-cols-3 md:gap-20 lg:gap-24">
+        <div className="grid gap-10 md:grid-cols-3 md:gap-12 lg:gap-16">
           <div>
             <img
               src={logoAsset}
               alt="1 Million AI Superstars"
               width={480}
               height={240}
-              className="h-20 w-auto sm:h-24"
+              className="h-16 w-auto sm:h-20"
             />
-            <p className="mt-6 max-w-sm text-[15px] leading-relaxed text-muted-foreground">
+            <p className="mt-4 max-w-sm text-[14px] leading-relaxed text-muted-foreground sm:text-[15px]">
               Empowering Malayalees to master AI in simple Malayalam, with practical, live
               instruction and real-world tools.
             </p>
           </div>
 
           <div>
-            <div className="text-[13px] font-semibold uppercase tracking-widest text-muted-foreground">
+            <div className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
               Quick Contact
             </div>
-            <ul className="mt-5 space-y-4 text-[15px]">
+            <ul className="mt-4 space-y-2.5 text-[14px] sm:text-[15px]">
               <li>
                 <a
                   href={contact.phoneHref}
@@ -66,37 +66,37 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <div className="text-[13px] font-semibold uppercase tracking-widest text-muted-foreground">
+            <div className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
               Follow Us
             </div>
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-4 flex flex-wrap gap-2.5">
               <a
                 href={social.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="group grid h-12 w-12 place-items-center rounded-full border border-border bg-white text-primary transition-all hover:-translate-y-0.5 hover:border-transparent hover:gradient-bg hover:text-white hover:shadow-[var(--shadow-soft)]"
+                className="group grid h-10 w-10 sm:h-11 sm:w-11 place-items-center rounded-full border border-border bg-white text-primary transition-all hover:-translate-y-0.5 hover:border-transparent hover:gradient-bg hover:text-white hover:shadow-[var(--shadow-soft)]"
               >
-                <Instagram className="h-5 w-5" />
+                <Instagram className="h-4 w-4 sm:h-5 sm:w-5" />
               </a>
               <a
                 href={social.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="group grid h-12 w-12 place-items-center rounded-full border border-border bg-white text-primary transition-all hover:-translate-y-0.5 hover:border-transparent hover:gradient-bg hover:text-white hover:shadow-[var(--shadow-soft)]"
+                className="group grid h-10 w-10 sm:h-11 sm:w-11 place-items-center rounded-full border border-border bg-white text-primary transition-all hover:-translate-y-0.5 hover:border-transparent hover:gradient-bg hover:text-white hover:shadow-[var(--shadow-soft)]"
               >
-                <Facebook className="h-5 w-5" />
+                <Facebook className="h-4 w-4 sm:h-5 sm:w-5" />
               </a>
             </div>
-            <p className="mt-5 text-[14px] text-muted-foreground">
+            <p className="mt-3 text-[13px] text-muted-foreground sm:text-[14px]">
               Join our community for AI tips, tools & updates.
             </p>
           </div>
         </div>
 
-        <div className="mt-14 border-t border-border pt-8 text-center text-[13px] text-muted-foreground">
-          © 2026 1 Million AI Superstars.
+        <div className="mt-10 border-t border-border pt-6 text-center text-[12px] text-muted-foreground sm:text-[13px]">
+          © {new Date().getFullYear()} 1 Million AI Superstars.
         </div>
       </div>
     </footer>
