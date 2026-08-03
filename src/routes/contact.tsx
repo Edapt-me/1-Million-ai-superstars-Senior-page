@@ -125,9 +125,12 @@ function ContactPage() {
             </p>
 
             <div className="mt-5 sm:mt-6 grid gap-4 sm:grid-cols-2">
-              <label className="block">
+              <label htmlFor="contact-name" className="block">
                 <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">Name</span>
                 <input
+                  id="contact-name"
+                  name="name"
+                  autoComplete="name"
                   value={form.name}
                   onChange={(e) => update("name", e.target.value)}
                   aria-invalid={!!errors.name}
@@ -145,11 +148,14 @@ function ContactPage() {
                   </span>
                 )}
               </label>
-              <label className="block">
+              <label htmlFor="contact-phone" className="block">
                 <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">
                   Phone <span className="text-muted-foreground">(optional)</span>
                 </span>
                 <input
+                  id="contact-phone"
+                  name="phone"
+                  autoComplete="tel"
                   value={form.phone}
                   onChange={(e) => update("phone", e.target.value)}
                   aria-invalid={!!errors.phone}
@@ -167,10 +173,13 @@ function ContactPage() {
                   </span>
                 )}
               </label>
-              <label className="block sm:col-span-2">
+              <label htmlFor="contact-email" className="block sm:col-span-2">
                 <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">Email</span>
                 <input
+                  id="contact-email"
+                  name="email"
                   type="email"
+                  autoComplete="email"
                   value={form.email}
                   onChange={(e) => update("email", e.target.value)}
                   aria-invalid={!!errors.email}
@@ -188,11 +197,13 @@ function ContactPage() {
                   </span>
                 )}
               </label>
-              <label className="block sm:col-span-2">
+              <label htmlFor="contact-message" className="block sm:col-span-2">
                 <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">
                   Message
                 </span>
                 <textarea
+                  id="contact-message"
+                  name="message"
                   rows={5}
                   value={form.message}
                   onChange={(e) => update("message", e.target.value)}

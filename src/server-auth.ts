@@ -1,35 +1,26 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createServerAuthClient, supabaseAdmin } from "@/integrations/supabase/client.server";
-import { getCookie, setCookie, deleteCookie } from "@tanstack/react-start/server";
+import { getCookie, setCookie, deleteCookie, getRequestHeader } from "@tanstack/react-start/server";
 
 // Security Constants
 const IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
 const ABSOLUTE_TIMEOUT_MS = 12 * 60 * 60 * 1000; // 12 hours
 
-export const loginServerFn = createServerFn({ method: "POST" })
-  .validator((d: { email: string; password: string }) => d)
+export const initializeSessionSecurityFn = createServerFn({ method: "POST" })
   .handler(
-    async ({ data: payload }) => {
-      const supabase = createServerAuthClient();
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: payload.email,
-        password: payload.password,
-      });
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
+    async () => {
       // Initialize session security timestamps
       const now = Date.now().toString();
-      setCookie("session_start", now, { httpOnly: true, secure: true, sameSite: "lax" });
-      setCookie("session_last_active", now, { httpOnly: true, secure: true, sameSite: "lax" });
+      const isProd = process.env.NODE_ENV === "production";
+      setCookie("session_start", now, { httpOnly: true, secure: isProd, sameSite: "lax" });
+      setCookie("session_last_active", now, { httpOnly: true, secure: isProd, sameSite: "lax" });
 
-    return { success: true };
-  },
-);
+      return { success: true };
+    },
+  );
 
-export const logoutServerFn = createServerFn({ method: "POST" }).handler(async () => {
+export const logoutServerFn = createServerFn({ method: "POST" })
+  .handler(async () => {
   const supabase = createServerAuthClient();
   const { error } = await supabase.auth.signOut();
 
@@ -42,7 +33,8 @@ export const logoutServerFn = createServerFn({ method: "POST" }).handler(async (
   return { success: true };
 });
 
-export const globalLogoutServerFn = createServerFn({ method: "POST" }).handler(async () => {
+export const globalLogoutServerFn = createServerFn({ method: "POST" })
+  .handler(async () => {
   const supabase = createServerAuthClient();
   const {
     data: { user },
@@ -59,45 +51,49 @@ export const globalLogoutServerFn = createServerFn({ method: "POST" }).handler(a
   await supabase.auth.signOut();
   return { success: true };
 });
+export const checkAdminSessionFn = createServerFn({ method: "GET" })
+  .handler(async () => {
+    const supabase = createServerAuthClient();
 
-export const checkAdminSessionFn = createServerFn({ method: "GET" }).handler(async () => {
-  const supabase = createServerAuthClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return false;
+    // 1. Check for Bearer token attached by middleware in request header
+    const authHeader = getRequestHeader("authorization") || getRequestHeader("Authorization");
+    const token = authHeader && authHeader.startsWith("Bearer ") ? authHeader.substring(7) : null;
 
-  // Session Security Enforcement
-  const now = Date.now();
-  const sessionStart = parseInt(getCookie("session_start") || "0", 10);
-  const lastActive = parseInt(getCookie("session_last_active") || "0", 10);
+    let user: any = null;
 
-  if (
-    !sessionStart ||
-    !lastActive ||
-    now - lastActive > IDLE_TIMEOUT_MS ||
-    now - sessionStart > ABSOLUTE_TIMEOUT_MS
-  ) {
-    // Session expired or tampered with
-    await supabase.auth.signOut();
-    deleteCookie("session_start");
-    deleteCookie("session_last_active");
-    return false;
-  }
+    if (token) {
+      const { data, error } = await supabase.auth.getUser(token);
+      if (!error && data?.user) {
+        user = data.user;
+      }
+    }
 
-  // Update idle timer
-  setCookie("session_last_active", now.toString(), {
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
+    // 2. Fall back to cookie-based session if no Bearer token
+    if (!user) {
+      const { data, error } = await supabase.auth.getUser();
+      if (!error && data?.user) {
+        user = data.user;
+      }
+    }
+
+    if (!user) {
+      return false;
+    }
+
+    // 3. Verify user role in user_roles table using supabaseAdmin (bypasses RLS for security check)
+    const { data: roles, error: roleError } = await supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .single();
+
+    if (roleError || !roles) {
+      // Fallback: Check if user.email matches site admin email if user_roles entry doesn't exist yet
+      if (user.email === "edapt.me@gmail.com" || user.email === "1millionaisuperstars2026@gmail.com") {
+        return true;
+      }
+      return false;
+    }
+
+    return roles.role === "admin";
   });
-
-  // Verify role securely using the admin client
-  const { data: roles } = await supabaseAdmin
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", user.id)
-    .single();
-
-  return roles?.role === "admin";
-});

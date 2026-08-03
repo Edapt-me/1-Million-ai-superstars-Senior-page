@@ -99,9 +99,11 @@ export function CurriculumTab() {
       >
         <h3 className="text-lg font-semibold mb-4">{editingId ? "Edit Module" : "Add Module"}</h3>
         <div className="grid gap-4 sm:grid-cols-2">
-          <label className="block sm:col-span-2">
+          <label htmlFor="curr-title" className="block sm:col-span-2">
             <span className="mb-1.5 block text-[13px] font-medium">Title</span>
             <input
+              id="curr-title"
+              name="title"
               required
               value={form.title}
               onChange={(e) => set("title", e.target.value)}
@@ -110,11 +112,13 @@ export function CurriculumTab() {
           </label>
           <div className="block sm:col-span-2">
             <span className="mb-1.5 block text-[13px] font-medium">Description</span>
-            <RichTextEditor value={form.description} onChange={(val) => set("description", val)} />
+            <RichTextEditor value={form.description || ""} onChange={(val) => set("description", val)} />
           </div>
-          <label className="block">
+          <label htmlFor="curr-week-number" className="block">
             <span className="mb-1.5 block text-[13px] font-medium">Week Number / Session</span>
             <input
+              id="curr-week-number"
+              name="week_number"
               type="number"
               required
               value={form.week_number}
@@ -122,9 +126,11 @@ export function CurriculumTab() {
               className={inputCls}
             />
           </label>
-          <label className="block">
+          <label htmlFor="curr-order-index" className="block">
             <span className="mb-1.5 block text-[13px] font-medium">Order Index (Sort)</span>
             <input
+              id="curr-order-index"
+              name="order_index"
               type="number"
               required
               value={form.order_index}
@@ -132,8 +138,10 @@ export function CurriculumTab() {
               className={inputCls}
             />
           </label>
-          <label className="block sm:col-span-2 flex items-center gap-2 text-[14px]">
+          <label htmlFor="curr-published" className="block sm:col-span-2 flex items-center gap-2 text-[14px]">
             <input
+              id="curr-published"
+              name="published"
               type="checkbox"
               checked={form.published}
               onChange={(e) => set("published", e.target.checked)}

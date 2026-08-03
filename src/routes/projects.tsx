@@ -169,6 +169,9 @@ function ProjectsPage() {
             <div className="relative w-full md:max-w-md">
               <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <input
+                id="projects-search"
+                name="search"
+                aria-label="Search projects"
                 value={q}
                 onChange={(e) => reset(setQ)(e.target.value)}
                 placeholder="Search projects, students…"
@@ -178,6 +181,9 @@ function ProjectsPage() {
             <div className="flex w-full gap-3 md:w-auto md:shrink-0">
               <div className="flex-1 md:w-[170px]">
                 <select
+                  id="projects-category"
+                  name="category"
+                  aria-label="Filter by category"
                   value={cat}
                   onChange={(e) => reset(setCat)(e.target.value)}
                   className="w-full appearance-none rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] outline-none transition hover:border-foreground/20 focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer"
@@ -190,6 +196,9 @@ function ProjectsPage() {
               </div>
               <div className="flex-1 md:w-[150px]">
                 <select
+                  id="projects-sort"
+                  name="sort"
+                  aria-label="Sort projects"
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortKey)}
                   className="w-full appearance-none rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] outline-none transition hover:border-foreground/20 focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer"

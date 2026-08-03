@@ -29,7 +29,7 @@ export type WebsiteSettings = {
 export type CurriculumModule = {
   id: string;
   title: string;
-  description: string;
+  description: string | null;
   week_number: number;
   order_index: number;
   published: boolean;

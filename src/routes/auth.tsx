@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { loginServerFn } from "@/server-auth";
+import { initializeSessionSecurityFn } from "@/server-auth";
+import { supabase } from "@/integrations/supabase/client";
 import { PageHero } from "@/components/layout/PageShell";
 
 export const Route = createFileRoute("/auth")({
@@ -33,7 +34,16 @@ function AuthPage() {
     setBusy(true);
     setError(null);
     try {
-      await loginServerFn({ data: { email, password } });
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (signInError) {
+        throw new Error(signInError.message);
+      }
+
+      await initializeSessionSecurityFn();
       navigate({ to: "/admin", replace: true });
     } catch (err: any) {
       setError(err.message || "An error occurred during sign in.");
@@ -51,10 +61,13 @@ function AuthPage() {
             onSubmit={onSubmit}
             className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-soft)] md:p-8"
           >
-            <label className="block">
+            <label htmlFor="admin-email" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Email</span>
               <input
+                id="admin-email"
+                name="email"
                 type="email"
+                autoComplete="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -62,10 +75,13 @@ function AuthPage() {
                 placeholder="you@example.com"
               />
             </label>
-            <label className="mt-4 block">
+            <label htmlFor="admin-password" className="mt-4 block">
               <span className="mb-1.5 block text-[13px] font-medium">Password</span>
               <input
+                id="admin-password"
+                name="password"
                 type="password"
+                autoComplete="current-password"
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}

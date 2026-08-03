@@ -96,9 +96,11 @@ export function SettingsTab() {
         <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-soft)]">
           <h3 className="text-lg font-semibold mb-4 border-b border-border pb-2">Hero Section</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block sm:col-span-2">
+            <label htmlFor="hero_title" className="block sm:col-span-2">
               <span className="mb-1.5 block text-[13px] font-medium">Hero Title</span>
               <input
+                id="hero_title"
+                name="hero_title"
                 value={form.hero_title}
                 onChange={(e) => set("hero_title", e.target.value)}
                 className={inputCls}
@@ -111,33 +113,41 @@ export function SettingsTab() {
                 onChange={(val) => set("hero_subtitle", val)}
               />
             </div>
-            <label className="block">
+            <label htmlFor="hero_badge" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Hero Badge</span>
               <input
+                id="hero_badge"
+                name="hero_badge"
                 value={form.hero_badge}
                 onChange={(e) => set("hero_badge", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="hero_trust_counter" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Trust Counter Text</span>
               <input
+                id="hero_trust_counter"
+                name="hero_trust_counter"
                 value={form.hero_trust_counter}
                 onChange={(e) => set("hero_trust_counter", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="hero_primary_button_text" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Primary Button Text</span>
               <input
+                id="hero_primary_button_text"
+                name="hero_primary_button_text"
                 value={form.hero_primary_button_text}
                 onChange={(e) => set("hero_primary_button_text", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="hero_secondary_button_text" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Secondary Button Text</span>
               <input
+                id="hero_secondary_button_text"
+                name="hero_secondary_button_text"
                 value={form.hero_secondary_button_text}
                 onChange={(e) => set("hero_secondary_button_text", e.target.value)}
                 className={inputCls}
@@ -150,49 +160,61 @@ export function SettingsTab() {
         <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-soft)]">
           <h3 className="text-lg font-semibold mb-4 border-b border-border pb-2">Course Details</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block">
+            <label htmlFor="course_batch_name" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Batch Name</span>
               <input
+                id="course_batch_name"
+                name="course_batch_name"
                 value={form.course_batch_name}
                 onChange={(e) => set("course_batch_name", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="course_start_date" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Start Date</span>
               <input
+                id="course_start_date"
+                name="course_start_date"
                 value={form.course_start_date}
                 onChange={(e) => set("course_start_date", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="course_duration" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Course Duration</span>
               <input
+                id="course_duration"
+                name="course_duration"
                 value={form.course_duration}
                 onChange={(e) => set("course_duration", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="course_fee" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Course Fee</span>
               <input
+                id="course_fee"
+                name="course_fee"
                 value={form.course_fee}
                 onChange={(e) => set("course_fee", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="course_offer_price" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Offer Price text</span>
               <input
+                id="course_offer_price"
+                name="course_offer_price"
                 value={form.course_offer_price}
                 onChange={(e) => set("course_offer_price", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block sm:col-span-2">
+            <label htmlFor="course_registration_link" className="block sm:col-span-2">
               <span className="mb-1.5 block text-[13px] font-medium">Registration Link URL</span>
               <input
+                id="course_registration_link"
+                name="course_registration_link"
                 value={form.course_registration_link}
                 onChange={(e) => set("course_registration_link", e.target.value)}
                 className={inputCls}
@@ -207,28 +229,34 @@ export function SettingsTab() {
             Contact Details
           </h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block">
+            <label htmlFor="contact_email" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Email</span>
               <input
+                id="contact_email"
+                name="contact_email"
                 type="email"
                 value={form.contact_email}
                 onChange={(e) => set("contact_email", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="contact_phone" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Phone</span>
               <input
+                id="contact_phone"
+                name="contact_phone"
                 value={form.contact_phone}
                 onChange={(e) => set("contact_phone", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="contact_whatsapp" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">
                 WhatsApp Number (e.g. 918138010166)
               </span>
               <input
+                id="contact_whatsapp"
+                name="contact_whatsapp"
                 value={form.contact_whatsapp}
                 onChange={(e) => set("contact_whatsapp", e.target.value)}
                 className={inputCls}
@@ -241,33 +269,41 @@ export function SettingsTab() {
         <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-soft)]">
           <h3 className="text-lg font-semibold mb-4 border-b border-border pb-2">Social Links</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label className="block">
+            <label htmlFor="social_facebook" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Facebook URL</span>
               <input
+                id="social_facebook"
+                name="social_facebook"
                 value={form.social_facebook}
                 onChange={(e) => set("social_facebook", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="social_instagram" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">Instagram URL</span>
               <input
+                id="social_instagram"
+                name="social_instagram"
                 value={form.social_instagram}
                 onChange={(e) => set("social_instagram", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="social_youtube" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">YouTube URL</span>
               <input
+                id="social_youtube"
+                name="social_youtube"
                 value={form.social_youtube}
                 onChange={(e) => set("social_youtube", e.target.value)}
                 className={inputCls}
               />
             </label>
-            <label className="block">
+            <label htmlFor="social_linkedin" className="block">
               <span className="mb-1.5 block text-[13px] font-medium">LinkedIn URL</span>
               <input
+                id="social_linkedin"
+                name="social_linkedin"
                 value={form.social_linkedin}
                 onChange={(e) => set("social_linkedin", e.target.value)}
                 className={inputCls}
