@@ -17,6 +17,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { programConfig } from "@/lib/programConfig";
 import { getWebsiteSettings } from "@/lib/cms";
+import { trackPageView, trackEvent, initGA } from "@/lib/analytics";
 
 function NotFoundComponent() {
   return (
@@ -125,6 +126,33 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="en">
       <head>
         <HeadContent />
+        {/* Meta Pixel Code */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1673306513692575');
+fbq('track', 'PageView');
+`
+          }}
+        />
+        <noscript>
+          <img
+            height="1"
+            width="1"
+            style={{ display: "none" }}
+            src="https://www.facebook.com/tr?id=1673306513692575&ev=PageView&noscript=1"
+            alt=""
+          />
+        </noscript>
+        {/* End Meta Pixel Code */}
       </head>
       <body className="relative w-full overflow-x-hidden bg-background font-sans text-foreground antialiased">
         {children}
@@ -169,6 +197,11 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
+  useEffect(() => {
+    initGA();
+    trackPageView(pathname);
+  }, [pathname]);
+
   return (
     <QueryClientProvider client={queryClient}>
       <SiteHeader />
@@ -191,6 +224,7 @@ function RootComponent() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
+        onClick={() => trackEvent("whatsapp_click", { location: pathname })}
         className="fixed z-[60] grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
         style={{
           backgroundColor: "#25D366",

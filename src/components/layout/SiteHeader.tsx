@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import logoAsset from "@/assets/1m-ai-superstars-logo-transparent.png";
 import { programConfig } from "@/lib/programConfig";
+import { trackEvent } from "@/lib/analytics";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -128,6 +129,7 @@ export function SiteHeader() {
               href={programConfig.registrationUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent("register_click", { location: "header_desktop" })}
               className="hidden items-center justify-center rounded-full px-6 py-2.5 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(31,10,119,0.5)] outline-none transition-all hover:-translate-y-[2px] hover:shadow-[0_12px_24px_-10px_rgba(31,10,119,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:inline-flex gradient-bg"
             >
               Register Now
@@ -217,7 +219,10 @@ export function SiteHeader() {
                   href={programConfig.registrationUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    setOpen(false);
+                    trackEvent("register_click", { location: "header_mobile" });
+                  }}
                   className="mx-auto flex w-full max-w-[260px] items-center justify-center rounded-full px-6 py-3 text-[15px] sm:text-[16px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(31,10,119,0.4)] transition-all hover:-translate-y-[1px] hover:shadow-[0_12px_24px_-10px_rgba(31,10,119,0.5)] active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 gradient-bg"
                 >
                   Register Now
