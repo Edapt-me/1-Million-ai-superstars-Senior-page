@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { PageHero } from "@/components/layout/PageShell";
 import { useQuery } from "@tanstack/react-query";
 import { getWebsiteSettings } from "@/lib/cms";
+import { programConfig } from "@/lib/programConfig";
 import { listPublishedProjects } from "@/lib/projects";
 
 export const Route = createFileRoute("/projects")({
@@ -223,8 +224,8 @@ function ProjectsPage() {
               <div className="mx-auto max-w-md rounded-2xl border border-dashed border-border bg-white p-10 text-center">
                 <h3 className="text-lg font-semibold">Projects coming soon</h3>
                 <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">
-                  {settings?.course_batch_name || "The batch"} kicks off soon. Student submissions
-                  will appear here once the program begins.
+                  {programConfig.batch.batchName} kicks off soon. Student submissions
+                  will be showcased here as they complete their final projects.
                 </p>
               </div>
             ) : (

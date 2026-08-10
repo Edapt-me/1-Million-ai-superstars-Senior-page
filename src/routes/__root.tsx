@@ -18,6 +18,8 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { programConfig } from "@/lib/programConfig";
 import { getWebsiteSettings } from "@/lib/cms";
 import { trackPageView, trackEvent, initGA } from "@/lib/analytics";
+import { BatchSelectionProvider, useBatchSelection } from "@/contexts/BatchSelectionContext";
+import { BatchSelectionModal } from "@/components/shared/BatchSelectionModal";
 
 function NotFoundComponent() {
   return (
@@ -164,21 +166,18 @@ fbq('track', 'PageView');
 
 function FloatingCTA() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { data: settings } = useQuery({
-    queryKey: ["website-settings"],
-    queryFn: getWebsiteSettings,
-  });
+  const { openModal } = useBatchSelection();
 
   // Do not show on the Contact page
   if (pathname === "/contact" || pathname === "/contact/") return null;
 
-  const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
-
   return (
-    <a
-      href={regUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+    <button
+      type="button"
+      onClick={() => {
+        trackEvent("register_click", { location: "floating_cta" });
+        openModal();
+      }}
       className="sticky-cta-float fixed left-1/2 z-50 inline-flex items-center justify-center rounded-full gradient-bg px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(31,10,119,0.55)] backdrop-blur-sm md:hidden transition-transform active:scale-95"
       style={{
         bottom: "calc(20px + env(safe-area-inset-bottom))",
@@ -189,7 +188,7 @@ function FloatingCTA() {
       }}
     >
       Register
-    </a>
+    </button>
   );
 }
 
@@ -204,38 +203,41 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SiteHeader />
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.main
-          key={pathname}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-        >
-          <Outlet />
-        </motion.main>
-      </AnimatePresence>
-      <SiteFooter />
-      <FloatingCTA />
+      <BatchSelectionProvider>
+        <SiteHeader />
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.main
+            key={pathname}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <Outlet />
+          </motion.main>
+        </AnimatePresence>
+        <SiteFooter />
+        <FloatingCTA />
+        <BatchSelectionModal />
 
-      <a
-        href={programConfig.contact.whatsappUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Chat on WhatsApp"
-        onClick={() => trackEvent("whatsapp_click", { location: pathname })}
-        className="fixed z-[60] grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
-        style={{
-          backgroundColor: "#25D366",
-          right: "24px",
-          bottom: "calc(24px + env(safe-area-inset-bottom))",
-        }}
-      >
-        <svg viewBox="0 0 32 32" className="h-7 w-7 md:h-8 md:w-8" fill="currentColor" aria-hidden>
-          <path d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.874 2.708.874.847 0 2.393-.66 2.694-1.475.13-.34.229-.72.229-1.088 0-.42-1.7-.777-1.9-1.462zm-2.973 7.593c-1.834 0-3.626-.5-5.188-1.448L5.55 25l1.687-4.99a9.895 9.895 0 0 1-1.833-5.79c0-5.545 4.583-10.06 10.203-10.06 5.62 0 10.203 4.515 10.203 10.06s-4.582 10.06-10.203 10.06zm0-22.087C9.263 2.71 3.68 8.192 3.68 15c0 2.334.652 4.51 1.79 6.377L3 30l8.83-2.813a12.417 12.417 0 0 0 4.305.795c6.874 0 12.457-5.482 12.457-12.29S23 2.71 16.137 2.71z" />
-        </svg>
-      </a>
+        <a
+          href={programConfig.contact.whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Chat on WhatsApp"
+          onClick={() => trackEvent("whatsapp_click", { location: pathname })}
+          className="fixed z-[60] grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
+          style={{
+            backgroundColor: "#25D366",
+            right: "24px",
+            bottom: "calc(24px + env(safe-area-inset-bottom))",
+          }}
+        >
+          <svg viewBox="0 0 32 32" className="h-7 w-7 md:h-8 md:w-8" fill="currentColor" aria-hidden>
+            <path d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.874 2.708.874.847 0 2.393-.66 2.694-1.475.13-.34.229-.72.229-1.088 0-.42-1.7-.777-1.9-1.462zm-2.973 7.593c-1.834 0-3.626-.5-5.188-1.448L5.55 25l1.687-4.99a9.895 9.895 0 0 1-1.833-5.79c0-5.545 4.583-10.06 10.203-10.06 5.62 0 10.203 4.515 10.203 10.06s-4.582 10.06-10.203 10.06zm0-22.087C9.263 2.71 3.68 8.192 3.68 15c0 2.334.652 4.51 1.79 6.377L3 30l8.83-2.813a12.417 12.417 0 0 0 4.305.795c6.874 0 12.457-5.482 12.457-12.29S23 2.71 16.137 2.71z" />
+          </svg>
+        </a>
+      </BatchSelectionProvider>
     </QueryClientProvider>
   );
 }

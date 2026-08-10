@@ -97,8 +97,8 @@ function AboutPage() {
       : programConfig.faqs;
 
   const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
-  const batchName = settings?.course_batch_name || programConfig.batch.batchName;
-  const displayRange = settings?.course_start_date || programConfig.batch.displayRange;
+  const batchName = programConfig.batch.batchName;
+  const displayRange = programConfig.batch.displayRange;
 
   return (
     <>

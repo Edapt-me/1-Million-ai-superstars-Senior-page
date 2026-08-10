@@ -54,6 +54,8 @@ import {
   getPublishedAITools,
 } from "@/lib/cms";
 import { optimizedImage } from "@/services/media";
+import { useBatchSelection } from "@/contexts/BatchSelectionContext";
+import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -115,8 +117,9 @@ function Hero() {
     queryKey: ["website-settings"],
     queryFn: getWebsiteSettings,
   });
+  
+  const { openModal } = useBatchSelection();
 
-  const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
   const badgesStr = settings?.hero_badge || "10 Live Sessions · Malayalam · Certificate";
   const badges = [
     "Live Classes",
@@ -192,14 +195,16 @@ function Hero() {
               transition={{ duration: 0.7, delay: 0.35 }}
               className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-10 md:gap-4"
             >
-              <a
-                href={regUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent("register_click", { location: "hero" });
+                  openModal();
+                }}
                 className="btn-primary inline-flex h-12 md:h-14 items-center justify-center rounded-full px-6 text-[15px] md:text-[16px] font-semibold sm:min-w-[180px] sm:px-8"
               >
                 {settings?.hero_primary_button_text || "Register Now"}
-              </a>
+              </button>
               <a
                 href="#curriculum"
                 className="inline-flex h-12 md:h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[15px] md:text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[180px] sm:px-8"
@@ -599,11 +604,11 @@ function ProgramSection() {
     {
       icon: Calendar,
       label: "Course Date",
-      value: settings?.course_start_date || programConfig.batch.displayStart,
+      value: programConfig.batch.displayStart,
     },
-    { icon: Clock, label: "Class Time", value: "8:30 PM – 10:00 PM Daily" },
-    { icon: GraduationCap, label: "Certificate", value: "Official Digital Certificate" },
-    { icon: PlayCircle, label: "Recording Access", value: "1-Year Recorded Class Access" },
+    { icon: Clock, label: "Class Time", value: programConfig.batch.classTime },
+    { icon: GraduationCap, label: "Certificate", value: programConfig.certificate.title },
+    { icon: PlayCircle, label: "Recording Access", value: programConfig.certificate.recordingAccess },
   ];
 
   return (
@@ -987,8 +992,9 @@ function FinalCTA() {
     queryKey: ["website-settings"],
     queryFn: getWebsiteSettings,
   });
+  
+  const { openModal } = useBatchSelection();
 
-  const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
   const whatsapp = settings?.contact_whatsapp || "918138010166";
   const whatsappUrl = `https://wa.me/${whatsapp}`;
 
@@ -1005,7 +1011,7 @@ function FinalCTA() {
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-1.5 text-[12px] font-semibold text-white backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" />
               Limited Seats · Next Batch{" "}
-              {settings?.course_start_date || programConfig.batch.displayStart}
+              {programConfig.batch.displayStart}
             </div>
             <h2 className="text-[40px] font-bold leading-tight tracking-tight md:text-5xl lg:text-[56px]">
               Start Your AI Journey Today
@@ -1015,15 +1021,17 @@ function FinalCTA() {
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a
-                href={regUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => {
+                  trackEvent("register_click", { location: "final_cta" });
+                  openModal();
+                }}
                 className="inline-flex h-14 min-w-64 items-center justify-center rounded-full bg-white px-8 text-[17px] font-bold text-primary shadow-xl transition-transform hover:-translate-y-0.5"
               >
                 Register Now for ₹{settings?.course_fee || "749"}{" "}
                 {settings?.course_offer_price || "+ GST"}
-              </a>
+              </button>
               <a
                 href={whatsappUrl}
                 target="_blank"

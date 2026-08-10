@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getWebsiteSettings, updateWebsiteSettings, type SettingsInput } from "@/lib/cms";
+import { programConfig } from "@/lib/programConfig";
 import { toast } from "sonner";
 import { Loader2, Save } from "lucide-react";
 import { RichTextEditor } from "@/components/editor/RichTextEditor";
@@ -160,24 +161,24 @@ export function SettingsTab() {
         <div className="rounded-2xl border border-border bg-white p-6 shadow-[var(--shadow-soft)]">
           <h3 className="text-lg font-semibold mb-4 border-b border-border pb-2">Course Details</h3>
           <div className="grid gap-4 sm:grid-cols-2">
-            <label htmlFor="course_batch_name" className="block">
-              <span className="mb-1.5 block text-[13px] font-medium">Batch Name</span>
+            <label htmlFor="course_batch_name" className="block opacity-70">
+              <span className="mb-1.5 block text-[13px] font-medium">Batch Name (Configured in Code)</span>
               <input
                 id="course_batch_name"
                 name="course_batch_name"
-                value={form.course_batch_name}
-                onChange={(e) => set("course_batch_name", e.target.value)}
-                className={inputCls}
+                value={programConfig.batch.batchName}
+                readOnly
+                className={inputCls + " bg-muted cursor-not-allowed"}
               />
             </label>
-            <label htmlFor="course_start_date" className="block">
-              <span className="mb-1.5 block text-[13px] font-medium">Start Date</span>
+            <label htmlFor="course_start_date" className="block opacity-70">
+              <span className="mb-1.5 block text-[13px] font-medium">Start Date (Configured in Code)</span>
               <input
                 id="course_start_date"
                 name="course_start_date"
-                value={form.course_start_date}
-                onChange={(e) => set("course_start_date", e.target.value)}
-                className={inputCls}
+                value={programConfig.batch.displayStart}
+                readOnly
+                className={inputCls + " bg-muted cursor-not-allowed"}
               />
             </label>
             <label htmlFor="course_duration" className="block">
