@@ -174,12 +174,11 @@ function FloatingCTA() {
       onClick={() => {
         trackEvent("register_click", { location: "floating_cta" });
       }}
-      className="sticky-cta-float fixed left-1/2 z-50 inline-flex items-center justify-center rounded-full gradient-bg px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(31,10,119,0.55)] backdrop-blur-sm md:hidden transition-transform active:scale-95"
+      className="sticky-cta-float fixed left-1/2 z-50 inline-flex items-center justify-center rounded-full bg-[#22c55e] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(34,197,94,0.55)] backdrop-blur-sm md:hidden transition-transform active:scale-95"
       style={{
         bottom: "calc(20px + env(safe-area-inset-bottom))",
-        width: "25vw",
-        minWidth: "140px",
-        maxWidth: "220px",
+        width: "75vw",
+        left: "50%",
         transform: "translateX(-50%)",
       }}
     >
@@ -214,17 +213,29 @@ function RootComponent() {
         <SiteFooter />
         <FloatingCTA />
 
+        <style>{`
+          .wa-float-pos {
+            left: 82.4%;
+            top: 81.2%;
+          }
+          @media (min-width: 768px) {
+            .wa-float-pos {
+              left: auto;
+              top: auto;
+              right: 24px;
+              bottom: calc(24px + env(safe-area-inset-bottom));
+            }
+          }
+        `}</style>
         <a
           href={programConfig.contact.whatsappUrl}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Chat on WhatsApp"
           onClick={() => trackEvent("whatsapp_click", { location: pathname })}
-          className="fixed z-[60] grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
+          className="wa-float-pos fixed z-[60] grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
           style={{
             backgroundColor: "#25D366",
-            right: "24px",
-            bottom: "calc(24px + env(safe-area-inset-bottom))",
           }}
         >
           <svg viewBox="0 0 32 32" className="h-7 w-7 md:h-8 md:w-8" fill="currentColor" aria-hidden>
