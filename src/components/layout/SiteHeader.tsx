@@ -5,10 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import logoAsset from "@/assets/1m-ai-superstars-logo-transparent.png";
 import { programConfig } from "@/lib/programConfig";
 import { trackEvent } from "@/lib/analytics";
-import { useBatchSelection } from "@/contexts/BatchSelectionContext";
-
 export function SiteHeader() {
-  const { openModal } = useBatchSelection();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
@@ -127,16 +124,13 @@ export function SiteHeader() {
 
           {/* Right: CTA & Mobile Menu Button */}
           <div className="flex flex-1 items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                trackEvent("register_click", { location: "header_desktop" });
-                openModal();
-              }}
+            <a
+              href={programConfig.registrationUrl}
+              onClick={() => trackEvent("register_click", { location: "header_desktop" })}
               className="hidden items-center justify-center rounded-full px-6 py-2.5 text-[15px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(31,10,119,0.5)] outline-none transition-all hover:-translate-y-[2px] hover:shadow-[0_12px_24px_-10px_rgba(31,10,119,0.6)] focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 md:inline-flex gradient-bg"
             >
-              Register Now
-            </button>
+              Join Now
+            </a>
 
             <button
               type="button"
@@ -218,17 +212,16 @@ export function SiteHeader() {
 
               {/* Bottom CTA */}
               <div className="px-6 pb-[max(2rem,env(safe-area-inset-bottom))] pt-2 sm:px-8">
-                <button
-                  type="button"
+                <a
+                  href={programConfig.registrationUrl}
                   onClick={() => {
                     setOpen(false);
                     trackEvent("register_click", { location: "header_mobile" });
-                    openModal();
                   }}
                   className="mx-auto flex w-full max-w-[260px] items-center justify-center rounded-full px-6 py-3 text-[15px] sm:text-[16px] font-semibold text-white shadow-[0_8px_20px_-8px_rgba(31,10,119,0.4)] transition-all hover:-translate-y-[1px] hover:shadow-[0_12px_24px_-10px_rgba(31,10,119,0.5)] active:scale-[0.98] outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 gradient-bg"
                 >
-                  Register Now
-                </button>
+                  Join Now
+                </a>
               </div>
             </motion.div>
           </div>

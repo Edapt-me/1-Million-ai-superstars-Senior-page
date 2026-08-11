@@ -23,24 +23,7 @@ export const programConfig = {
     sessions: 10,
     language: "Malayalam",
   },
-  batches: [
-    {
-      id: "batch-9",
-      label: "Batch 9",
-      date: "12 August 2026",
-      time: "06:30 PM",
-      checkoutUrl: "https://learn.edapt.me/web/checkout/6a1ff9235736ad4a98d25b84",
-      status: "open",
-    },
-    {
-      id: "batch-10",
-      label: "Batch 10",
-      date: "18 August 2026",
-      time: "08:30 PM",
-      checkoutUrl: "https://learn.edapt.me/web/checkout/6a797034dd59734fdbb27e6d",
-      status: "open",
-    },
-  ],
+
   certificate: {
     title: "Official Completion Certificate",
     issuedBy: "Edapt Learning Technologies",

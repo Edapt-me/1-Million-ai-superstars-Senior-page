@@ -54,7 +54,6 @@ import {
   getPublishedAITools,
 } from "@/lib/cms";
 import { optimizedImage } from "@/services/media";
-import { useBatchSelection } from "@/contexts/BatchSelectionContext";
 import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/")({
@@ -117,8 +116,8 @@ function Hero() {
     queryKey: ["website-settings"],
     queryFn: getWebsiteSettings,
   });
-  
-  const { openModal } = useBatchSelection();
+
+  const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
 
   const badgesStr = settings?.hero_badge || "10 Live Sessions · Malayalam · Certificate";
   const badges = [
@@ -163,14 +162,16 @@ function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.05 }}
-              className="text-balance text-[38px] font-bold leading-[1.1] tracking-tight sm:text-5xl md:text-6xl md:leading-[1.08] lg:text-[64px]"
+              className="text-[26px] font-bold leading-[1.45] sm:leading-[1.35] tracking-tight sm:text-[36px] md:text-[46px] lg:text-[54px]"
+              lang="ml"
             >
               {settings?.hero_title ? (
                 settings.hero_title
               ) : (
                 <>
-                  Learn Artificial Intelligence in{" "}
-                  <span className="gradient-text">Simple Malayalam</span>
+                  <span className="block">AI എന്താണെന്നും,</span>
+                  <span className="block">എങ്ങനെ ഉപയോഗിക്കാമെന്നും</span>
+                  <span className="block gradient-text">മലയാളത്തിൽ പഠിക്കാം</span>
                 </>
               )}
             </motion.h1>
@@ -179,11 +180,12 @@ function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15 }}
-              className="mt-5 max-w-2xl text-pretty text-[16px] font-normal leading-relaxed text-muted-foreground sm:text-[18px] md:mx-auto md:mt-6 md:text-[20px] prose prose-lg prose-p:my-0 prose-headings:my-0 max-w-none prose-a:text-primary text-left md:text-center"
+              className="mt-5 max-w-2xl text-pretty text-[16px] font-normal leading-[1.7] text-muted-foreground sm:text-[18px] md:mx-auto md:mt-6 md:text-[20px] prose prose-lg prose-p:my-0 prose-headings:my-0 max-w-none prose-a:text-primary text-left md:text-center"
+              lang="ml"
               dangerouslySetInnerHTML={{
                 __html:
                   settings?.hero_subtitle ||
-                  "<p>Whether you are an employee, business owner, teacher, homemaker or beginner, this program helps you confidently use AI in your daily life and work.</p>",
+                  "<p>AIയെക്കുറിച്ച് വലിയ ടെക്നിക്കൽ അറിവൊന്നും വേണ്ട. നമ്മുടെ ദൈനംദിന ജീവിതത്തിലും ജോലിയിലും AI എങ്ങനെ എളുപ്പത്തിൽ ഉപയോഗിക്കാമെന്ന് ലളിതമായി പഠിക്കാം.</p>",
               }}
             />
 
@@ -195,16 +197,13 @@ function Hero() {
               transition={{ duration: 0.7, delay: 0.35 }}
               className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-10 md:gap-4"
             >
-              <button
-                type="button"
-                onClick={() => {
-                  trackEvent("register_click", { location: "hero" });
-                  openModal();
-                }}
+              <a
+                href={regUrl}
+                onClick={() => trackEvent("register_click", { location: "hero" })}
                 className="btn-primary inline-flex h-12 md:h-14 items-center justify-center rounded-full px-6 text-[15px] md:text-[16px] font-semibold sm:min-w-[180px] sm:px-8"
               >
-                {settings?.hero_primary_button_text || "Register Now"}
-              </button>
+                {settings?.hero_primary_button_text || "Join Now"}
+              </a>
               <a
                 href="#curriculum"
                 className="inline-flex h-12 md:h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[15px] md:text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[180px] sm:px-8"
@@ -992,8 +991,8 @@ function FinalCTA() {
     queryKey: ["website-settings"],
     queryFn: getWebsiteSettings,
   });
-  
-  const { openModal } = useBatchSelection();
+
+  const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
 
   const whatsapp = settings?.contact_whatsapp || "918138010166";
   const whatsappUrl = `https://wa.me/${whatsapp}`;
@@ -1021,17 +1020,14 @@ function FinalCTA() {
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <button
-                type="button"
-                onClick={() => {
-                  trackEvent("register_click", { location: "final_cta" });
-                  openModal();
-                }}
+              <a
+                href={regUrl}
+                onClick={() => trackEvent("register_click", { location: "final_cta" })}
                 className="inline-flex h-14 min-w-64 items-center justify-center rounded-full bg-white px-8 text-[17px] font-bold text-primary shadow-xl transition-transform hover:-translate-y-0.5"
               >
-                Register Now for ₹{settings?.course_fee || "749"}{" "}
+                Join Now for ₹{settings?.course_fee || "749"}{" "}
                 {settings?.course_offer_price || "+ GST"}
-              </button>
+              </a>
               <a
                 href={whatsappUrl}
                 target="_blank"
@@ -1070,11 +1066,10 @@ function SectionHeader({
           {eyebrow}
         </div>
         <h2
-          className={`text-balance font-semibold tracking-tight ${
-            malayalamTitle
+          className={`text-balance font-semibold tracking-tight ${malayalamTitle
               ? "font-malayalam text-[clamp(22px,5vw,32px)] leading-[1.2] md:text-[36px] md:leading-[1.15]"
               : "text-[28px] leading-[1.15] sm:text-[32px] md:text-[40px] lg:text-[44px]"
-          }`}
+            }`}
           lang={malayalamTitle ? "ml" : undefined}
         >
           <span className="gradient-text">{title}</span>

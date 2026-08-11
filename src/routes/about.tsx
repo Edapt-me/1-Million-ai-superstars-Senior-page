@@ -263,7 +263,7 @@ function AboutPage() {
             rel="noopener noreferrer"
             className="mt-6 sm:mt-8 inline-flex items-center justify-center rounded-full gradient-bg px-6 py-3 sm:px-7 sm:py-3.5 text-[13px] sm:text-sm font-semibold text-white shadow-[0_10px_28px_-10px_rgba(31,10,119,0.55)] transition-transform hover:-translate-y-0.5"
           >
-            Register Now
+            Join Now
           </a>
         </div>
       </section>
