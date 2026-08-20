@@ -25,8 +25,9 @@ export function initGA(): void {
   try {
     // Initialize dataLayer and global gtag function
     window.dataLayer = window.dataLayer || [];
-    function gtag(...args: any[]) {
-      window.dataLayer.push(args);
+    function gtag() {
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer.push(arguments);
     }
     window.gtag = gtag;
 
