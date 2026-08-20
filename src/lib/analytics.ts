@@ -37,11 +37,8 @@ export function initGA(): void {
       anonymize_ip: true,
     });
 
-    // Dynamically insert script tag asynchronously
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
-    document.head.appendChild(script);
+    // Script injection is now handled directly in __root.tsx's <head>
+    // to ensure Google's site verifier detects it reliably.
 
     isInitialized = true;
   } catch (error) {
