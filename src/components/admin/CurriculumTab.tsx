@@ -112,7 +112,10 @@ export function CurriculumTab() {
           </label>
           <div className="block sm:col-span-2">
             <span className="mb-1.5 block text-[13px] font-medium">Description</span>
-            <RichTextEditor value={form.description || ""} onChange={(val) => set("description", val)} />
+            <RichTextEditor
+              value={form.description || ""}
+              onChange={(val) => set("description", val)}
+            />
           </div>
           <label htmlFor="curr-week-number" className="block">
             <span className="mb-1.5 block text-[13px] font-medium">Week Number / Session</span>
@@ -138,7 +141,10 @@ export function CurriculumTab() {
               className={inputCls}
             />
           </label>
-          <label htmlFor="curr-published" className="block sm:col-span-2 flex items-center gap-2 text-[14px]">
+          <label
+            htmlFor="curr-published"
+            className="block sm:col-span-2 flex items-center gap-2 text-[14px]"
+          >
             <input
               id="curr-published"
               name="published"

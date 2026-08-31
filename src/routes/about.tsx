@@ -108,7 +108,8 @@ function AboutPage() {
             <span className="gradient-text">Kerala's largest Malayalam AI movement</span>
           </h1>
           <p className="mt-3 md:mx-auto md:mt-4 max-w-2xl text-[16px] leading-[1.5] text-muted-foreground sm:text-[17px] md:text-[19px] md:leading-relaxed">
-            A joint initiative by Edapt, Future Knowledge Collective and Malayala Manorama, built to make AI accessible to every Malayali household.
+            A joint initiative by Edapt, Future Knowledge Collective and Malayala Manorama, built to
+            make AI accessible to every Malayali household.
           </p>
         </div>
       </section>
@@ -129,7 +130,9 @@ function AboutPage() {
                   <p.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </span>
                 <h3 className="text-[18px] sm:text-xl font-semibold tracking-tight">{p.title}</h3>
-                <p className="mt-2.5 sm:mt-3 text-[14px] sm:text-[15px] leading-relaxed text-muted-foreground">{p.body}</p>
+                <p className="mt-2.5 sm:mt-3 text-[14px] sm:text-[15px] leading-relaxed text-muted-foreground">
+                  {p.body}
+                </p>
               </motion.div>
             ))}
           </div>
@@ -156,7 +159,9 @@ function AboutPage() {
                   <w.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                 </span>
                 <h3 className="text-[17px] sm:text-lg font-semibold tracking-tight">{w.title}</h3>
-                <p className="mt-2 text-[14px] sm:text-[15px] leading-relaxed text-muted-foreground">{w.body}</p>
+                <p className="mt-2 text-[14px] sm:text-[15px] leading-relaxed text-muted-foreground">
+                  {w.body}
+                </p>
               </div>
             ))}
           </div>
@@ -225,7 +230,9 @@ function AboutPage() {
                   <span className="mb-3 sm:mb-4 grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-xl sm:rounded-2xl bg-secondary text-primary transition-all group-hover:gradient-bg group-hover:text-white">
                     <feature.icon className="h-4 w-4 sm:h-5 sm:w-5" />
                   </span>
-                  <h3 className="text-[16px] sm:text-[17px] font-semibold text-foreground tracking-tight">{feature.title}</h3>
+                  <h3 className="text-[16px] sm:text-[17px] font-semibold text-foreground tracking-tight">
+                    {feature.title}
+                  </h3>
                   <p className="mt-1.5 sm:mt-2 text-[13px] sm:text-[14px] leading-relaxed text-muted-foreground">
                     {feature.desc}
                   </p>

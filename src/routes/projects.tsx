@@ -188,10 +188,18 @@ function ProjectsPage() {
                   value={cat}
                   onChange={(e) => reset(setCat)(e.target.value)}
                   className="w-full appearance-none rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] outline-none transition hover:border-foreground/20 focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer"
-                  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1rem' }}
+                  style={{
+                    backgroundImage:
+                      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E\")",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 0.75rem center",
+                    backgroundSize: "1rem",
+                  }}
                 >
                   {CATEGORIES.map((c) => (
-                    <option key={c} value={c}>{c === "All" ? "All Categories" : c}</option>
+                    <option key={c} value={c}>
+                      {c === "All" ? "All Categories" : c}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -203,7 +211,13 @@ function ProjectsPage() {
                   value={sort}
                   onChange={(e) => setSort(e.target.value as SortKey)}
                   className="w-full appearance-none rounded-xl border border-border bg-white px-3.5 py-2.5 text-[14px] outline-none transition hover:border-foreground/20 focus:border-primary focus:ring-2 focus:ring-primary/20 shadow-sm cursor-pointer"
-                  style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'%3E%3C/path%3E%3C/svg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.75rem center', backgroundSize: '1rem' }}
+                  style={{
+                    backgroundImage:
+                      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E\")",
+                    backgroundRepeat: "no-repeat",
+                    backgroundPosition: "right 0.75rem center",
+                    backgroundSize: "1rem",
+                  }}
                 >
                   <option value="newest">Sort: Newest</option>
                   <option value="oldest">Sort: Oldest</option>
@@ -224,8 +238,8 @@ function ProjectsPage() {
               <div className="mx-auto max-w-md rounded-2xl border border-dashed border-border bg-white p-10 text-center">
                 <h3 className="text-lg font-semibold">Projects coming soon</h3>
                 <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">
-                  {programConfig.batch.batchName} kicks off soon. Student submissions
-                  will be showcased here as they complete their final projects.
+                  {programConfig.batch.batchName} kicks off soon. Student submissions will be
+                  showcased here as they complete their final projects.
                 </p>
               </div>
             ) : (
@@ -269,9 +283,13 @@ function ProjectsPage() {
                             {p.category}
                           </span>
                         </div>
-                        <h3 className="mt-2.5 text-[17px] sm:text-[18px] font-semibold leading-tight tracking-tight text-foreground">{p.title}</h3>
-                        <div className="mt-1 text-[12.5px] text-muted-foreground/90 font-medium">by {p.student}</div>
-                        
+                        <h3 className="mt-2.5 text-[17px] sm:text-[18px] font-semibold leading-tight tracking-tight text-foreground">
+                          {p.title}
+                        </h3>
+                        <div className="mt-1 text-[12.5px] text-muted-foreground/90 font-medium">
+                          by {p.student}
+                        </div>
+
                         <ExpandableDescription html={p.description} />
 
                         {/* Gallery for AI Image */}

@@ -85,10 +85,7 @@ export function trackPageView(path: string): void {
 /**
  * Tracks custom events (e.g. CTA clicks, registration attempts, project views).
  */
-export function trackEvent(
-  action: string,
-  params?: Record<string, any>
-): void {
+export function trackEvent(action: string, params?: Record<string, any>): void {
   if (typeof window === "undefined" || !GA_ID) {
     return;
   }

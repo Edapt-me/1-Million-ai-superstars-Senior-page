@@ -27,7 +27,8 @@ export const Route = createFileRoute("/_authenticated/admin")({
   component: AdminPage,
 });
 
-type TabId = "dashboard" | "settings" | "projects" | "curriculum" | "faqs" | "ai_tools" | "analytics";
+type TabId =
+  "dashboard" | "settings" | "projects" | "curriculum" | "faqs" | "ai_tools" | "analytics";
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },

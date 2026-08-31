@@ -162,7 +162,9 @@ export function SettingsTab() {
           <h3 className="text-lg font-semibold mb-4 border-b border-border pb-2">Course Details</h3>
           <div className="grid gap-4 sm:grid-cols-2">
             <label htmlFor="course_batch_name" className="block opacity-70">
-              <span className="mb-1.5 block text-[13px] font-medium">Batch Name (Configured in Code)</span>
+              <span className="mb-1.5 block text-[13px] font-medium">
+                Batch Name (Configured in Code)
+              </span>
               <input
                 id="course_batch_name"
                 name="course_batch_name"
@@ -172,7 +174,9 @@ export function SettingsTab() {
               />
             </label>
             <label htmlFor="course_start_date" className="block opacity-70">
-              <span className="mb-1.5 block text-[13px] font-medium">Start Date (Configured in Code)</span>
+              <span className="mb-1.5 block text-[13px] font-medium">
+                Start Date (Configured in Code)
+              </span>
               <input
                 id="course_start_date"
                 name="course_start_date"

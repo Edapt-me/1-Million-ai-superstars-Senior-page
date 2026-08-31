@@ -127,15 +127,18 @@ function RootShell({ children }: { children: ReactNode }) {
       <head>
         <HeadContent />
         {/* Google Analytics */}
-        <script async src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-20WQ6HPJ31'}`}></script>
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${import.meta.env.VITE_GA_MEASUREMENT_ID || "G-20WQ6HPJ31"}`}
+        ></script>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-20WQ6HPJ31'}');
-            `
+              gtag('config', '${import.meta.env.VITE_GA_MEASUREMENT_ID || "G-20WQ6HPJ31"}');
+            `,
           }}
         />
         {/* Meta Pixel Code */}
@@ -152,7 +155,7 @@ s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '1673306513692575');
 fbq('track', 'PageView');
-`
+`,
           }}
         />
         <noscript>
@@ -210,22 +213,22 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-        <SiteHeader />
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.main
-            key={pathname}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          >
-            <Outlet />
-          </motion.main>
-        </AnimatePresence>
-        <SiteFooter />
-        <FloatingCTA />
+      <SiteHeader />
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.main
+          key={pathname}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -6 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+        >
+          <Outlet />
+        </motion.main>
+      </AnimatePresence>
+      <SiteFooter />
+      <FloatingCTA />
 
-        <style>{`
+      <style>{`
           .wa-float-pos {
             left: 82.4%;
             top: 81.2%;
@@ -239,21 +242,21 @@ function RootComponent() {
             }
           }
         `}</style>
-        <a
-          href={programConfig.contact.whatsappUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Chat on WhatsApp"
-          onClick={() => trackEvent("whatsapp_click", { location: pathname })}
-          className="wa-float-pos fixed z-[60] grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
-          style={{
-            backgroundColor: "#25D366",
-          }}
-        >
-          <svg viewBox="0 0 32 32" className="h-7 w-7 md:h-8 md:w-8" fill="currentColor" aria-hidden>
-            <path d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.874 2.708.874.847 0 2.393-.66 2.694-1.475.13-.34.229-.72.229-1.088 0-.42-1.7-.777-1.9-1.462zm-2.973 7.593c-1.834 0-3.626-.5-5.188-1.448L5.55 25l1.687-4.99a9.895 9.895 0 0 1-1.833-5.79c0-5.545 4.583-10.06 10.203-10.06 5.62 0 10.203 4.515 10.203 10.06s-4.582 10.06-10.203 10.06zm0-22.087C9.263 2.71 3.68 8.192 3.68 15c0 2.334.652 4.51 1.79 6.377L3 30l8.83-2.813a12.417 12.417 0 0 0 4.305.795c6.874 0 12.457-5.482 12.457-12.29S23 2.71 16.137 2.71z" />
-          </svg>
-        </a>
+      <a
+        href={programConfig.contact.whatsappUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Chat on WhatsApp"
+        onClick={() => trackEvent("whatsapp_click", { location: pathname })}
+        className="wa-float-pos fixed z-[60] grid h-14 w-14 place-items-center rounded-full text-white shadow-[0_10px_30px_-6px_rgba(37,211,102,0.6)] transition-transform hover:scale-105 md:h-[60px] md:w-[60px]"
+        style={{
+          backgroundColor: "#25D366",
+        }}
+      >
+        <svg viewBox="0 0 32 32" className="h-7 w-7 md:h-8 md:w-8" fill="currentColor" aria-hidden>
+          <path d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.874 2.708.874.847 0 2.393-.66 2.694-1.475.13-.34.229-.72.229-1.088 0-.42-1.7-.777-1.9-1.462zm-2.973 7.593c-1.834 0-3.626-.5-5.188-1.448L5.55 25l1.687-4.99a9.895 9.895 0 0 1-1.833-5.79c0-5.545 4.583-10.06 10.203-10.06 5.62 0 10.203 4.515 10.203 10.06s-4.582 10.06-10.203 10.06zm0-22.087C9.263 2.71 3.68 8.192 3.68 15c0 2.334.652 4.51 1.79 6.377L3 30l8.83-2.813a12.417 12.417 0 0 0 4.305.795c6.874 0 12.457-5.482 12.457-12.29S23 2.71 16.137 2.71z" />
+        </svg>
+      </a>
     </QueryClientProvider>
   );
 }

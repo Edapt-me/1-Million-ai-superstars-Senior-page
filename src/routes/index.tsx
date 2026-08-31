@@ -104,8 +104,6 @@ function LandingPage() {
         <FinalCTA />
         <FAQSection />
       </main>
-
-
     </div>
   );
 }
@@ -129,7 +127,10 @@ function Hero() {
   ];
 
   return (
-    <section id="hero" className="hero-bg relative overflow-hidden pt-[104px] sm:pt-[120px] md:pt-[144px]">
+    <section
+      id="hero"
+      className="hero-bg relative overflow-hidden pt-[104px] sm:pt-[120px] md:pt-[144px]"
+    >
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <motion.div
           animate={{ y: [0, 30, 0], x: [0, 20, 0] }}
@@ -189,8 +190,6 @@ function Hero() {
               }}
             />
 
-
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -233,7 +232,9 @@ function Hero() {
                     <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6" />
                   </span>
                   <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
-                    Official<br />Certificate
+                    Official
+                    <br />
+                    Certificate
                   </div>
                 </div>
 
@@ -243,7 +244,9 @@ function Hero() {
                     <PlayCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                   </span>
                   <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
-                    1-Year<br />Access
+                    1-Year
+                    <br />
+                    Access
                   </div>
                 </div>
 
@@ -253,7 +256,9 @@ function Hero() {
                     <Users className="h-5 w-5 sm:h-6 sm:w-6" />
                   </span>
                   <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
-                    {settings?.hero_trust_counter?.replace(/[^0-9+]/g, '') || "5,000+"}<br />Learners
+                    {settings?.hero_trust_counter?.replace(/[^0-9+]/g, "") || "5,000+"}
+                    <br />
+                    Learners
                   </div>
                 </div>
               </div>
@@ -607,7 +612,11 @@ function ProgramSection() {
     },
     { icon: Clock, label: "Class Time", value: programConfig.batch.classTime },
     { icon: GraduationCap, label: "Certificate", value: programConfig.certificate.title },
-    { icon: PlayCircle, label: "Recording Access", value: programConfig.certificate.recordingAccess },
+    {
+      icon: PlayCircle,
+      label: "Recording Access",
+      value: programConfig.certificate.recordingAccess,
+    },
   ];
 
   return (
@@ -718,8 +727,12 @@ function WhyJoinSection() {
                   <div className="mb-4 sm:mb-5 grid h-11 w-11 sm:h-13 sm:w-13 place-items-center rounded-xl sm:rounded-2xl gradient-bg p-2.5 sm:p-3 text-white shadow-[var(--shadow-soft)] transition-transform group-hover:scale-110">
                     <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
                   </div>
-                  <h3 className="text-[18px] sm:text-[22px] font-semibold tracking-tight">{w.title}</h3>
-                  <p className="mt-2.5 sm:mt-3 text-[15px] sm:text-[17px] leading-relaxed text-muted-foreground">{w.body}</p>
+                  <h3 className="text-[18px] sm:text-[22px] font-semibold tracking-tight">
+                    {w.title}
+                  </h3>
+                  <p className="mt-2.5 sm:mt-3 text-[15px] sm:text-[17px] leading-relaxed text-muted-foreground">
+                    {w.body}
+                  </p>
                 </div>
               </FadeIn>
             );
@@ -805,7 +818,9 @@ function FAQSection() {
                     aria-expanded={isOpen}
                     className="flex w-full items-center justify-between gap-3 sm:gap-4 p-5 sm:p-6 text-left"
                   >
-                    <span className={`text-[15px] sm:text-[17px] font-semibold ${isOpen ? "gradient-text" : ""}`}>
+                    <span
+                      className={`text-[15px] sm:text-[17px] font-semibold ${isOpen ? "gradient-text" : ""}`}
+                    >
                       {f.q}
                     </span>
                     <ChevronDown
@@ -1009,8 +1024,7 @@ function FinalCTA() {
           <div className="relative mx-auto max-w-2xl">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-1.5 text-[12px] font-semibold text-white backdrop-blur">
               <Sparkles className="h-3.5 w-3.5" />
-              Limited Seats · Next Batch{" "}
-              {programConfig.batch.displayStart}
+              Limited Seats · Next Batch {programConfig.batch.displayStart}
             </div>
             <h2 className="text-[40px] font-bold leading-tight tracking-tight md:text-5xl lg:text-[56px]">
               Start Your AI Journey Today
@@ -1066,10 +1080,11 @@ function SectionHeader({
           {eyebrow}
         </div>
         <h2
-          className={`text-balance font-semibold tracking-tight ${malayalamTitle
+          className={`text-balance font-semibold tracking-tight ${
+            malayalamTitle
               ? "font-malayalam text-[clamp(22px,5vw,32px)] leading-[1.2] md:text-[36px] md:leading-[1.15]"
               : "text-[28px] leading-[1.15] sm:text-[32px] md:text-[40px] lg:text-[44px]"
-            }`}
+          }`}
           lang={malayalamTitle ? "ml" : undefined}
         >
           <span className="gradient-text">{title}</span>

@@ -2,8 +2,6 @@
 import { createBrowserClient } from "@supabase/ssr";
 import type { Database } from "./types";
 
-
-
 function createSupabaseClient() {
   const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
   const SUPABASE_PUBLISHABLE_KEY =

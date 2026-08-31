@@ -26,7 +26,9 @@ export function PageHero({
   compact?: boolean;
 }) {
   return (
-    <section className={`relative overflow-hidden hero-bg pt-[96px] sm:pt-[112px] md:pt-[144px] ${compact ? "pb-6 md:pb-8" : "pb-10 md:pb-20"}`}>
+    <section
+      className={`relative overflow-hidden hero-bg pt-[96px] sm:pt-[112px] md:pt-[144px] ${compact ? "pb-6 md:pb-8" : "pb-10 md:pb-20"}`}
+    >
       <div className="mx-auto max-w-4xl px-5 text-left md:text-center sm:px-6 lg:px-8">
         {eyebrow && (
           <div className="mb-3 md:mx-auto md:mb-4 inline-flex items-center gap-2 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-white">

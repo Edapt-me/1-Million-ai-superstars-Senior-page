@@ -71,24 +71,27 @@ function ContactPage() {
       setStatus("idle");
       return;
     }
-    
+
     setErrors({});
     setStatus("sending");
 
     try {
-      await fetch("https://script.google.com/macros/s/AKfycbzUpY8OJcLPXWUum-m8Fjg5Rs3NuGad0IxXmQZ7FPESjy9uuXIEa2zmVkhldKU1k4yH1g/exec", {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
+      await fetch(
+        "https://script.google.com/macros/s/AKfycbzUpY8OJcLPXWUum-m8Fjg5Rs3NuGad0IxXmQZ7FPESjy9uuXIEa2zmVkhldKU1k4yH1g/exec",
+        {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: form.name,
+            phone: form.phone,
+            email: form.email,
+            message: form.message,
+          }),
         },
-        body: JSON.stringify({
-          name: form.name,
-          phone: form.phone,
-          email: form.email,
-          message: form.message
-        })
-      });
+      );
 
       setStatus("sent");
       setForm({ name: "", email: "", phone: "", message: "" });
@@ -126,7 +129,9 @@ function ContactPage() {
 
             <div className="mt-5 sm:mt-6 grid gap-4 sm:grid-cols-2">
               <label htmlFor="contact-name" className="block">
-                <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">Name</span>
+                <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">
+                  Name
+                </span>
                 <input
                   id="contact-name"
                   name="name"
@@ -174,7 +179,9 @@ function ContactPage() {
                 )}
               </label>
               <label htmlFor="contact-email" className="block sm:col-span-2">
-                <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">Email</span>
+                <span className="mb-1 block text-[12px] sm:text-[13px] font-medium text-foreground">
+                  Email
+                </span>
                 <input
                   id="contact-email"
                   name="email"

@@ -42,7 +42,7 @@ export function AnalyticsTab() {
   // Dynamic telemetry dataset based on date range selection
   const data = useMemo(() => {
     const multiplier = range === "today" ? 0.08 : range === "7d" ? 0.35 : range === "90d" ? 2.8 : 1;
-    
+
     return {
       kpis: {
         totalVisitors: Math.round(14850 * multiplier),
@@ -55,13 +55,41 @@ export function AnalyticsTab() {
         bounceRate: "28.2%",
       },
       trafficTrend: [
-        { date: "Day 1", sessions: Math.round(420 * multiplier), pageViews: Math.round(1100 * multiplier) },
-        { date: "Day 5", sessions: Math.round(580 * multiplier), pageViews: Math.round(1450 * multiplier) },
-        { date: "Day 10", sessions: Math.round(790 * multiplier), pageViews: Math.round(1980 * multiplier) },
-        { date: "Day 15", sessions: Math.round(650 * multiplier), pageViews: Math.round(1620 * multiplier) },
-        { date: "Day 20", sessions: Math.round(920 * multiplier), pageViews: Math.round(2300 * multiplier) },
-        { date: "Day 25", sessions: Math.round(1150 * multiplier), pageViews: Math.round(2890 * multiplier) },
-        { date: "Day 30", sessions: Math.round(1340 * multiplier), pageViews: Math.round(3410 * multiplier) },
+        {
+          date: "Day 1",
+          sessions: Math.round(420 * multiplier),
+          pageViews: Math.round(1100 * multiplier),
+        },
+        {
+          date: "Day 5",
+          sessions: Math.round(580 * multiplier),
+          pageViews: Math.round(1450 * multiplier),
+        },
+        {
+          date: "Day 10",
+          sessions: Math.round(790 * multiplier),
+          pageViews: Math.round(1980 * multiplier),
+        },
+        {
+          date: "Day 15",
+          sessions: Math.round(650 * multiplier),
+          pageViews: Math.round(1620 * multiplier),
+        },
+        {
+          date: "Day 20",
+          sessions: Math.round(920 * multiplier),
+          pageViews: Math.round(2300 * multiplier),
+        },
+        {
+          date: "Day 25",
+          sessions: Math.round(1150 * multiplier),
+          pageViews: Math.round(2890 * multiplier),
+        },
+        {
+          date: "Day 30",
+          sessions: Math.round(1340 * multiplier),
+          pageViews: Math.round(3410 * multiplier),
+        },
       ],
       trafficSources: [
         { name: "Organic Search", value: 42 },
@@ -71,19 +99,74 @@ export function AnalyticsTab() {
         { name: "Paid Ads", value: 4 },
       ],
       ctaPerformance: [
-        { name: "Register Now (Hero)", category: "Conversion", clicks: Math.round(780 * multiplier), rate: "44.5%" },
-        { name: "Register Now (Header)", category: "Conversion", clicks: Math.round(430 * multiplier), rate: "24.5%" },
-        { name: "WhatsApp Chat", category: "Support", clicks: Math.round(420 * multiplier), rate: "24.0%" },
-        { name: "View Curriculum", category: "Engagement", clicks: Math.round(260 * multiplier), rate: "14.8%" },
-        { name: "Student Projects", category: "Interest", clicks: Math.round(180 * multiplier), rate: "10.2%" },
-        { name: "Call Now", category: "Support", clicks: Math.round(90 * multiplier), rate: "5.1%" },
+        {
+          name: "Register Now (Hero)",
+          category: "Conversion",
+          clicks: Math.round(780 * multiplier),
+          rate: "44.5%",
+        },
+        {
+          name: "Register Now (Header)",
+          category: "Conversion",
+          clicks: Math.round(430 * multiplier),
+          rate: "24.5%",
+        },
+        {
+          name: "WhatsApp Chat",
+          category: "Support",
+          clicks: Math.round(420 * multiplier),
+          rate: "24.0%",
+        },
+        {
+          name: "View Curriculum",
+          category: "Engagement",
+          clicks: Math.round(260 * multiplier),
+          rate: "14.8%",
+        },
+        {
+          name: "Student Projects",
+          category: "Interest",
+          clicks: Math.round(180 * multiplier),
+          rate: "10.2%",
+        },
+        {
+          name: "Call Now",
+          category: "Support",
+          clicks: Math.round(90 * multiplier),
+          rate: "5.1%",
+        },
       ],
       topPages: [
-        { path: "/", title: "Home | 1 Million AI Superstars", views: Math.round(18500 * multiplier), time: "2m 14s" },
-        { path: "/projects", title: "Student Projects", views: Math.round(8400 * multiplier), time: "4m 02s" },
-        { path: "/about", title: "About Program", views: Math.round(6100 * multiplier), time: "1m 58s" },
-        { path: "/contact", title: "Contact Admissions", views: Math.round(3900 * multiplier), time: "2m 45s" },
-        { path: "/auth", title: "Admin Portal", views: Math.round(1200 * multiplier), time: "1m 10s" },
+        {
+          path: "/",
+          title: "Home | 1 Million AI Superstars",
+          views: Math.round(18500 * multiplier),
+          time: "2m 14s",
+        },
+        {
+          path: "/projects",
+          title: "Student Projects",
+          views: Math.round(8400 * multiplier),
+          time: "4m 02s",
+        },
+        {
+          path: "/about",
+          title: "About Program",
+          views: Math.round(6100 * multiplier),
+          time: "1m 58s",
+        },
+        {
+          path: "/contact",
+          title: "Contact Admissions",
+          views: Math.round(3900 * multiplier),
+          time: "2m 45s",
+        },
+        {
+          path: "/auth",
+          title: "Admin Portal",
+          views: Math.round(1200 * multiplier),
+          time: "1m 10s",
+        },
       ],
       devices: [
         { name: "Mobile (Android/iOS)", value: 74 },
@@ -103,7 +186,7 @@ export function AnalyticsTab() {
         { stage: "View Curriculum", count: Math.round(6680 * multiplier), percent: 45 },
         { stage: "Register CTA Click", count: Math.round(2670 * multiplier), percent: 18 },
         { stage: "Checkout Page Open", count: Math.round(1780 * multiplier), percent: 12 },
-      ]
+      ],
     };
   }, [range]);
 
@@ -182,7 +265,9 @@ export function AnalyticsTab() {
           <Sparkles className="h-4 w-4 shrink-0 text-primary mt-0.5" />
           <div>
             <strong className="font-semibold text-primary">Enterprise Integration Ready: </strong>
-            GA4 telemetry is dynamically ingested client-side using statutory Google tags. Production metrics can sync securely via TanStack Server endpoints using the <strong>Google Analytics Data API (`v1beta`)</strong> without exposing API credentials.
+            GA4 telemetry is dynamically ingested client-side using statutory Google tags.
+            Production metrics can sync securely via TanStack Server endpoints using the{" "}
+            <strong>Google Analytics Data API (`v1beta`)</strong> without exposing API credentials.
           </div>
         </div>
       </div>
@@ -240,7 +325,9 @@ export function AnalyticsTab() {
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h3 className="text-base font-semibold">Traffic Trends Over Time</h3>
-              <p className="text-xs text-muted-foreground">Sessions and Page Views volume comparison</p>
+              <p className="text-xs text-muted-foreground">
+                Sessions and Page Views volume comparison
+              </p>
             </div>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </div>
@@ -261,8 +348,22 @@ export function AnalyticsTab() {
                 <YAxis stroke="#94a3b8" fontSize={12} tickLine={false} />
                 <Tooltip />
                 <Legend />
-                <Area type="monotone" dataKey="pageViews" stroke="#1F0A77" fillOpacity={1} fill="url(#colorPageViews)" name="Page Views" />
-                <Area type="monotone" dataKey="sessions" stroke="#4F46E5" fillOpacity={1} fill="url(#colorSessions)" name="Sessions" />
+                <Area
+                  type="monotone"
+                  dataKey="pageViews"
+                  stroke="#1F0A77"
+                  fillOpacity={1}
+                  fill="url(#colorPageViews)"
+                  name="Page Views"
+                />
+                <Area
+                  type="monotone"
+                  dataKey="sessions"
+                  stroke="#4F46E5"
+                  fillOpacity={1}
+                  fill="url(#colorSessions)"
+                  name="Sessions"
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -296,7 +397,10 @@ export function AnalyticsTab() {
             {data.trafficSources.map((source, idx) => (
               <div key={source.name} className="flex items-center justify-between text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
+                  <span
+                    className="h-2.5 w-2.5 rounded-full"
+                    style={{ backgroundColor: COLORS[idx % COLORS.length] }}
+                  />
                   <span className="text-foreground/80">{source.name}</span>
                 </div>
                 <span className="font-semibold">{source.value}%</span>
@@ -313,7 +417,9 @@ export function AnalyticsTab() {
           <div className="mb-4 flex items-center justify-between">
             <div>
               <h3 className="text-base font-semibold">Student Registration Funnel</h3>
-              <p className="text-xs text-muted-foreground">Step-by-step conversion drop-off analysis</p>
+              <p className="text-xs text-muted-foreground">
+                Step-by-step conversion drop-off analysis
+              </p>
             </div>
             <Layers className="h-4 w-4 text-muted-foreground" />
           </div>
@@ -323,7 +429,9 @@ export function AnalyticsTab() {
               <div key={step.stage} className="space-y-1.5">
                 <div className="flex justify-between text-xs font-medium">
                   <span>{step.stage}</span>
-                  <span className="font-semibold text-primary">{step.count.toLocaleString()} ({step.percent}%)</span>
+                  <span className="font-semibold text-primary">
+                    {step.count.toLocaleString()} ({step.percent}%)
+                  </span>
                 </div>
                 <div className="h-3.5 w-full overflow-hidden rounded-full bg-secondary">
                   <div
@@ -423,7 +531,10 @@ export function AnalyticsTab() {
                     <span className="font-semibold">{d.value}%</span>
                   </div>
                   <div className="h-2 w-full rounded-full bg-secondary">
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${d.value}%` }} />
+                    <div
+                      className="h-full rounded-full bg-primary"
+                      style={{ width: `${d.value}%` }}
+                    />
                   </div>
                 </div>
               ))}
@@ -437,7 +548,10 @@ export function AnalyticsTab() {
             </div>
             <div className="grid grid-cols-2 gap-2 text-xs">
               {data.locations.map((loc) => (
-                <div key={loc.city} className="flex items-center justify-between rounded-xl bg-secondary/30 p-2.5">
+                <div
+                  key={loc.city}
+                  className="flex items-center justify-between rounded-xl bg-secondary/30 p-2.5"
+                >
                   <div>
                     <div className="font-semibold">{loc.city}</div>
                     <div className="text-[10px] text-muted-foreground">{loc.state}</div>
