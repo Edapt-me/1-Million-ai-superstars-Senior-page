@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import {
   Sparkles,
   BookOpen,
@@ -55,6 +56,7 @@ import {
 } from "@/lib/cms";
 import { optimizedImage } from "@/services/media";
 import { trackEvent } from "@/lib/analytics";
+import { ExploreCoursesSection } from "@/components/courses/ExploreCoursesSection";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -95,13 +97,12 @@ function LandingPage() {
         <InitiativeBySection />
         <CertificateSection />
         <CurriculumSection />
-        <CurriculumUpdateNotice />
         <ToolsSection />
         <ProgramSection />
         <WhyJoinSection />
         <WhoCanJoinSection />
+        <ExploreCoursesSection />
         <ContactSection />
-        <FinalCTA />
         <FAQSection />
       </main>
     </div>
@@ -116,15 +117,6 @@ function Hero() {
   });
 
   const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
-
-  const badgesStr = settings?.hero_badge || "10 Live Sessions · Malayalam · Certificate";
-  const badges = [
-    "Live Classes",
-    "Malayalam",
-    "Practical Learning",
-    "Certificate",
-    "1-Year Recording Access",
-  ];
 
   return (
     <section
@@ -146,18 +138,6 @@ function Hero() {
 
       <div className="mx-auto max-w-7xl px-4 pb-4 sm:px-6 md:pb-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
-          <div className="flex justify-center md:block md:text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="mb-5 md:mb-8 inline-flex items-center gap-2 rounded-full border border-border bg-white/80 px-3 py-1.5 md:px-4 md:py-2 text-[12px] md:text-[13px] font-semibold text-primary shadow-sm backdrop-blur"
-            >
-              <Sparkles className="h-3.5 w-3.5" />
-              {badgesStr}
-            </motion.div>
-          </div>
-
           <div className="text-left md:text-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
@@ -451,6 +431,38 @@ function CurriculumSection() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Curriculum"
+          eyebrowExtra={
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center h-4 w-4 rounded-full bg-white/20 hover:bg-white/40 text-white transition-colors cursor-pointer ml-0.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-white"
+                  aria-label="Curriculum update notice"
+                >
+                  <Info className="h-2.5 w-2.5" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-80 sm:w-96 rounded-2xl p-4 sm:p-5 shadow-2xl border border-border/80 bg-white text-foreground"
+                align="center"
+                sideOffset={8}
+              >
+                <div className="flex items-start gap-3.5 text-left normal-case tracking-normal">
+                  <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary/10 text-primary">
+                    <Info className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h4 className="text-[15px] font-semibold text-primary">
+                      Curriculum Update Notice
+                    </h4>
+                    <p className="mt-1.5 text-[13px] leading-relaxed text-muted-foreground">
+                      AI technology evolves rapidly. To keep this program current and valuable, the syllabus may be updated periodically to include the latest AI tools and features.
+                    </p>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          }
           title={<>ഈ പദ്ധതിയിലൂടെ നിങ്ങൾ എന്തെല്ലാം പഠിച്ചെടുക്കും?</>}
           malayalamTitle
           titleMaxWidth="max-w-4xl"
@@ -523,28 +535,6 @@ function CurriculumSection() {
   );
 }
 
-function CurriculumUpdateNotice() {
-  return (
-    <section className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white pb-4 pt-2 md:pb-6 md:pt-4">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="flex items-start gap-4 rounded-2xl border-l-4 border-[#1F0A77] bg-[#EEF2FF] p-5 shadow-[var(--shadow-soft)] md:items-center md:gap-5 md:rounded-3xl md:p-6">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#1F0A77]/10 text-[#1F0A77] md:h-11 md:w-11">
-            <Info className="h-5 w-5 md:h-6 md:w-6" />
-          </div>
-          <div>
-            <h3 className="text-[16px] font-semibold text-[#1F0A77] md:text-[18px]">
-              Curriculum Update Notice
-            </h3>
-            <p className="mt-1 text-[14px] leading-relaxed text-[#4B5563] md:text-[15px]">
-              AI technology evolves rapidly. To keep this program current and valuable, the syllabus
-              may be updated periodically to include the latest AI tools and features.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ---------- Tools ---------- */
 function ToolsSection() {
@@ -604,20 +594,7 @@ function ProgramSection() {
     queryFn: getWebsiteSettings,
   });
 
-  const SPECS = [
-    {
-      icon: Calendar,
-      label: "Course Date",
-      value: programConfig.batch.displayStart,
-    },
-    { icon: Clock, label: "Class Time", value: programConfig.batch.classTime },
-    { icon: GraduationCap, label: "Certificate", value: programConfig.certificate.title },
-    {
-      icon: PlayCircle,
-      label: "Recording Access",
-      value: programConfig.certificate.recordingAccess,
-    },
-  ];
+  const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
 
   return (
     <section
@@ -630,44 +607,119 @@ function ProgramSection() {
           title="Program Specifications"
           subtitle="Everything you need to know at a glance."
         />
-        <div className="mt-8 md:mt-10 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {SPECS.map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <FadeIn key={s.label} delay={i * 0.04}>
-                <div className="glass-card gradient-border-hover group h-full rounded-2xl sm:rounded-3xl p-5 sm:p-7 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                  <div className="mb-4 sm:mb-5 flex items-center gap-3">
-                    <div className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-xl sm:rounded-2xl gradient-bg text-white shadow-[var(--shadow-soft)]">
-                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
-                    </div>
-                    <div className="text-[11px] sm:text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
-                      {s.label}
-                    </div>
+
+        {/* Desktop Connected / Tree-Style Layout */}
+        <div className="hidden md:block max-w-2xl mx-auto mt-10">
+          <div className="flex flex-col items-center">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary shadow-sm backdrop-blur">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              {programConfig.batch.batchName} Schedule
+            </div>
+            {/* Trunk line */}
+            <div className="h-6 w-0.5 gradient-bg" />
+            {/* Branches line */}
+            <div className="relative w-full max-w-md">
+              <div className="h-0.5 w-full gradient-bg rounded-full" />
+              {/* Drop branch connectors */}
+              <div className="absolute left-1/4 -bottom-4 h-4 w-0.5 gradient-bg -translate-x-1/2" />
+              <div className="absolute right-1/4 -bottom-4 h-4 w-0.5 gradient-bg translate-x-1/2" />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-6 mt-4">
+            <FadeIn delay={0.05}>
+              <div className="glass-card gradient-border-hover group h-full rounded-2xl p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="grid h-11 w-11 place-items-center rounded-xl gradient-bg text-white shadow-[var(--shadow-soft)]">
+                    <Calendar className="h-5 w-5" />
                   </div>
-                  <div className="text-[20px] font-semibold tracking-tight text-foreground">
-                    {s.value}
+                  <div className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
+                    Course Date
                   </div>
                 </div>
-              </FadeIn>
-            );
-          })}
+                <div className="text-[20px] lg:text-[22px] font-bold tracking-tight text-foreground">
+                  {programConfig.batch.displayStart}
+                </div>
+              </div>
+            </FadeIn>
+
+            <FadeIn delay={0.1}>
+              <div className="glass-card gradient-border-hover group h-full rounded-2xl p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="grid h-11 w-11 place-items-center rounded-xl gradient-bg text-white shadow-[var(--shadow-soft)]">
+                    <Clock className="h-5 w-5" />
+                  </div>
+                  <div className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
+                    Class Time
+                  </div>
+                </div>
+                <div className="text-[20px] lg:text-[22px] font-bold tracking-tight text-foreground">
+                  {programConfig.batch.classTime}
+                </div>
+              </div>
+            </FadeIn>
+          </div>
         </div>
 
+        {/* Mobile Simple Stacked Cards */}
+        <div className="md:hidden grid grid-cols-1 gap-3.5 max-w-md mx-auto mt-8">
+          <div className="flex justify-center mb-1">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-white/90 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary shadow-sm backdrop-blur">
+              <Sparkles className="h-3 w-3 text-primary" />
+              {programConfig.batch.batchName} Schedule
+            </div>
+          </div>
+
+          <div className="glass-card rounded-2xl p-5 flex items-center gap-4">
+            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl gradient-bg text-white shadow-[var(--shadow-soft)]">
+              <Calendar className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                Course Date
+              </div>
+              <div className="text-[18px] font-bold text-foreground mt-0.5">
+                {programConfig.batch.displayStart}
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-card rounded-2xl p-5 flex items-center gap-4">
+            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl gradient-bg text-white shadow-[var(--shadow-soft)]">
+              <Clock className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                Class Time
+              </div>
+              <div className="text-[18px] font-bold text-foreground mt-0.5">
+                {programConfig.batch.classTime}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Program Fee Card */}
         <FadeIn delay={0.2}>
-          <div className="mt-12 overflow-hidden rounded-[32px] gradient-bg p-10 text-center text-white shadow-[var(--shadow-glow)] md:p-14">
+          <div className="mt-12 overflow-hidden rounded-[32px] gradient-bg p-8 sm:p-10 text-center text-white shadow-[var(--shadow-glow)] md:p-12 max-w-2xl mx-auto">
             <div className="text-[12px] font-semibold uppercase tracking-[0.2em] text-white/80">
               Program Fee
             </div>
-            <div className="mt-3 text-5xl font-bold md:text-6xl">
-              ₹{settings?.course_fee || "749"}{" "}
-              <span className="text-2xl font-medium text-white/80">
-                {settings?.course_offer_price || "+ GST"}
+            <div className="mt-3 text-4xl font-bold sm:text-5xl md:text-6xl">
+              ₹{settings?.course_fee || programConfig.pricing.fee}{" "}
+              <span className="text-xl sm:text-2xl font-medium text-white/80">
+                {settings?.course_offer_price || programConfig.pricing.offerPrice}
               </span>
             </div>
-            <p className="mt-4 text-[17px] text-white/85 md:text-lg">
-              One-time payment · {settings?.course_duration || "10 sessions"} · 1-year recording
-              access
-            </p>
+            <div className="mt-6 flex justify-center">
+              <a
+                href={regUrl}
+                onClick={() => trackEvent("register_click", { location: "program_fee" })}
+                className="inline-flex h-12 md:h-14 w-[75%] max-w-lg items-center justify-center rounded-full bg-white px-8 text-[16px] md:text-[17px] font-bold text-primary shadow-lg hover:bg-white/95 hover:shadow-xl transition-all duration-200 active:scale-[0.99]"
+              >
+                Join Now
+              </a>
+            </div>
           </div>
         </FadeIn>
       </div>
@@ -1000,63 +1052,7 @@ function ContactSection() {
   );
 }
 
-/* ---------- Final CTA ---------- */
-function FinalCTA() {
-  const { data: settings } = useQuery({
-    queryKey: ["website-settings"],
-    queryFn: getWebsiteSettings,
-  });
 
-  const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
-
-  const whatsapp = settings?.contact_whatsapp || "918138010166";
-  const whatsappUrl = `https://wa.me/${whatsapp}`;
-
-  return (
-    <section id="register" className="relative overflow-hidden py-14 md:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-[36px] gradient-bg p-12 text-center text-white shadow-[var(--shadow-glow)] md:p-20">
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -left-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-            <div className="absolute -bottom-20 -right-20 h-72 w-72 rounded-full bg-white/10 blur-3xl" />
-          </div>
-
-          <div className="relative mx-auto max-w-2xl">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-3.5 py-1.5 text-[12px] font-semibold text-white backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5" />
-              Limited Seats · Next Batch {programConfig.batch.displayStart}
-            </div>
-            <h2 className="text-[40px] font-bold leading-tight tracking-tight md:text-5xl lg:text-[56px]">
-              Start Your AI Journey Today
-            </h2>
-            <p className="mx-auto mt-5 max-w-lg text-[18px] text-white/90 md:text-[20px]">
-              Join thousands of learners who are building their future with AI.
-            </p>
-
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <a
-                href={regUrl}
-                onClick={() => trackEvent("register_click", { location: "final_cta" })}
-                className="inline-flex h-14 min-w-64 items-center justify-center rounded-full bg-white px-8 text-[17px] font-bold text-primary shadow-xl transition-transform hover:-translate-y-0.5"
-              >
-                Join Now for ₹{settings?.course_fee || "749"}{" "}
-                {settings?.course_offer_price || "+ GST"}
-              </a>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-14 min-w-56 items-center justify-center gap-2 rounded-full border border-white/40 bg-white/10 px-8 text-[17px] font-semibold text-white backdrop-blur transition-all hover:bg-white/20"
-              >
-                <MessageCircle className="h-5 w-5" /> Chat on WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 /* ---------- Shared helpers ---------- */
 function SectionHeader({
@@ -1065,19 +1061,22 @@ function SectionHeader({
   subtitle,
   malayalamTitle = false,
   titleMaxWidth = "max-w-2xl",
+  eyebrowExtra,
 }: {
   eyebrow: string;
   title: React.ReactNode;
   subtitle?: string;
   malayalamTitle?: boolean;
   titleMaxWidth?: string;
+  eyebrowExtra?: React.ReactNode;
 }) {
   return (
     <FadeIn>
       <div className={`mx-auto text-center ${titleMaxWidth}`}>
-        <div className="mb-2.5 md:mb-3 inline-flex items-center gap-2 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-white">
+        <div className="mb-2.5 md:mb-3 inline-flex items-center gap-1.5 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-white">
           <Sparkles className="h-3.5 w-3.5" />
-          {eyebrow}
+          <span>{eyebrow}</span>
+          {eyebrowExtra}
         </div>
         <h2
           className={`text-balance font-semibold tracking-tight ${

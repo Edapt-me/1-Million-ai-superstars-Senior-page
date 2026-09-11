@@ -266,6 +266,102 @@ export type Database = {
         };
         Relationships: [];
       };
+      reviews: {
+        Row: {
+          created_at: string | null;
+          display_order: number | null;
+          id: string;
+          is_published: boolean | null;
+          name: string;
+          profile_image_url: string | null;
+          rating: number | null;
+          review_date: string | null;
+          review_image_url: string | null;
+          review_text: string | null;
+          role: string | null;
+          source: string | null;
+          source_review_id: string | null;
+          updated_at: string | null;
+          video_url: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          display_order?: number | null;
+          id?: string;
+          is_published?: boolean | null;
+          name: string;
+          profile_image_url?: string | null;
+          rating?: number | null;
+          review_date?: string | null;
+          review_image_url?: string | null;
+          review_text?: string | null;
+          role?: string | null;
+          source?: string | null;
+          source_review_id?: string | null;
+          updated_at?: string | null;
+          video_url?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          display_order?: number | null;
+          id?: string;
+          is_published?: boolean | null;
+          name?: string;
+          profile_image_url?: string | null;
+          rating?: number | null;
+          review_date?: string | null;
+          review_image_url?: string | null;
+          review_text?: string | null;
+          role?: string | null;
+          source?: string | null;
+          source_review_id?: string | null;
+          updated_at?: string | null;
+          video_url?: string | null;
+        };
+        Relationships: [];
+      };
+      registrations: {
+        Row: {
+          amount: number | null;
+          city: string | null;
+          created_at: string;
+          email: string;
+          id: string;
+          name: string;
+          payment_id: string | null;
+          phone: string;
+          status: string;
+          updated_at: string;
+          whatsapp: string | null;
+        };
+        Insert: {
+          amount?: number | null;
+          city?: string | null;
+          created_at?: string;
+          email: string;
+          id?: string;
+          name: string;
+          payment_id?: string | null;
+          phone: string;
+          status?: string;
+          updated_at?: string;
+          whatsapp?: string | null;
+        };
+        Update: {
+          amount?: number | null;
+          city?: string | null;
+          created_at?: string;
+          email?: string;
+          id?: string;
+          name?: string;
+          payment_id?: string | null;
+          phone?: string;
+          status?: string;
+          updated_at?: string;
+          whatsapp?: string | null;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;

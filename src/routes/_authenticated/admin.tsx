@@ -9,6 +9,7 @@ import {
   MessageCircleQuestion,
   Wrench,
   BarChart3,
+  Star,
 } from "lucide-react";
 import { DashboardTab } from "@/components/admin/DashboardTab";
 import { SettingsTab } from "@/components/admin/SettingsTab";
@@ -17,6 +18,7 @@ import { CurriculumTab } from "@/components/admin/CurriculumTab";
 import { FAQsTab } from "@/components/admin/FAQsTab";
 import { AIToolsTab } from "@/components/admin/AIToolsTab";
 import { AnalyticsTab } from "@/components/admin/AnalyticsTab";
+import { ReviewsTab } from "@/components/admin/ReviewsTab";
 import { useQueryClient } from "@tanstack/react-query";
 import { logoutServerFn } from "@/server-auth";
 
@@ -28,7 +30,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 });
 
 type TabId =
-  "dashboard" | "settings" | "projects" | "curriculum" | "faqs" | "ai_tools" | "analytics";
+  "dashboard" | "settings" | "projects" | "curriculum" | "faqs" | "ai_tools" | "analytics" | "reviews";
 
 const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -36,6 +38,7 @@ const TABS: { id: TabId; label: string; icon: React.ElementType }[] = [
   { id: "projects", label: "Projects", icon: FolderOpen },
   { id: "ai_tools", label: "AI Tools", icon: Wrench },
   { id: "curriculum", label: "Curriculum", icon: BookOpen },
+  { id: "reviews", label: "Reviews", icon: Star },
   { id: "faqs", label: "FAQs", icon: MessageCircleQuestion },
   { id: "analytics", label: "Analytics", icon: BarChart3 },
 ];
@@ -99,6 +102,7 @@ function AdminPage() {
             {activeTab === "projects" && <ProjectsTab />}
             {activeTab === "ai_tools" && <AIToolsTab />}
             {activeTab === "curriculum" && <CurriculumTab />}
+            {activeTab === "reviews" && <ReviewsTab />}
             {activeTab === "faqs" && <FAQsTab />}
             {activeTab === "analytics" && <AnalyticsTab />}
           </main>

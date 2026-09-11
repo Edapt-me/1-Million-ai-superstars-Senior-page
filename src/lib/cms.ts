@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { programConfig } from "./programConfig";
 
 export type WebsiteSettings = {
   id: number;
@@ -69,7 +70,15 @@ export async function getWebsiteSettings(): Promise<WebsiteSettings | null> {
     console.error("Error fetching website settings:", error);
     return null;
   }
-  return data;
+  if (!data) return null;
+  return {
+    ...data,
+    course_batch_name: programConfig.batch.batchName,
+    course_start_date: programConfig.batch.displayStart,
+    course_registration_link: programConfig.registrationUrl,
+    course_fee: programConfig.pricing.fee,
+    course_offer_price: programConfig.pricing.offerPrice,
+  };
 }
 
 export async function updateWebsiteSettings(input: Partial<SettingsInput>) {
