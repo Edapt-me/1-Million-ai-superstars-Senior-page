@@ -1,6 +1,5 @@
 import edaptLogo from "@/assets/partners/edapt.png";
 import fkcLogo from "@/assets/partners/fkc.png";
-import manoramaLogo from "@/assets/partners/manorama.png";
 
 export type Mentor = {
   name: string;
@@ -53,7 +52,6 @@ export const programConfig = {
   partners: [
     { name: "Edapt", logoUrl: edaptLogo },
     { name: "Future Knowledge Collective", logoUrl: fkcLogo },
-    { name: "Malayala Manorama", logoUrl: manoramaLogo },
   ],
   // Populated as mentor profiles are confirmed.
   mentors: [] as Mentor[],

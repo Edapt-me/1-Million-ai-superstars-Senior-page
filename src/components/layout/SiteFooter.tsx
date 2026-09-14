@@ -6,7 +6,7 @@ export function SiteFooter() {
   const { contact, social } = programConfig;
   return (
     <footer className="border-t border-border bg-white pb-[80px] pt-12 md:pb-6 md:pt-16">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <div className="grid gap-10 md:grid-cols-3 md:gap-12 lg:gap-16">
           <div>
             <img

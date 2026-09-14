@@ -53,7 +53,7 @@ const WHY = [
   {
     icon: Award,
     title: "Trusted partners",
-    body: "Edapt, Future Knowledge Collective and Malayala Manorama stand behind this program.",
+    body: "Edapt and Future Knowledge Collective stand behind this program.",
   },
 ];
 
@@ -108,7 +108,7 @@ function AboutPage() {
             <span className="gradient-text">Kerala's largest Malayalam AI movement</span>
           </h1>
           <p className="mt-3 md:mx-auto md:mt-4 max-w-2xl text-[16px] leading-[1.5] text-muted-foreground sm:text-[17px] md:text-[19px] md:leading-relaxed">
-            A joint initiative by Edapt, Future Knowledge Collective and Malayala Manorama, built to
+            A joint initiative by Edapt and Future Knowledge Collective, built to
             make AI accessible to every Malayali household.
           </p>
         </div>

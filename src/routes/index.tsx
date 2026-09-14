@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import {
@@ -31,8 +31,10 @@ import {
   Info,
   Headset,
   ArrowRight,
+  Trophy,
 } from "lucide-react";
 import certificateAsset from "@/assets/1m-ai-superstars-certificate.png";
+import heroLaptopImg from "@/assets/hero-laptop.png";
 // Replaced by CMS
 // import chatgptLogo from "@/assets/tools/chatgpt.png.asset.json";
 // import geminiLogo from "@/assets/tools/gemini-new.png.asset.json";
@@ -46,7 +48,6 @@ import certificateAsset from "@/assets/1m-ai-superstars-certificate.png";
 // import gammaLogo from "@/assets/tools/gamma.png.asset.json";
 import edaptLogo from "@/assets/partners/edapt.png";
 import fkcLogo from "@/assets/partners/fkc.png";
-import manoramaLogo from "@/assets/partners/manorama.png";
 import { programConfig } from "@/lib/programConfig";
 import {
   getWebsiteSettings,
@@ -72,13 +73,40 @@ export const Route = createFileRoute("/")({
   }),
 });
 
+const DEFAULT_SETTINGS = {
+  id: 1,
+  hero_title: "AI എന്താണെന്നും, എങ്ങനെ ഉപയോഗിക്കാമെന്നും മലയാളത്തിൽ പഠിക്കാം",
+  hero_subtitle:
+    "<p>AI-യെക്കുറിച്ച് വലിയ ടെക്നിക്കൽ അറിവൊന്നും വേണ്ട. നമ്മുടെ ദൈനംദിന ജീവിതത്തിലും ജോലിയിലും AI എങ്ങനെ എളുപ്പത്തിൽ ഉപയോഗിക്കാമെന്ന് ലളിതമായി പഠിക്കാം.</p>",
+  hero_badge: "10 Live Sessions · Malayalam · Certificate",
+  hero_image: "",
+  hero_primary_button_text: "ഇപ്പോൾ തന്നെ Join ചെയ്യൂ",
+  hero_secondary_button_text: "View Curriculum",
+  hero_trust_counter: "5000+ Students are part of the program",
+  course_batch_name: programConfig.batch.batchName,
+  course_start_date: programConfig.batch.displayStart,
+  course_duration: `${programConfig.batch.sessions} Days`,
+  course_registration_link: programConfig.registrationUrl,
+  course_fee: programConfig.pricing.fee,
+  course_offer_price: programConfig.pricing.offerPrice,
+  contact_email: programConfig.contact.email,
+  contact_phone: programConfig.contact.phone,
+  contact_whatsapp: programConfig.contact.whatsappNumber,
+  social_facebook: programConfig.social.facebook,
+  social_instagram: programConfig.social.instagram,
+  social_youtube: "",
+  social_linkedin: "",
+  created_at: "",
+  updated_at: "",
+};
+
 function LandingPage() {
   const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, { stiffness: 120, damping: 25, mass: 0.3 });
 
-  const { data: settings } = useQuery({
+  const { data: settings = DEFAULT_SETTINGS } = useQuery({
     queryKey: ["website-settings"],
     queryFn: getWebsiteSettings,
+    initialData: DEFAULT_SETTINGS,
   });
 
   const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
@@ -86,7 +114,7 @@ function LandingPage() {
   return (
     <div className="relative min-h-screen bg-background text-foreground">
       <motion.div
-        style={{ scaleX }}
+        style={{ scaleX: scrollYProgress }}
         className="fixed left-0 right-0 top-0 z-[60] h-1 origin-left gradient-bg"
         aria-hidden
       />
@@ -95,11 +123,9 @@ function LandingPage() {
         <Hero />
         <AboutSection />
         <InitiativeBySection />
-        <CertificateSection />
         <CurriculumSection />
         <ToolsSection />
         <ProgramSection />
-        <WhyJoinSection />
         <WhoCanJoinSection />
         <ExploreCoursesSection />
         <ContactSection />
@@ -109,11 +135,97 @@ function LandingPage() {
   );
 }
 
+/* ---------- Hero Tool Icons ---------- */
+function ChatGPTLogo({ className = "w-8 h-8" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path
+        d="M22.282 9.821a5.985 5.985 0 0 0-.516-4.91 6.046 6.046 0 0 0-6.51-2.9A6.065 6.065 0 0 0 4.981 4.182a5.985 5.985 0 0 0-3.998 2.9 6.046 6.046 0 0 0 .743 7.097 5.98 5.98 0 0 0 .51 4.911 6.051 6.051 0 0 0 6.515 2.9A5.985 5.985 0 0 0 13.26 24a6.056 6.056 0 0 0 5.772-4.206 5.99 5.99 0 0 0 3.997-2.9 6.056 6.056 0 0 0-.747-7.073zM13.26 22.43a4.476 4.476 0 0 1-2.876-1.04l.141-.081 4.779-2.758a.795.795 0 0 0 .392-.681v-6.737l2.02 1.168a.071.071 0 0 1 .038.052v5.583a4.504 4.504 0 0 1-4.494 4.494zM3.6 18.304a4.47 4.47 0 0 1-.535-3.014l.142.085 4.783 2.758a.771.771 0 0 0 .78 0l5.843-3.368v2.332a.08.08 0 0 1-.033.062L9.74 19.95a4.499 4.499 0 0 1-6.14-1.646zm-1.26-10.41a4.485 4.485 0 0 1 2.366-1.972V11.6a.766.766 0 0 0 .388.676l5.814 3.355-2.02 1.168a.076.076 0 0 1-.071 0L4.047 14.01a4.504 4.504 0 0 1-1.707-6.118zm16.596 3.856L13.104 8.364l2.015-1.164a.076.076 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.104v-5.677a.79.79 0 0 0-.408-.667zm2.011-3.023l-.142-.085-4.774-2.782a.776.776 0 0 0-.785 0L9.409 9.23V6.897a.066.066 0 0 1 .028-.061l4.83-2.787a4.499 4.499 0 0 1 6.68 4.66zm-12.64 4.135a.771.771 0 0 0 .397-.681V6.755l2.02-1.168a.071.071 0 0 1 .071 0l4.83 2.791a4.494 4.494 0 0 1-.676 8.104v-5.677a.79.79 0 0 0-.407-.667zm-1.259 2.182l2.91-1.68a.795.795 0 0 0 .393-.681V9.923l2.91 1.68a.795.795 0 0 0 .785 0l2.91-1.68v3.364a.795.795 0 0 0 .393.681l2.91 1.68-2.91 1.68a.795.795 0 0 0-.393.681v3.364l-2.91-1.68a.795.795 0 0 0-.785 0l-2.91 1.68v-3.364a.795.795 0 0 0-.393-.681l-2.91-1.68z"
+        fill="#10A37F"
+      />
+    </svg>
+  );
+}
+
+function GeminiLogo({ className = "w-8 h-8" }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="hero-gemini-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#EA4335" />
+          <stop offset="30%" stopColor="#FBBC04" />
+          <stop offset="65%" stopColor="#4285F4" />
+          <stop offset="100%" stopColor="#34A853" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M12 0C12 6.627 6.627 12 0 12C6.627 12 12 17.373 12 24C12 17.373 17.373 12 24 12C17.373 12 12 6.627 12 0Z"
+        fill="url(#hero-gemini-grad)"
+      />
+    </svg>
+  );
+}
+
+function LovableLogo() {
+  return (
+    <div className="flex flex-col items-center justify-center select-none">
+      <svg className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="hero-lovable-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#FF416C" />
+            <stop offset="35%" stopColor="#FF4B2B" />
+            <stop offset="70%" stopColor="#8A2BE2" />
+            <stop offset="100%" stopColor="#3B82F6" />
+          </linearGradient>
+        </defs>
+        <path
+          d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+          fill="url(#hero-lovable-grad)"
+        />
+      </svg>
+      <span className="mt-1 text-[11px] sm:text-[12px] font-bold text-slate-800 tracking-tight">
+        Lovable
+      </span>
+    </div>
+  );
+}
+
+function NotebookLMLogo() {
+  return (
+    <div className="flex flex-col items-center justify-center select-none">
+      <svg className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M6 23C6 14.2 10.5 9 16 9C21.5 9 26 14.2 26 23"
+          stroke="#111827"
+          strokeWidth="2.8"
+          strokeLinecap="round"
+        />
+        <path
+          d="M10 23C10 17 12.7 13.5 16 13.5C19.3 13.5 22 17 22 23"
+          stroke="#111827"
+          strokeWidth="2.8"
+          strokeLinecap="round"
+        />
+        <path
+          d="M14 23C14 20 14.9 18 16 18C17.1 18 18 20 18 23"
+          stroke="#111827"
+          strokeWidth="2.8"
+          strokeLinecap="round"
+        />
+      </svg>
+      <span className="mt-1 text-[10px] sm:text-[11px] font-bold text-slate-800 tracking-tight">
+        NotebookLM
+      </span>
+    </div>
+  );
+}
+
 /* ---------- Hero ---------- */
 function Hero() {
-  const { data: settings } = useQuery({
+  const { data: settings = DEFAULT_SETTINGS } = useQuery({
     queryKey: ["website-settings"],
     queryFn: getWebsiteSettings,
+    initialData: DEFAULT_SETTINGS,
   });
 
   const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
@@ -121,128 +233,231 @@ function Hero() {
   return (
     <section
       id="hero"
-      className="hero-bg relative overflow-hidden pt-[104px] sm:pt-[120px] md:pt-[144px]"
+      className="bg-white relative overflow-x-clip overflow-y-visible pt-[88px] sm:pt-[104px] md:pt-[120px] lg:pt-[128px] pb-6 sm:pb-8 md:pb-12"
     >
+      {/* Soft lavender/purple background ambient glow matching reference */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <motion.div
-          animate={{ y: [0, 30, 0], x: [0, 20, 0] }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -left-20 top-20 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(31,10,119,0.22),transparent_70%)] blur-2xl will-change-transform md:blur-3xl"
-        />
-        <motion.div
-          animate={{ y: [0, -40, 0], x: [0, -20, 0] }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute right-0 top-40 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(75,45,214,0.22),transparent_70%)] blur-2xl will-change-transform md:blur-3xl"
-        />
+        {/* Large subtle circular purple glow behind the right column / laptop (hidden on phone/mobile) */}
+        <div className="hidden md:block absolute right-[-4%] sm:right-[0%] top-[4%] sm:top-[6%] h-[550px] w-[550px] sm:h-[680px] sm:w-[680px] md:h-[780px] md:w-[780px] rounded-full bg-[radial-gradient(circle,rgba(224,216,255,0.65)_0%,rgba(238,233,255,0.3)_42%,transparent_70%)] blur-2xl md:blur-3xl" />
+        {/* Soft lavender ambient glow on the bottom-left */}
+        <div className="absolute -left-20 bottom-[-5%] h-[320px] w-[320px] sm:h-[480px] sm:w-[480px] rounded-full bg-[radial-gradient(circle,rgba(238,232,255,0.45)_0%,transparent_65%)] blur-2xl" />
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 pb-4 sm:px-6 md:pb-6 lg:px-8">
-        <div className="mx-auto max-w-4xl">
-          <div className="text-left md:text-center">
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.05 }}
-              className="text-[26px] font-bold leading-[1.45] sm:leading-[1.35] tracking-tight sm:text-[36px] md:text-[46px] lg:text-[54px]"
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+        {/* Top 2-Column Hero Composition */}
+        <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-12 md:gap-6 lg:gap-8 xl:gap-10">
+          {/* LEFT SIDE: Text Content & Primary CTA */}
+          <div className="col-span-1 md:col-span-7 lg:col-span-7 xl:col-span-7 flex flex-col items-start text-left z-20 relative">
+            <h1
+              className="text-[25px] sm:text-[29px] md:text-[33px] lg:text-[35px] xl:text-[38px] 2xl:text-[42px] font-extrabold !leading-[1.02] sm:!leading-[1.04] lg:!leading-[1.02] tracking-tight text-foreground"
               lang="ml"
             >
-              {settings?.hero_title ? (
-                settings.hero_title
-              ) : (
-                <>
-                  <span className="block">AI എന്താണെന്നും,</span>
-                  <span className="block">എങ്ങനെ ഉപയോഗിക്കാമെന്നും</span>
-                  <span className="block gradient-text">മലയാളത്തിൽ പഠിക്കാം</span>
-                </>
-              )}
-            </motion.h1>
+              <span className="block sm:whitespace-nowrap">AI എന്താണെന്നും, എങ്ങനെ</span>
+              <span className="block -mt-1 sm:-mt-2 md:-mt-2.5 lg:-mt-3 sm:whitespace-nowrap">
+                ഉപയോഗിക്കാമെന്നും മലയാളത്തിൽ
+              </span>
+              <span className="block -mt-1 sm:-mt-2 md:-mt-2.5 lg:-mt-3 text-[#3b1298]">
+                പഠിക്കാം
+              </span>
+            </h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15 }}
-              className="mt-5 max-w-2xl text-pretty text-[16px] font-normal leading-[1.7] text-muted-foreground sm:text-[18px] md:mx-auto md:mt-6 md:text-[20px] prose prose-lg prose-p:my-0 prose-headings:my-0 max-w-none prose-a:text-primary text-left md:text-center"
+            <p
+              className="mt-3.5 sm:mt-4 md:mt-5 text-[15px] sm:text-[16px] lg:text-[16.5px] xl:text-[17px] !leading-[1.65] text-slate-600 max-w-full md:max-w-[560px] lg:max-w-[620px] xl:max-w-[670px]"
               lang="ml"
-              dangerouslySetInnerHTML={{
-                __html:
-                  settings?.hero_subtitle ||
-                  "<p>AIയെക്കുറിച്ച് വലിയ ടെക്നിക്കൽ അറിവൊന്നും വേണ്ട. നമ്മുടെ ദൈനംദിന ജീവിതത്തിലും ജോലിയിലും AI എങ്ങനെ എളുപ്പത്തിൽ ഉപയോഗിക്കാമെന്ന് ലളിതമായി പഠിക്കാം.</p>",
-              }}
-            />
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.35 }}
-              className="mt-8 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-center md:mt-10 md:gap-4"
             >
+              AI-യെക്കുറിച്ച് വലിയ ടെക്നിക്കൽ അറിവൊന്നും വേണ്ട. നമ്മുടെ ദൈനംദിന ജീവിതത്തിലും ജോലിയിലും AI എങ്ങനെ എളുപ്പത്തിൽ ഉപയോഗിക്കാമെന്ന് ലളിതമായി പഠിക്കാം.
+            </p>
+
+            <div className="mt-6 sm:mt-7 md:mt-8">
               <a
                 href={regUrl}
                 onClick={() => trackEvent("register_click", { location: "hero" })}
-                className="btn-primary inline-flex h-12 md:h-14 items-center justify-center rounded-full px-6 text-[15px] md:text-[16px] font-semibold sm:min-w-[180px] sm:px-8"
+                className="group inline-flex h-13 sm:h-14 items-center justify-between rounded-full bg-gradient-to-r from-[#240c88] via-[#3314a6] to-[#4820d2] pl-7 pr-2.5 sm:pl-8 sm:pr-3 text-[15px] sm:text-[16px] font-semibold text-white shadow-[0_10px_25px_-4px_rgba(40,15,145,0.45),0_6px_12px_-4px_rgba(40,15,145,0.25)] transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_14px_30px_-4px_rgba(40,15,145,0.55)] active:scale-[0.98]"
               >
-                {settings?.hero_primary_button_text || "Join Now"}
+                <span className="mr-3 sm:mr-4 tracking-wide">
+                  {settings?.hero_primary_button_text || "ഇപ്പോൾ തന്നെ Join ചെയ്യൂ"}
+                </span>
+                <span className="grid h-8 w-8 sm:h-9 sm:w-9 place-items-center rounded-full bg-white text-[#2a0f9b] shadow-sm transition-transform duration-300 group-hover:translate-x-0.5">
+                  <ArrowRight className="h-4 w-4 sm:h-4.5 sm:w-4.5 stroke-[2.5]" />
+                </span>
               </a>
-              <a
-                href="#curriculum"
-                className="inline-flex h-12 md:h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[15px] md:text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[180px] sm:px-8"
-              >
-                <PlayCircle className="h-4 w-4 md:h-5 md:w-5" />
-                {settings?.hero_secondary_button_text || "View Curriculum"}
-              </a>
-              <Link
-                to="/projects"
-                className="inline-flex h-12 md:h-14 items-center justify-center gap-2 rounded-full border border-border bg-white/85 px-6 text-[15px] md:text-[16px] font-semibold text-foreground backdrop-blur transition-all hover:border-primary hover:text-primary sm:min-w-[180px] sm:px-8"
-              >
-                <Briefcase className="h-4 w-4 md:h-5 md:w-5" />
-                Student Projects
-              </Link>
-            </motion.div>
+            </div>
+          </div>
 
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.6, duration: 0.8 }}
-              className="mt-10 mx-auto w-full max-w-[420px] md:max-w-2xl md:mt-14"
-            >
-              <div className="grid grid-cols-3 divide-x divide-border/60 rounded-3xl p-2 sm:p-4 md:px-6">
-                {/* Column 1 */}
-                <div className="flex flex-col items-center justify-start text-center px-1 md:px-4">
-                  <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-3 sm:mb-4">
-                    <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </span>
-                  <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
-                    Official
-                    <br />
-                    Certificate
-                  </div>
-                </div>
+          {/* RIGHT SIDE: Laptop + Hand-drawn Annotation + Floating AI Tool Cards */}
+          <div className="hidden md:flex md:col-span-5 lg:col-span-5 xl:col-span-5 relative items-center justify-center lg:justify-end pt-4 md:pt-0">
+            <div className="relative w-full max-w-[430px] lg:max-w-[480px] xl:max-w-[530px] aspect-[4/3] flex items-center justify-center">
+              
+              {/* Hand-drawn Annotation: Practical Skills / Real Opportunities */}
+              <div className="absolute -top-10 lg:-top-14 right-[18%] lg:right-[22%] z-20 pointer-events-none select-none">
+                <svg
+                  className="w-36 h-24 lg:w-44 lg:h-28 overflow-visible"
+                  viewBox="0 0 160 90"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <text
+                    x="85"
+                    y="26"
+                    textAnchor="middle"
+                    fill="#4b5563"
+                    style={{
+                      fontFamily: "'Caveat', 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive, sans-serif",
+                      fontSize: "17px",
+                      fontWeight: "600",
+                      fontStyle: "italic",
+                      letterSpacing: "0.2px",
+                    }}
+                    transform="rotate(-5 85 26)"
+                  >
+                    Practical Skills
+                  </text>
+                  <text
+                    x="87"
+                    y="45"
+                    textAnchor="middle"
+                    fill="#6b7280"
+                    style={{
+                      fontFamily: "'Caveat', 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive, sans-serif",
+                      fontSize: "14px",
+                      fontWeight: "500",
+                      fontStyle: "italic",
+                      letterSpacing: "0.1px",
+                    }}
+                    transform="rotate(-5 87 45)"
+                  >
+                    Real Opportunities
+                  </text>
+                  {/* Sketched arrow pointing down-left towards laptop screen */}
+                  <path
+                    d="M62 52 C48 58 38 66 28 78"
+                    stroke="#6b7280"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <path
+                    d="M26 68 L28 78 L38 76"
+                    stroke="#6b7280"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
 
-                {/* Column 2 */}
-                <div className="flex flex-col items-center justify-start text-center px-1 md:px-4">
-                  <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-3 sm:mb-4">
-                    <PlayCircle className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </span>
-                  <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
-                    1-Year
-                    <br />
-                    Access
-                  </div>
-                </div>
+              {/* Floating AI Tool 1: ChatGPT (Top-Left, closer to laptop screen) */}
+              <div className="absolute top-[18%] lg:top-[20%] left-[18%] sm:left-[20%] md:left-[21%] lg:left-[23%] xl:left-[24%] z-20 flex h-13 w-13 md:h-14 md:w-14 lg:h-16 lg:w-16 items-center justify-center rounded-2xl lg:rounded-[22px] border border-white/90 bg-white shadow-[0_10px_26px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)] animate-hero-float-up">
+                <ChatGPTLogo className="h-7 w-7 md:h-8 md:w-8 lg:h-9 lg:w-9" />
+              </div>
 
-                {/* Column 3 */}
-                <div className="flex flex-col items-center justify-start text-center px-1 md:px-4">
-                  <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-3 sm:mb-4">
-                    <Users className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </span>
-                  <div className="text-[12px] sm:text-[14px] font-medium leading-tight text-foreground/90">
-                    {settings?.hero_trust_counter?.replace(/[^0-9+]/g, "") || "5,000+"}
-                    <br />
-                    Learners
-                  </div>
+              {/* Floating AI Tool 2: Gemini (Bottom-Left, closer to laptop keyboard/base) */}
+              <div className="absolute top-[52%] lg:top-[54%] left-[3%] lg:left-[5%] z-20 flex h-13 w-13 md:h-14 md:w-14 lg:h-16 lg:w-16 items-center justify-center rounded-2xl lg:rounded-[22px] border border-white/90 bg-white shadow-[0_10px_26px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)] animate-hero-float-down">
+                <GeminiLogo className="h-7 w-7 md:h-8 md:w-8 lg:h-9 lg:w-9" />
+              </div>
+
+              {/* Floating AI Tool 3: Lovable (Top-Right, closer to laptop screen) */}
+              <div className="absolute top-[26%] lg:top-[28%] right-[2%] lg:right-[4%] z-20 flex h-[64px] w-[64px] md:h-[70px] md:w-[70px] lg:h-[78px] lg:w-[78px] flex-col items-center justify-center rounded-2xl lg:rounded-[22px] border border-white/90 bg-white p-2 shadow-[0_10px_26px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)] animate-hero-float-up">
+                <LovableLogo />
+              </div>
+
+              {/* Floating AI Tool 4: NotebookLM (Bottom-Right, closer to laptop screen/base) */}
+              <div className="absolute top-[56%] lg:top-[58%] right-[2%] lg:right-[4%] z-20 flex h-[64px] w-[64px] md:h-[70px] md:w-[70px] lg:h-[78px] lg:w-[78px] flex-col items-center justify-center rounded-2xl lg:rounded-[22px] border border-white/90 bg-white p-2 shadow-[0_10px_26px_rgba(0,0,0,0.08),0_2px_8px_rgba(0,0,0,0.04)] animate-hero-float-down">
+                <NotebookLMLogo />
+              </div>
+
+              {/* Central Laptop Mockup Image */}
+              <div className="relative z-10 w-full overflow-hidden select-none pointer-events-none">
+                <img
+                  src={heroLaptopImg}
+                  alt="Learn AI in Malayalam on Laptop"
+                  width={1024}
+                  height={768}
+                  loading="eager"
+                  fetchPriority="high"
+                  className="w-full h-auto object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* HERO BENEFITS ROW: 6-item benefit row directly below the two-column hero */}
+        <div className="mt-10 sm:mt-14 md:mt-18 lg:mt-20 pt-6 sm:pt-8 border-t border-border/50">
+          <div className="mx-auto w-full max-w-[440px] md:max-w-5xl xl:max-w-[1360px]">
+            <div className="grid grid-cols-3 gap-y-4 rounded-3xl p-2 sm:p-4 md:grid-cols-6 md:gap-y-0 md:divide-x divide-border/60">
+              {/* 1. 10 Day Live */}
+              <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3 border-r border-border/60 md:border-r-0">
+                <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
+                  <Calendar className="h-5 w-5 sm:h-6 sm:w-6" />
+                </span>
+                <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
+                  10 Day
+                  <br />
+                  Live
                 </div>
               </div>
-            </motion.div>
+
+              {/* 2. Live Doubt Clearance */}
+              <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3 border-r border-border/60 md:border-r-0">
+                <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
+                  <MessageCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+                </span>
+                <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
+                  Live Doubt
+                  <br />
+                  Clearance
+                </div>
+              </div>
+
+              {/* 3. 1-Year Access */}
+              <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3">
+                <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
+                  <PlayCircle className="h-5 w-5 sm:h-6 sm:w-6" />
+                </span>
+                <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
+                  1-Year
+                  <br />
+                  Access
+                </div>
+              </div>
+
+              {/* 4. Competition and Challenges */}
+              <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3 border-r border-border/60 md:border-r-0">
+                <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
+                  <Trophy className="h-5 w-5 sm:h-6 sm:w-6" />
+                </span>
+                <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
+                  Competition &amp;
+                  <br />
+                  Challenges
+                </div>
+              </div>
+
+              {/* 5. Official Certificate */}
+              <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3 border-r border-border/60 md:border-r-0">
+                <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
+                  <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6" />
+                </span>
+                <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
+                  Official
+                  <br />
+                  Certificate
+                </div>
+              </div>
+
+              {/* 6. 5000+ Learners */}
+              <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3">
+                <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
+                  <Users className="h-5 w-5 sm:h-6 sm:w-6" />
+                </span>
+                <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
+                  {settings?.hero_trust_counter?.replace(/[^0-9+]/g, "") || "5,000+"}
+                  <br />
+                  Learners
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -251,41 +466,56 @@ function Hero() {
 }
 
 /* ---------- Initiative By ---------- */
-const PARTNERS = [
-  { name: "Edapt", logo: edaptLogo, maxH: 44 },
-  { name: "Future Knowledge Collective", logo: fkcLogo, maxH: 56 },
-  { name: "Malayala Manorama", logo: manoramaLogo, maxH: 36 },
-];
-
 function InitiativeBySection() {
   return (
     <section
       id="initiative-by"
-      className="relative border-t border-border/60 bg-white py-12 md:py-14"
+      className="relative border-t border-border/60 bg-white py-10 sm:py-12 md:py-14"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <FadeIn>
-          <div className="text-center">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
-              Initiative By
+          <div className="flex flex-col items-center justify-center text-center">
+            {/* Header with flanking decorative lines matching reference */}
+            <div className="flex items-center justify-center gap-3 sm:gap-4">
+              <div className="h-px w-10 sm:w-16 bg-gradient-to-r from-transparent to-border/80" />
+              <span className="text-[11px] sm:text-xs font-bold uppercase tracking-[0.24em] text-muted-foreground">
+                Initiative By
+              </span>
+              <div className="h-px w-10 sm:w-16 bg-gradient-to-l from-transparent to-border/80" />
             </div>
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-8 gap-y-6 sm:gap-x-14 md:gap-x-20 md:mt-7 md:gap-y-8">
-              {PARTNERS.map((p) => (
-                <motion.div
-                  key={p.name}
-                  whileHover={{ scale: 1.03 }}
-                  transition={{ duration: 0.25, ease: "easeOut" }}
-                  className="flex items-center justify-center"
-                >
-                  <img
-                    src={p.logo}
-                    alt={`${p.name} logo`}
-                    loading="lazy"
-                    style={{ maxHeight: p.maxH, width: "auto", height: "auto", maxWidth: "160px" }}
-                    className="object-contain"
-                  />
-                </motion.div>
-              ))}
+
+            {/* Centered Partner Cards matching reference */}
+            <div className="mt-6 sm:mt-7 flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+              {/* Edapt Card */}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="flex h-16 sm:h-20 w-44 sm:w-52 items-center justify-center rounded-2xl bg-white px-5 py-3 shadow-[0_4px_20px_-4px_rgba(31,10,119,0.07),0_2px_6px_rgba(0,0,0,0.03)] border border-slate-100/90"
+              >
+                <img
+                  src={edaptLogo}
+                  alt="Edapt logo"
+                  loading="lazy"
+                  className="max-h-9 sm:max-h-11 w-auto object-contain"
+                />
+              </motion.div>
+
+              {/* Vertical divider line between logos matching reference */}
+              <div className="hidden sm:block h-10 w-px bg-slate-200/80" />
+
+              {/* Future Knowledge Collective Card */}
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.2, ease: "easeOut" }}
+                className="flex h-16 sm:h-20 w-44 sm:w-52 items-center justify-center rounded-2xl bg-white px-5 py-3 shadow-[0_4px_20px_-4px_rgba(31,10,119,0.07),0_2px_6px_rgba(0,0,0,0.03)] border border-slate-100/90"
+              >
+                <img
+                  src={fkcLogo}
+                  alt="Future Knowledge Collective logo"
+                  loading="lazy"
+                  className="max-h-10 sm:max-h-12 w-auto object-contain"
+                />
+              </motion.div>
             </div>
           </div>
         </FadeIn>
@@ -295,7 +525,7 @@ function InitiativeBySection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.5, delay: 0.15, ease: "easeOut" }}
-          className="mt-8 flex justify-center md:mt-9"
+          className="mt-7 flex justify-center md:mt-8"
         >
           <Link
             to="/about"
@@ -312,83 +542,93 @@ function InitiativeBySection() {
   );
 }
 
-/* ---------- Certificate Showcase ---------- */
-function CertificateSection() {
+/* ---------- About / AI Literacy ---------- */
+function AboutSection() {
   return (
-    <section id="certificate" className="relative py-14 md:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          eyebrow="Certification"
-          title="Official Course Completion Certificate"
-          subtitle="Complete the program successfully and receive an official digital certificate after passing the final assessment."
-        />
+    <section id="about" className="relative py-12 sm:py-16 md:py-20 lg:py-24 bg-white overflow-hidden">
+      {/* Subtle ambient glow behind certificate */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="hidden md:block absolute right-[5%] top-[15%] h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,rgba(224,216,255,0.45)_0%,transparent_70%)] blur-3xl" />
+      </div>
 
-        <FadeIn delay={0.1}>
-          <div className="relative mt-8 md:mt-10">
-            <div className="pointer-events-none absolute inset-0 -z-10 mx-auto max-w-4xl">
-              <div className="absolute inset-x-8 top-10 h-full rounded-[40px] bg-[radial-gradient(60%_80%_at_50%_20%,rgba(75,45,214,0.18),transparent_70%)] blur-2xl" />
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+        <div className="grid grid-cols-1 items-center gap-10 md:gap-12 lg:grid-cols-12 lg:gap-12 xl:gap-16">
+          {/* LEFT SIDE: Badge, Main Heading & Paragraphs */}
+          <div className="col-span-1 lg:col-span-6 xl:col-span-6 flex flex-col items-start text-left z-10">
+            {/* "Why AI, Why Now" Badge */}
+            <div className="mb-4 sm:mb-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#200a78] via-[#2f119b] to-[#451fd4] px-4 py-1.5 text-xs sm:text-[13px] font-semibold text-white shadow-sm">
+              <Sparkles className="h-3.5 w-3.5" />
+              <span>Why AI, Why Now</span>
             </div>
 
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              transition={{ type: "spring", stiffness: 260, damping: 22 }}
-              className="float-cert group mx-auto max-w-4xl"
+            {/* Main Malayalam Heading */}
+            <h2
+              className="text-[24px] sm:text-[28px] md:text-[32px] lg:text-[34px] xl:text-[36px] font-extrabold text-foreground !leading-[1.28] tracking-tight"
+              lang="ml"
             >
-              <div
-                className="relative rounded-[24px] sm:rounded-[32px] p-3 sm:p-5 md:p-6"
-                style={{
-                  background: "linear-gradient(145deg, #1a1a1a 0%, #0a0a0a 50%, #1a1a1a 100%)",
-                  boxShadow:
-                    "0 30px 80px -20px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(0,0,0,0.6)",
-                }}
-              >
-                <div className="overflow-hidden rounded-[16px] sm:rounded-[20px] border border-black/60 bg-white shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]">
+              ഇന്ന് ലോകം മുഴുവൻ മാറ്റിമറിച്ചുകൊണ്ടിരിക്കുന്ന സാങ്കേതികവിദ്യയാണ് AI.
+            </h2>
+
+            {/* Supporting Malayalam Paragraphs */}
+            <div
+              className="mt-4 sm:mt-5 md:mt-6 space-y-3.5 sm:space-y-4 text-[15px] sm:text-[16px] md:text-[16.5px] text-slate-700 !leading-[1.75]"
+              lang="ml"
+            >
+              <p>
+                വലിയ കമ്പ്യൂട്ടർ അറിവുകളോ വിദ്യാഭ്യാസ യോഗ്യതയോ ഇല്ലാത്ത ഏതൊരു സാധാരണക്കാരനും വളരെ ലളിതമായി പഠിച്ചെടുക്കാനും, സ്വന്തം നിത്യജീവിതത്തിൽ ഒരു സഹായിയെപ്പോലെ AI എങ്ങനെ ഉപയോഗിക്കാമെന്ന് പഠിപ്പിച്ചു തരുന്ന രീതിയിലാണ് ഈ പദ്ധതി രൂപകൽപ്പന ചെയ്തിരിക്കുന്നത്.
+              </p>
+              <p>
+                അടിസ്ഥാന അറിവുകളിൽ നിന്ന് തുടങ്ങി ഓരോ ദിവസം കഴിയുന്തോറും നിങ്ങളെ ഒരു AI Literate ആക്കി മാറ്റുന്ന രീതിയിലാണ് പദ്ധതി ഡിസൈൻ ചെയ്തിട്ടുള്ളത്.
+              </p>
+            </div>
+          </div>
+
+          {/* RIGHT SIDE: Framed Certificate & Decorative Badges */}
+          <div className="col-span-1 lg:col-span-6 xl:col-span-6 relative flex items-center justify-center pt-2 sm:pt-4 lg:pt-0">
+            <div className="relative w-full max-w-[480px] sm:max-w-[540px] lg:max-w-[580px] xl:max-w-[620px]">
+              {/* Decorative radiant burst at top-right */}
+              <div className="absolute -top-7 -right-2 sm:-top-8 sm:-right-4 pointer-events-none select-none z-10">
+                <svg
+                  className="w-10 h-10 sm:w-12 sm:h-12 text-[#4f28d9]"
+                  viewBox="0 0 48 48"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.8"
+                  strokeLinecap="round"
+                >
+                  <path d="M12 28 C10 20 8 13 5 7" />
+                  <path d="M25 24 C25 16 27 10 30 4" />
+                  <path d="M35 28 C40 24 44 20 48 18" />
+                </svg>
+              </div>
+
+              {/* Black Physical Certificate Frame */}
+              <div className="relative rounded-none border-[12px] sm:border-[16px] md:border-[18px] border-[#0c0c0e] bg-[#0c0c0e] shadow-[0_22px_55px_-12px_rgba(0,0,0,0.28),0_10px_20px_-5px_rgba(0,0,0,0.15)]">
+                {/* Inner white mat & certificate artwork */}
+                <div className="relative bg-white overflow-hidden border border-slate-200">
                   <img
                     src={certificateAsset}
-                    alt="Sample Certificate of Completion"
+                    alt="1 Million AI Superstars Official Certificate of Completion"
                     width={2000}
                     height={1414}
                     loading="lazy"
-                    className="block h-auto w-full transition-transform duration-500 group-hover:scale-[1.03]"
+                    className="block w-full h-auto object-contain"
                   />
                 </div>
               </div>
-            </motion.div>
-          </div>
-        </FadeIn>
-      </div>
-    </section>
-  );
-}
 
-/* ---------- About ---------- */
-function AboutSection() {
-  return (
-    <section id="about" className="relative pb-12 pt-4 md:pb-20 md:pt-8">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <FadeIn>
-          <div className="glass-card gradient-border-hover rounded-3xl p-6 sm:p-8 md:p-14">
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold text-white md:mb-6">
-              <Sparkles className="h-3.5 w-3.5" />
-              Why AI, Why Now
-            </div>
-            <div
-              className="space-y-4 text-[16px] leading-relaxed text-foreground sm:text-[18px] md:space-y-5 md:text-[20px]"
-              lang="ml"
-            >
-              <p>ഇന്ന് ലോകം മുഴുവൻ മാറ്റിമറിച്ചുകൊണ്ടിരിക്കുന്ന സാങ്കേതികവിദ്യയാണ് AI.</p>
-              <p>
-                വലിയ കമ്പ്യൂട്ടർ അറിവുകളോ വിദ്യാഭ്യാസ യോഗ്യതയോ ഇല്ലാത്ത ഏതൊരു സാധാരണക്കാരനും വളരെ
-                ലളിതമായി പഠിച്ചെടുക്കാനും, സ്വന്തം നിത്യജീവിതത്തിൽ ഒരു സഹായിയെപ്പോലെ AI എങ്ങനെ
-                ഉപയോഗിക്കാമെന്ന് പഠിപ്പിച്ചു തരുന്ന രീതിയിലാണ് ഈ പദ്ധതി രൂപകൽപ്പന ചെയ്തിരിക്കുന്നത്.
-              </p>
-              <p>
-                അടിസ്ഥാന അറിവുകളിൽ നിന്ന് തുടങ്ങി ഓരോ ദിവസം കഴിയുന്തോറും നിങ്ങളെ ഒരു AI Literate
-                ആക്കി മാറ്റുന്ന രീതിയിലാണ് പദ്ധതി ഡിസൈൻ ചെയ്തിട്ടുള്ളത്.
-              </p>
+              {/* Decorative Floating Badge 1: Award Ribbon (Bottom-Left) */}
+              <div className="absolute -bottom-4 -left-4 sm:-bottom-5 sm:-left-5 z-20 flex h-13 w-13 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-white shadow-[0_10px_25px_rgba(0,0,0,0.12),0_4px_10px_rgba(0,0,0,0.06)] border border-slate-100">
+                <Award className="h-7 w-7 sm:h-8 sm:w-8 text-[#451fd4] stroke-[2.2]" />
+              </div>
+
+              {/* Decorative Floating Badge 2: Graduation Cap (Middle-Right) */}
+              <div className="absolute top-[52%] -right-4 sm:-right-5 z-20 flex h-13 w-13 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-white shadow-[0_10px_25px_rgba(0,0,0,0.12),0_4px_10px_rgba(0,0,0,0.06)] border border-slate-100">
+                <GraduationCap className="h-7 w-7 sm:h-8 sm:w-8 text-[#451fd4] stroke-[2.2]" />
+              </div>
             </div>
           </div>
-        </FadeIn>
+        </div>
       </div>
     </section>
   );
@@ -428,7 +668,7 @@ function CurriculumSection() {
       id="curriculum"
       className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white pb-12 pt-6 md:pb-16 md:pt-10"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <SectionHeader
           eyebrow="Curriculum"
           eyebrowExtra={
@@ -465,11 +705,11 @@ function CurriculumSection() {
           }
           title={<>ഈ പദ്ധതിയിലൂടെ നിങ്ങൾ എന്തെല്ലാം പഠിച്ചെടുക്കും?</>}
           malayalamTitle
-          titleMaxWidth="max-w-4xl"
+          titleMaxWidth="max-w-4xl xl:max-w-5xl"
           subtitle="Live sessions covering practical AI skills you need in daily life & work."
         />
 
-        <div className="relative mt-5 md:mt-8">
+        <div className="relative mt-5 md:mt-8 max-w-[1360px] mx-auto">
           <div className="absolute left-4 top-0 h-full w-0.5 gradient-bg md:left-1/2 md:-translate-x-1/2" />
 
           <div className="space-y-4 sm:space-y-6 md:space-y-10">
@@ -543,17 +783,121 @@ function ToolsSection() {
     queryFn: getPublishedAITools,
   });
 
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const isInteractingRef = useRef(false);
+  const isVisibleRef = useRef(false);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Repeat tools 4 times to ensure seamless infinite looping across any viewport width
+  const loopedTools = tools.length > 0 ? [...tools, ...tools, ...tools, ...tools] : [];
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        isVisibleRef.current = entry.isIntersecting;
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (tools.length === 0) return;
+    const el = scrollRef.current;
+    if (!el) return;
+
+    let animId: number;
+    const speed = 0.8; // Smooth 48px/sec linear motion
+
+    const step = () => {
+      if (isVisibleRef.current && el && !isInteractingRef.current) {
+        // Single set width is exact 1/4 of total scrollable width
+        const setWidth = el.scrollWidth / 4;
+        if (setWidth > 0) {
+          el.scrollLeft += speed;
+          if (el.scrollLeft >= setWidth) {
+            el.scrollLeft -= setWidth;
+          }
+        }
+      }
+      animId = requestAnimationFrame(step);
+    };
+
+    animId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animId);
+  }, [tools.length]);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el || tools.length === 0) return;
+    const setWidth = el.scrollWidth / 4;
+    if (setWidth <= 0) return;
+
+    // Keep scrollLeft safely inside boundary during manual swiping
+    if (el.scrollLeft >= setWidth * 2) {
+      el.scrollLeft -= setWidth;
+    } else if (el.scrollLeft <= 0) {
+      el.scrollLeft += setWidth;
+    }
+  };
+
+  const pauseAutoScroll = () => {
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    isInteractingRef.current = true;
+  };
+
+  const resumeAutoScroll = (delay = 1200) => {
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    resumeTimeoutRef.current = setTimeout(() => {
+      isInteractingRef.current = false;
+    }, delay);
+  };
+
+  // Mouse drag support for desktop
+  const isMouseDownRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollStartRef = useRef(0);
+
+  const handleMouseDown = (e: React.MouseEvent) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isMouseDownRef.current = true;
+    pauseAutoScroll();
+    startXRef.current = e.pageX - el.offsetLeft;
+    scrollStartRef.current = el.scrollLeft;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isMouseDownRef.current) return;
+    const el = scrollRef.current;
+    if (!el) return;
+    e.preventDefault();
+    const x = e.pageX - el.offsetLeft;
+    const walk = (x - startXRef.current) * 1.3;
+    el.scrollLeft = scrollStartRef.current - walk;
+  };
+
+  const handleMouseUp = () => {
+    if (isMouseDownRef.current) {
+      isMouseDownRef.current = false;
+      resumeAutoScroll(1000);
+    }
+  };
+
   return (
-    <section id="tools" className="relative pb-12 pt-6 md:pb-16 md:pt-8">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <section id="tools" className="relative pb-12 pt-6 md:pb-16 md:pt-8 overflow-hidden">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <SectionHeader
-          eyebrow="AI Tools"
           title="പഠിക്കുന്ന പ്രധാന AI Tools"
           malayalamTitle
           titleMaxWidth="max-w-3xl whitespace-nowrap overflow-hidden text-ellipsis sm:whitespace-normal sm:overflow-visible"
-          subtitle="15+ hands-on tools you'll master through live practical sessions."
         />
-        <div className="mt-5 md:mt-8">
+        <div className="mt-6 md:mt-10 relative select-none">
           {isLoading ? (
             <div className="flex justify-center py-12 text-muted-foreground">Loading tools...</div>
           ) : tools.length === 0 ? (
@@ -561,23 +905,47 @@ function ToolsSection() {
               No AI tools available.
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
-              {tools.map((t, i) => (
-                <FadeIn key={t.id} delay={i * 0.03}>
-                  <div className="glass-card gradient-border-hover group flex h-full flex-col items-center justify-between rounded-2xl sm:rounded-3xl px-4 pb-5 pt-6 sm:px-5 sm:pb-6 sm:pt-8 text-center transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                    <div className="flex h-20 w-full items-center justify-center bg-transparent transition-transform duration-300 ease-out group-hover:scale-[1.08] sm:h-24 md:h-28">
+            <div
+              ref={scrollRef}
+              onMouseEnter={pauseAutoScroll}
+              onMouseLeave={() => {
+                if (isMouseDownRef.current) {
+                  isMouseDownRef.current = false;
+                }
+                resumeAutoScroll(600);
+              }}
+              onTouchStart={pauseAutoScroll}
+              onTouchEnd={() => resumeAutoScroll(1500)}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onScroll={handleScroll}
+              className="flex gap-3.5 sm:gap-5 overflow-x-auto pb-4 pt-2 no-scrollbar cursor-grab active:cursor-grabbing focus:outline-none"
+              style={{
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+                WebkitOverflowScrolling: "touch",
+              }}
+            >
+              {loopedTools.map((t, i) => (
+                <div
+                  key={`${t.id || t.tool_name}-${i}`}
+                  className="w-[145px] sm:w-[170px] md:w-[190px] shrink-0 pointer-events-none sm:pointer-events-auto"
+                >
+                  <div className="glass-card gradient-border-hover group flex h-[180px] sm:h-[205px] md:h-[225px] flex-col items-center justify-between rounded-2xl sm:rounded-3xl px-3.5 pb-4 pt-5 sm:px-5 sm:pb-6 sm:pt-7 text-center transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
+                    <div className="flex h-16 w-full items-center justify-center bg-transparent transition-transform duration-300 ease-out group-hover:scale-[1.08] sm:h-24 md:h-28">
                       <img
                         src={optimizedImage(t.tool_logo)}
                         alt={`${t.tool_name} logo`}
                         loading="lazy"
-                        className="max-h-full max-w-full object-contain"
+                        className="max-h-full max-w-full object-contain pointer-events-none"
                       />
                     </div>
-                    <div className="mt-4 sm:mt-5 text-[14px] sm:text-[15px] font-medium text-foreground">
+                    <div className="mt-3 sm:mt-4 text-[13px] sm:text-[14px] md:text-[15px] font-medium text-foreground line-clamp-1">
                       {t.tool_name}
                     </div>
                   </div>
-                </FadeIn>
+                </div>
               ))}
             </div>
           )}
@@ -589,136 +957,139 @@ function ToolsSection() {
 
 /* ---------- Program Specs ---------- */
 function ProgramSection() {
-  const { data: settings } = useQuery({
+  const { data: settings = DEFAULT_SETTINGS } = useQuery({
     queryKey: ["website-settings"],
     queryFn: getWebsiteSettings,
+    initialData: DEFAULT_SETTINGS,
   });
 
   const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
+  const startDate = "Tuesday, 22 September 2026";
+  const classTime = "8:30 PM IST";
+  const offerPrice = "999";
+  const wasPrice = "2,499";
 
   return (
     <section
       id="program"
       className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <SectionHeader
           eyebrow="Program Details"
           title="Program Specifications"
           subtitle="Everything you need to know at a glance."
         />
 
-        {/* Desktop Connected / Tree-Style Layout */}
-        <div className="hidden md:block max-w-2xl mx-auto mt-10">
-          <div className="flex flex-col items-center">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/90 px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary shadow-sm backdrop-blur">
-              <Sparkles className="h-3.5 w-3.5 text-primary" />
-              {programConfig.batch.batchName} Schedule
-            </div>
-            {/* Trunk line */}
-            <div className="h-6 w-0.5 gradient-bg" />
-            {/* Branches line */}
-            <div className="relative w-full max-w-md">
-              <div className="h-0.5 w-full gradient-bg rounded-full" />
-              {/* Drop branch connectors */}
-              <div className="absolute left-1/4 -bottom-4 h-4 w-0.5 gradient-bg -translate-x-1/2" />
-              <div className="absolute right-1/4 -bottom-4 h-4 w-0.5 gradient-bg translate-x-1/2" />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-6 mt-4">
-            <FadeIn delay={0.05}>
-              <div className="glass-card gradient-border-hover group h-full rounded-2xl p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl gradient-bg text-white shadow-[var(--shadow-soft)]">
-                    <Calendar className="h-5 w-5" />
-                  </div>
-                  <div className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
-                    Course Date
-                  </div>
+        <FadeIn delay={0.1}>
+          <div className="mx-auto max-w-5xl xl:max-w-[1360px] mt-8 md:mt-12">
+            {/* Unified Program Specifications Card */}
+            <div className="grid grid-cols-1 md:grid-cols-[1.02fr_1fr] gap-4 md:gap-0 rounded-[26px] overflow-hidden md:bg-[linear-gradient(102deg,#1f0a77_0%,#2a1194_46%,#3216a8_74%,#4b2dd6_100%)] shadow-[0_20px_60px_-15px_rgba(31,10,119,0.25)] border border-primary/20 md:border-white/10">
+              {/* Left Column / Top Mobile Panel: Program Details */}
+              <div className="flex flex-col justify-center gap-1 p-6 sm:p-8 md:p-10 lg:p-11 bg-[#1f0a77] md:bg-transparent rounded-[24px] md:rounded-none border border-white/10 md:border-0 md:border-r md:border-white/10">
+                <div className="text-[12.5px] font-bold tracking-[0.05em] uppercase text-[#a79ce0] mb-3 md:mb-4">
+                  Program Details
                 </div>
-                <div className="text-[20px] lg:text-[22px] font-bold tracking-tight text-foreground">
-                  {programConfig.batch.displayStart}
+                <div className="py-4 md:py-5 border-b border-white/[0.13]">
+                  <span className="block text-[14px] font-medium text-[#a79ce0]">Starts</span>
+                  <span className="block text-[22px] sm:text-[24px] md:text-[26px] font-extrabold text-[#f1edff] tracking-[-0.03em] mt-1.5 leading-snug">
+                    {startDate}
+                  </span>
+                </div>
+                <div className="pt-4 md:pt-5">
+                  <span className="block text-[14px] font-medium text-[#a79ce0]">Class time</span>
+                  <span className="block text-[22px] sm:text-[24px] md:text-[26px] font-extrabold text-[#f1edff] tracking-[-0.03em] mt-1.5 leading-snug">
+                    {classTime}
+                    <small className="block text-[13.5px] font-medium text-[#a79ce0] mt-1.5 tracking-normal">
+                      Every evening, 1 hour
+                    </small>
+                  </span>
                 </div>
               </div>
-            </FadeIn>
 
-            <FadeIn delay={0.1}>
-              <div className="glass-card gradient-border-hover group h-full rounded-2xl p-6 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="grid h-11 w-11 place-items-center rounded-xl gradient-bg text-white shadow-[var(--shadow-soft)]">
-                    <Clock className="h-5 w-5" />
+              {/* Right Column / Bottom Mobile Panel: Fee & CTA */}
+              <div className="relative overflow-hidden p-6 sm:p-8 md:p-9 lg:p-10 bg-[#3216a8] md:bg-transparent rounded-[24px] md:rounded-none border border-white/15 md:border-0 flex flex-col justify-center">
+                {/* Background Geometric Lattice SVG */}
+                <svg
+                  className="absolute -right-10 -top-10 md:-right-14 md:-top-14 w-[300px] h-[300px] md:w-[330px] md:h-[330px] opacity-45 pointer-events-none"
+                  viewBox="0 0 300 300"
+                  aria-hidden="true"
+                >
+                  <g stroke="#fff" strokeOpacity="0.16" strokeWidth="1" fill="none">
+                    <path d="M40 60 L120 30 L210 78 L268 40" />
+                    <path d="M40 60 L96 140 L210 78" />
+                    <path d="M96 140 L180 190 L268 40" />
+                    <path d="M180 190 L240 262 L120 30" />
+                    <path d="M96 140 L36 228 L240 262" />
+                    <path d="M210 78 L282 152 L240 262" />
+                  </g>
+                  <g fill="#fff" fillOpacity="0.5">
+                    <circle cx="40" cy="60" r="3.5" />
+                    <circle cx="120" cy="30" r="3.5" />
+                    <circle cx="210" cy="78" r="4.5" />
+                    <circle cx="268" cy="40" r="3" />
+                    <circle cx="96" cy="140" r="4.5" />
+                    <circle cx="180" cy="190" r="3.5" />
+                    <circle cx="240" cy="262" r="3" />
+                    <circle cx="36" cy="228" r="3" />
+                    <circle cx="282" cy="152" r="3.5" />
+                  </g>
+                </svg>
+
+                <div className="relative z-10 flex flex-col">
+                  {/* AI Prompt Pill */}
+                  <div className="flex items-center gap-2.5 bg-white/[0.08] border border-white/[0.17] rounded-[14px] px-4 py-3 shadow-inner">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="w-4 h-4 shrink-0 fill-white opacity-85"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 2l2.4 6.1L20.5 10l-6.1 2.4L12 18.5l-2.4-6.1L3.5 10l6.1-1.9L12 2z" />
+                    </svg>
+                    <p className="text-[14px] sm:text-[14.5px] font-medium text-[#ddd6ff] tracking-[-0.01em]">
+                      What does it cost to join?
+                      <span className="inline-block w-[2px] h-4 bg-white align-[-3px] ml-1 animate-pulse" />
+                    </p>
                   </div>
-                  <div className="text-[12px] font-semibold uppercase tracking-widest text-muted-foreground">
-                    Class Time
+
+                  {/* Pricing Display */}
+                  <div className="flex items-start gap-3 mt-5">
+                    <svg
+                      className="w-5 h-5 shrink-0 fill-white mt-3.5"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
+                    >
+                      <path d="M12 2l2.4 6.1L20.5 10l-6.1 2.4L12 18.5l-2.4-6.1L3.5 10l6.1-1.9L12 2z" />
+                    </svg>
+                    <div className="flex items-start gap-2 sm:gap-2.5">
+                      <span className="text-[24px] sm:text-[26px] font-bold text-white mt-2">
+                        ₹
+                      </span>
+                      <b className="text-[64px] sm:text-[74px] md:text-[80px] lg:text-[84px] font-extrabold tracking-[-0.055em] text-white leading-[0.92]">
+                        {offerPrice.replace(/[^0-9]/g, "") || "999"}
+                      </b>
+                      <span className="self-end text-[16px] sm:text-[18px] font-semibold text-[#9a8ade] mb-2 line-through decoration-[1.5px]">
+                        ₹{wasPrice.replace(/[^0-9,]/g, "") || "2,499"}
+                      </span>
+                    </div>
                   </div>
+
+                  <p className="text-[13.5px] sm:text-[14.5px] font-medium text-[#ddd6ff] mt-2.5 pl-8">
+                    Including GST. One payment, that's all.
+                  </p>
+
+                  {/* CTA Button */}
+                  <a
+                    href={regUrl}
+                    onClick={() =>
+                      trackEvent("register_click", { location: "program_specifications" })
+                    }
+                    className="block w-full mt-5 bg-white text-[#1f0a77] rounded-[14px] py-3.5 sm:py-4 text-[16px] sm:text-[17px] font-extrabold tracking-[-0.015em] text-center transition-all duration-200 hover:bg-[#ece8ff] hover:shadow-xl active:scale-[0.99] shadow-lg shadow-black/20"
+                  >
+                    Take my seat
+                  </a>
                 </div>
-                <div className="text-[20px] lg:text-[22px] font-bold tracking-tight text-foreground">
-                  {programConfig.batch.classTime}
-                </div>
               </div>
-            </FadeIn>
-          </div>
-        </div>
-
-        {/* Mobile Simple Stacked Cards */}
-        <div className="md:hidden grid grid-cols-1 gap-3.5 max-w-md mx-auto mt-8">
-          <div className="flex justify-center mb-1">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-white/90 px-3.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary shadow-sm backdrop-blur">
-              <Sparkles className="h-3 w-3 text-primary" />
-              {programConfig.batch.batchName} Schedule
-            </div>
-          </div>
-
-          <div className="glass-card rounded-2xl p-5 flex items-center gap-4">
-            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl gradient-bg text-white shadow-[var(--shadow-soft)]">
-              <Calendar className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                Course Date
-              </div>
-              <div className="text-[18px] font-bold text-foreground mt-0.5">
-                {programConfig.batch.displayStart}
-              </div>
-            </div>
-          </div>
-
-          <div className="glass-card rounded-2xl p-5 flex items-center gap-4">
-            <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl gradient-bg text-white shadow-[var(--shadow-soft)]">
-              <Clock className="h-5 w-5" />
-            </div>
-            <div>
-              <div className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                Class Time
-              </div>
-              <div className="text-[18px] font-bold text-foreground mt-0.5">
-                {programConfig.batch.classTime}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Program Fee Card */}
-        <FadeIn delay={0.2}>
-          <div className="mt-12 overflow-hidden rounded-[32px] gradient-bg p-8 sm:p-10 text-center text-white shadow-[var(--shadow-glow)] md:p-12 max-w-2xl mx-auto">
-            <div className="text-[12px] font-semibold uppercase tracking-[0.2em] text-white/80">
-              Program Fee
-            </div>
-            <div className="mt-3 text-4xl font-bold sm:text-5xl md:text-6xl">
-              ₹{settings?.course_fee || programConfig.pricing.fee}{" "}
-              <span className="text-xl sm:text-2xl font-medium text-white/80">
-                {settings?.course_offer_price || programConfig.pricing.offerPrice}
-              </span>
-            </div>
-            <div className="mt-6 flex justify-center">
-              <a
-                href={regUrl}
-                onClick={() => trackEvent("register_click", { location: "program_fee" })}
-                className="inline-flex h-12 md:h-14 w-[75%] max-w-lg items-center justify-center rounded-full bg-white px-8 text-[16px] md:text-[17px] font-bold text-primary shadow-lg hover:bg-white/95 hover:shadow-xl transition-all duration-200 active:scale-[0.99]"
-              >
-                Join Now
-              </a>
             </div>
           </div>
         </FadeIn>
@@ -727,81 +1098,11 @@ function ProgramSection() {
   );
 }
 
-/* ---------- Why Join ---------- */
-const WHY_JOIN = [
-  {
-    icon: Sparkles,
-    title: "Learn AI from Zero",
-    body: "No prior technical knowledge is required. Start from the absolute basics.",
-  },
-  {
-    icon: Zap,
-    title: "15+ Practical AI Tools",
-    body: "Hands-on with the exact tools professionals use every day.",
-  },
-  {
-    icon: MessageCircle,
-    title: "Live Interaction",
-    body: "Ask questions in real-time during every live session.",
-  },
-  {
-    icon: BookOpen,
-    title: "Malayalam Classes",
-    body: "Learn in your native language with clear, easy-to-understand explanations.",
-  },
-  {
-    icon: Award,
-    title: "Official Certificate",
-    body: "Earn a shareable digital certificate on completion.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Lifetime Skills",
-    body: "Build practical AI skills that remain valuable for your career, business, and everyday life.",
-  },
-];
-
-function WhyJoinSection() {
-  return (
-    <section className="relative py-12 md:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <SectionHeader
-          eyebrow="Benefits"
-          title="Why Join This Program?"
-          subtitle="Six reasons this program transforms the way you live and work with AI."
-        />
-        <div className="mt-8 md:mt-10 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {WHY_JOIN.map((w, i) => {
-            const Icon = w.icon;
-            return (
-              <FadeIn key={w.title} delay={i * 0.05}>
-                <div className="glass-card gradient-border-hover group h-full rounded-2xl sm:rounded-3xl p-5 sm:p-7 transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                  <div className="mb-4 sm:mb-5 grid h-11 w-11 sm:h-13 sm:w-13 place-items-center rounded-xl sm:rounded-2xl gradient-bg p-2.5 sm:p-3 text-white shadow-[var(--shadow-soft)] transition-transform group-hover:scale-110">
-                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </div>
-                  <h3 className="text-[18px] sm:text-[22px] font-semibold tracking-tight">
-                    {w.title}
-                  </h3>
-                  <p className="mt-2.5 sm:mt-3 text-[15px] sm:text-[17px] leading-relaxed text-muted-foreground">
-                    {w.body}
-                  </p>
-                </div>
-              </FadeIn>
-            );
-          })}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 /* ---------- Who Can Join ---------- */
 const AUDIENCES = [
-  { icon: Sparkles, label: "AI Enthusiasts" },
   { icon: Briefcase, label: "Business Owners" },
   { icon: Users, label: "Professionals" },
   { icon: Home, label: "Housewives" },
-  { icon: Search, label: "Job Seekers" },
   { icon: Video, label: "Content Creators" },
   { icon: BookOpen, label: "Teachers" },
   { icon: PenTool, label: "Freelancers" },
@@ -810,13 +1111,12 @@ const AUDIENCES = [
 function WhoCanJoinSection() {
   return (
     <section className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <SectionHeader
-          eyebrow="Audience"
           title="Who Can Join?"
           subtitle="This program is designed for anyone curious about AI, regardless of background."
         />
-        <div className="mt-8 md:mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3">
+        <div className="mt-8 md:mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3 max-w-6xl xl:max-w-[1360px] mx-auto">
           {AUDIENCES.map((a, i) => {
             const Icon = a.icon;
             return (
@@ -851,9 +1151,8 @@ function FAQSection() {
 
   return (
     <section id="faq" className="relative py-12 md:py-20">
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-4xl xl:max-w-5xl px-4 sm:px-8 lg:px-12">
         <SectionHeader
-          eyebrow="FAQ"
           title="Frequently Asked Questions"
           subtitle="Everything you need to know before you register."
         />
@@ -868,15 +1167,13 @@ function FAQSection() {
                   <button
                     onClick={() => setOpen(isOpen ? null : i)}
                     aria-expanded={isOpen}
-                    className="flex w-full items-center justify-between gap-3 sm:gap-4 p-5 sm:p-6 text-left"
+                    className="flex w-full items-center justify-between gap-4 p-5 sm:p-6 text-left transition-colors hover:bg-secondary/40"
                   >
-                    <span
-                      className={`text-[15px] sm:text-[17px] font-semibold ${isOpen ? "gradient-text" : ""}`}
-                    >
+                    <span className="text-[15px] sm:text-[17px] font-semibold text-foreground">
                       {f.q}
                     </span>
                     <ChevronDown
-                      className={`h-5 w-5 shrink-0 text-muted-foreground transition-transform ${isOpen ? "rotate-180 text-primary" : ""}`}
+                      className={`h-5 w-5 shrink-0 text-primary transition-transform ${isOpen ? "rotate-180" : ""}`}
                     />
                   </button>
                   <AnimatePresence initial={false}>
@@ -907,9 +1204,10 @@ function FAQSection() {
 
 /* ---------- Contact ---------- */
 function ContactSection() {
-  const { data: settings } = useQuery({
+  const { data: settings = DEFAULT_SETTINGS } = useQuery({
     queryKey: ["website-settings"],
     queryFn: getWebsiteSettings,
+    initialData: DEFAULT_SETTINGS,
   });
 
   const phone = settings?.contact_phone || "+91 81380 10166";
@@ -919,12 +1217,12 @@ function ContactSection() {
 
   return (
     <section id="contact" className="relative py-14 md:py-20">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <FadeIn>
-          <div className="group relative overflow-hidden rounded-[28px] border border-[#ECEEF5] bg-white shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-glow)]">
+          <div className="group relative overflow-hidden rounded-[28px] border border-[#ECEEF5] bg-white shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-glow)] max-w-5xl xl:max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-[40%_60%] lg:grid-cols-[35%_65%]">
-              {/* Left Side: Illustration */}
-              <div className="relative flex flex-col items-center justify-center border-b border-[#ECEEF5] bg-slate-50/50 py-8 px-6 md:border-b-0 md:border-r md:p-10">
+              {/* Left Side: Illustration (hidden on mobile, visible on desktop/tablet) */}
+              <div className="relative hidden md:flex flex-col items-center justify-center border-b border-[#ECEEF5] bg-slate-50/50 py-8 px-6 md:border-b-0 md:border-r md:p-10">
                 {/* Dotted background pattern */}
                 <div
                   className="absolute inset-0 opacity-[0.03]"
@@ -1063,7 +1361,7 @@ function SectionHeader({
   titleMaxWidth = "max-w-2xl",
   eyebrowExtra,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: React.ReactNode;
   subtitle?: string;
   malayalamTitle?: boolean;
@@ -1073,11 +1371,13 @@ function SectionHeader({
   return (
     <FadeIn>
       <div className={`mx-auto text-center ${titleMaxWidth}`}>
-        <div className="mb-2.5 md:mb-3 inline-flex items-center gap-1.5 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-white">
-          <Sparkles className="h-3.5 w-3.5" />
-          <span>{eyebrow}</span>
-          {eyebrowExtra}
-        </div>
+        {eyebrow && (
+          <div className="mb-2.5 md:mb-3 inline-flex items-center gap-1.5 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-white">
+            <Sparkles className="h-3.5 w-3.5" />
+            <span>{eyebrow}</span>
+            {eyebrowExtra}
+          </div>
+        )}
         <h2
           className={`text-balance font-semibold tracking-tight ${
             malayalamTitle

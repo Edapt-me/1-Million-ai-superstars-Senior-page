@@ -39,12 +39,8 @@ export function ExploreCoursesSection() {
       id="explore-courses"
       className="relative py-14 sm:py-16 md:py-24 bg-gradient-to-b from-[#f7f5fd] via-white to-white"
     >
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <div className="mx-auto text-center max-w-2xl mb-8 md:mb-12">
-          <div className="mb-2.5 md:mb-3 inline-flex items-center gap-1.5 rounded-full gradient-bg px-3 py-1 text-[11px] sm:text-xs font-semibold uppercase tracking-wider text-white">
-            <Sparkles className="h-3.5 w-3.5" />
-            <span>Pathways</span>
-          </div>
           <h2 className="text-[28px] leading-[1.15] sm:text-[32px] md:text-[40px] lg:text-[44px] font-semibold tracking-tight">
             <span className="gradient-text">Explore More Courses</span>
           </h2>

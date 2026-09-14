@@ -217,7 +217,7 @@ function RootComponent() {
       <AnimatePresence mode="wait" initial={false}>
         <motion.main
           key={pathname}
-          initial={{ opacity: 0, y: 8 }}
+          initial={false}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -6 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
@@ -230,13 +230,11 @@ function RootComponent() {
 
       <style>{`
           .wa-float-pos {
-            left: 82.4%;
-            top: 81.2%;
+            right: 18px;
+            bottom: calc(82px + env(safe-area-inset-bottom));
           }
           @media (min-width: 768px) {
             .wa-float-pos {
-              left: auto;
-              top: auto;
               right: 24px;
               bottom: calc(24px + env(safe-area-inset-bottom));
             }

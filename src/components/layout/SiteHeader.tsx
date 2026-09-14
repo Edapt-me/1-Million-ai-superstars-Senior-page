@@ -11,30 +11,50 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
+  const isScrolledRef = useRef(false);
+  const isHiddenRef = useRef(false);
   const lastScrollY = useRef(typeof window !== "undefined" ? window.scrollY : 0);
+  const rafId = useRef<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+      if (rafId.current !== null) return;
 
-      setScrolled(currentScrollY > 12);
+      rafId.current = requestAnimationFrame(() => {
+        rafId.current = null;
+        const currentScrollY = window.scrollY;
 
-      // Auto-hide logic
-      if (currentScrollY < 20) {
-        setHidden(false); // Always show at top
-      } else if (currentScrollY > lastScrollY.current + 5) {
-        setHidden(true); // Hide on scroll down
-      } else if (currentScrollY < lastScrollY.current - 5) {
-        setHidden(false); // Show on scroll up
-      }
+        const nextScrolled = currentScrollY > 16;
+        if (nextScrolled !== isScrolledRef.current) {
+          isScrolledRef.current = nextScrolled;
+          setScrolled(nextScrolled);
+        }
 
-      if (Math.abs(currentScrollY - lastScrollY.current) > 5 || currentScrollY < 20) {
-        lastScrollY.current = currentScrollY;
-      }
+        let nextHidden = isHiddenRef.current;
+        if (currentScrollY < 24) {
+          nextHidden = false; // Always show near top
+        } else if (currentScrollY > lastScrollY.current + 12) {
+          nextHidden = true; // Hide on scroll down
+        } else if (currentScrollY < lastScrollY.current - 12) {
+          nextHidden = false; // Show on scroll up
+        }
+
+        if (nextHidden !== isHiddenRef.current) {
+          isHiddenRef.current = nextHidden;
+          setHidden(nextHidden);
+        }
+
+        if (Math.abs(currentScrollY - lastScrollY.current) > 12 || currentScrollY < 24) {
+          lastScrollY.current = currentScrollY;
+        }
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId.current !== null) cancelAnimationFrame(rafId.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -64,18 +84,18 @@ export function SiteHeader() {
     <>
       <header
         className={[
-          "fixed left-1/2 top-3 z-50 w-[calc(100%-1.5rem)] max-w-[1240px] -translate-x-1/2 rounded-full transition-all duration-300 sm:top-5",
+          "fixed left-1/2 top-3 z-50 w-[calc(100%-1.5rem)] max-w-[1400px] xl:max-w-[1440px] -translate-x-1/2 rounded-full transition-all duration-300 sm:top-5",
           scrolled
-            ? "border border-white/40 bg-white/70 shadow-[0_8px_30px_-14px_rgba(31,10,119,0.18)] backdrop-blur-xl"
-            : "border border-white/20 bg-white/40 shadow-[0_4px_20px_-10px_rgba(31,10,119,0.08)] backdrop-blur-md",
+            ? "border border-white/40 bg-white/75 shadow-[0_8px_30px_-14px_rgba(31,10,119,0.18)] backdrop-blur-lg"
+            : "border border-white/20 bg-white/45 shadow-[0_4px_20px_-10px_rgba(31,10,119,0.08)] backdrop-blur-md",
           hidden && !open
             ? "-translate-y-[150%] opacity-0 md:translate-y-0 md:opacity-100"
             : "translate-y-0 opacity-100",
         ].join(" ")}
         style={{
           WebkitBackdropFilter: scrolled
-            ? "blur(22px) saturate(140%)"
-            : "blur(12px) saturate(100%)",
+            ? "blur(14px) saturate(130%)"
+            : "blur(8px) saturate(100%)",
         }}
       >
         <div className="flex h-[68px] items-center justify-between gap-4 px-4 sm:h-[76px] sm:px-6 lg:px-8">
