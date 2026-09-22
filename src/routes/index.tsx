@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useSpring, AnimatePresence } from "framer-motion";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import {
   Sparkles,
@@ -16,6 +18,8 @@ import {
   ShieldCheck,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Phone,
   MessageCircle,
   Award,
@@ -35,6 +39,7 @@ import {
 } from "lucide-react";
 import certificateAsset from "@/assets/1m-ai-superstars-certificate.png";
 import heroLaptopImg from "@/assets/hero-laptop.png";
+import programThumbnail from "@/assets/program-thumbnail.png";
 // Replaced by CMS
 // import chatgptLogo from "@/assets/tools/chatgpt.png.asset.json";
 // import geminiLogo from "@/assets/tools/gemini-new.png.asset.json";
@@ -783,121 +788,98 @@ function ToolsSection() {
     queryFn: getPublishedAITools,
   });
 
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const isInteractingRef = useRef(false);
-  const isVisibleRef = useRef(false);
-  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Ensure sufficient cloned items for Embla's circular loop without visual jumps (at least 24, even count)
+  const displayTools = useMemo(() => {
+    if (tools.length === 0) return [];
+    let items = [...tools];
+    while (items.length < 24 || items.length % 2 !== 0) {
+      items = [...items, ...tools];
+    }
+    return items;
+  }, [tools]);
 
-  // Repeat tools 4 times to ensure seamless infinite looping across any viewport width
-  const loopedTools = tools.length > 0 ? [...tools, ...tools, ...tools, ...tools] : [];
+  // Autoplay: 3.2s interval, pauses on touch/hover and resumes automatically
+  const autoplay = useMemo(
+    () =>
+      Autoplay({
+        delay: 3200,
+        stopOnInteraction: false,
+        stopOnMouseEnter: true,
+      }),
+    []
+  );
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        isVisibleRef.current = entry.isIntersecting;
-      },
-      { threshold: 0.05 }
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (tools.length === 0) return;
-    const el = scrollRef.current;
-    if (!el) return;
-
-    let animId: number;
-    const speed = 0.8; // Smooth 48px/sec linear motion
-
-    const step = () => {
-      if (isVisibleRef.current && el && !isInteractingRef.current) {
-        // Single set width is exact 1/4 of total scrollable width
-        const setWidth = el.scrollWidth / 4;
-        if (setWidth > 0) {
-          el.scrollLeft += speed;
-          if (el.scrollLeft >= setWidth) {
-            el.scrollLeft -= setWidth;
-          }
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    {
+      loop: true,
+      align: (viewSize, snapSize) => {
+        if (typeof window !== "undefined" && window.innerWidth < 768) {
+          // Mobile peek: 1 center card fully visible with half-card peek on each side
+          return (viewSize - snapSize) / 2;
         }
-      }
-      animId = requestAnimationFrame(step);
+        return 0; // 'start' for tablet, laptop, desktop
+      },
+      slidesToScroll: 1,
+    },
+    [autoplay]
+  );
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
     };
 
-    animId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animId);
-  }, [tools.length]);
+    const onInit = () => {
+      setScrollSnaps(emblaApi.scrollSnapList());
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    };
 
-  const handleScroll = () => {
-    const el = scrollRef.current;
-    if (!el || tools.length === 0) return;
-    const setWidth = el.scrollWidth / 4;
-    if (setWidth <= 0) return;
+    onInit();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onInit);
 
-    // Keep scrollLeft safely inside boundary during manual swiping
-    if (el.scrollLeft >= setWidth * 2) {
-      el.scrollLeft -= setWidth;
-    } else if (el.scrollLeft <= 0) {
-      el.scrollLeft += setWidth;
-    }
-  };
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onInit);
+    };
+  }, [emblaApi]);
 
-  const pauseAutoScroll = () => {
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-    isInteractingRef.current = true;
-  };
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
 
-  const resumeAutoScroll = (delay = 1200) => {
-    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
-    resumeTimeoutRef.current = setTimeout(() => {
-      isInteractingRef.current = false;
-    }, delay);
-  };
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
 
-  // Mouse drag support for desktop
-  const isMouseDownRef = useRef(false);
-  const startXRef = useRef(0);
-  const scrollStartRef = useRef(0);
+  // Subtle pagination indicators (5 dots)
+  const totalDots = 5;
+  const activeDotIndex = useMemo(() => {
+    if (scrollSnaps.length === 0) return 0;
+    return Math.floor((selectedIndex / scrollSnaps.length) * totalDots) % totalDots;
+  }, [selectedIndex, scrollSnaps.length]);
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    isMouseDownRef.current = true;
-    pauseAutoScroll();
-    startXRef.current = e.pageX - el.offsetLeft;
-    scrollStartRef.current = el.scrollLeft;
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isMouseDownRef.current) return;
-    const el = scrollRef.current;
-    if (!el) return;
-    e.preventDefault();
-    const x = e.pageX - el.offsetLeft;
-    const walk = (x - startXRef.current) * 1.3;
-    el.scrollLeft = scrollStartRef.current - walk;
-  };
-
-  const handleMouseUp = () => {
-    if (isMouseDownRef.current) {
-      isMouseDownRef.current = false;
-      resumeAutoScroll(1000);
-    }
+  const scrollToDot = (dotIndex: number) => {
+    if (!emblaApi || scrollSnaps.length === 0) return;
+    const targetSnap = Math.floor((dotIndex / totalDots) * scrollSnaps.length);
+    emblaApi.scrollTo(targetSnap);
   };
 
   return (
-    <section id="tools" className="relative pb-12 pt-6 md:pb-16 md:pt-8 overflow-hidden">
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+    <section id="tools" className="relative pt-6 pb-10 md:pt-8 md:pb-14 overflow-hidden">
+      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-3 sm:px-6 lg:px-8">
         <SectionHeader
           title="പഠിക്കുന്ന പ്രധാന AI Tools"
           malayalamTitle
           titleMaxWidth="max-w-3xl whitespace-nowrap overflow-hidden text-ellipsis sm:whitespace-normal sm:overflow-visible"
         />
-        <div className="mt-6 md:mt-10 relative select-none">
+
+        <div className="mt-6 md:mt-8 relative">
           {isLoading ? (
             <div className="flex justify-center py-12 text-muted-foreground">Loading tools...</div>
           ) : tools.length === 0 ? (
@@ -905,49 +887,82 @@ function ToolsSection() {
               No AI tools available.
             </div>
           ) : (
-            <div
-              ref={scrollRef}
-              onMouseEnter={pauseAutoScroll}
-              onMouseLeave={() => {
-                if (isMouseDownRef.current) {
-                  isMouseDownRef.current = false;
-                }
-                resumeAutoScroll(600);
-              }}
-              onTouchStart={pauseAutoScroll}
-              onTouchEnd={() => resumeAutoScroll(1500)}
-              onMouseDown={handleMouseDown}
-              onMouseMove={handleMouseMove}
-              onMouseUp={handleMouseUp}
-              onScroll={handleScroll}
-              className="flex gap-3.5 sm:gap-5 overflow-x-auto pb-4 pt-2 no-scrollbar cursor-grab active:cursor-grabbing focus:outline-none"
-              style={{
-                scrollbarWidth: "none",
-                msOverflowStyle: "none",
-                WebkitOverflowScrolling: "touch",
-              }}
-            >
-              {loopedTools.map((t, i) => (
-                <div
-                  key={`${t.id || t.tool_name}-${i}`}
-                  className="w-[145px] sm:w-[170px] md:w-[190px] shrink-0 pointer-events-none sm:pointer-events-auto"
+            <>
+              {/* Carousel Container with Arrows and Viewport */}
+              <div className="relative flex items-center justify-between gap-1.5 sm:gap-3 md:gap-4 w-full">
+                {/* Left Circular Navigation Button */}
+                <button
+                  type="button"
+                  onClick={scrollPrev}
+                  aria-label="Previous AI tools"
+                  className="h-8 w-8 sm:h-10 sm:w-10 md:h-11 md:w-11 shrink-0 rounded-full border border-[#e6e2f2] bg-white text-[#1f0a77] shadow-[0_2px_8px_rgba(31,10,119,0.08)] backdrop-blur-sm transition-all duration-200 hover:bg-[#1f0a77] hover:text-white hover:border-[#1f0a77] hover:shadow-[0_4px_16px_rgba(31,10,119,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f0a77] active:scale-95 flex items-center justify-center cursor-pointer"
                 >
-                  <div className="glass-card gradient-border-hover group flex h-[180px] sm:h-[205px] md:h-[225px] flex-col items-center justify-between rounded-2xl sm:rounded-3xl px-3.5 pb-4 pt-5 sm:px-5 sm:pb-6 sm:pt-7 text-center transition-all hover:-translate-y-1 hover:shadow-[var(--shadow-glow)]">
-                    <div className="flex h-16 w-full items-center justify-center bg-transparent transition-transform duration-300 ease-out group-hover:scale-[1.08] sm:h-24 md:h-28">
-                      <img
-                        src={optimizedImage(t.tool_logo)}
-                        alt={`${t.tool_name} logo`}
-                        loading="lazy"
-                        className="max-h-full max-w-full object-contain pointer-events-none"
-                      />
-                    </div>
-                    <div className="mt-3 sm:mt-4 text-[13px] sm:text-[14px] md:text-[15px] font-medium text-foreground line-clamp-1">
-                      {t.tool_name}
-                    </div>
+                  <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+
+                {/* Embla Viewport */}
+                <div className="overflow-hidden flex-1 select-none min-w-0" ref={emblaRef}>
+                  <div className="flex gap-2.5 sm:gap-3 md:gap-4 lg:gap-5 xl:gap-6 items-stretch">
+                    {displayTools.map((t, i) => (
+                      <div
+                        key={`${t.id || t.tool_name}-${i}`}
+                        className="basis-[calc((100%-20px)/2)] md:basis-[calc((100%-16px)/2)] lg:basis-[calc((100%-40px)/3)] xl:basis-[calc((100%-72px)/4)] shrink-0 min-w-0"
+                      >
+                        <div className="group relative flex h-[155px] sm:h-[175px] md:h-[195px] lg:h-[205px] w-full flex-col items-center justify-between rounded-2xl border border-[#e6e2f2] bg-white p-3.5 sm:p-5 text-center shadow-[0_4px_16px_-4px_rgba(31,10,119,0.06)] transition-all duration-300 hover:-translate-y-1 hover:border-[#3216a8]/35 hover:shadow-[0_12px_28px_-6px_rgba(31,10,119,0.12)]">
+                          <div className="flex flex-1 w-full items-center justify-center overflow-hidden">
+                            <img
+                              src={optimizedImage(t.tool_logo)}
+                              alt={`${t.tool_name} logo`}
+                              loading="lazy"
+                              className="max-h-12 sm:max-h-16 md:max-h-20 max-w-[85%] object-contain pointer-events-none select-none transition-transform duration-300 ease-out group-hover:scale-105"
+                            />
+                          </div>
+                          <div className="mt-2 text-[12px] sm:text-[13px] md:text-[15px] font-semibold text-foreground line-clamp-1 w-full px-1">
+                            {t.tool_name}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
-              ))}
-            </div>
+
+                {/* Right Circular Navigation Button */}
+                <button
+                  type="button"
+                  onClick={scrollNext}
+                  aria-label="Next AI tools"
+                  className="h-8 w-8 sm:h-10 sm:w-10 md:h-11 md:w-11 shrink-0 rounded-full border border-[#e6e2f2] bg-white text-[#1f0a77] shadow-[0_2px_8px_rgba(31,10,119,0.08)] backdrop-blur-sm transition-all duration-200 hover:bg-[#1f0a77] hover:text-white hover:border-[#1f0a77] hover:shadow-[0_4px_16px_rgba(31,10,119,0.2)] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f0a77] active:scale-95 flex items-center justify-center cursor-pointer"
+                >
+                  <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+              </div>
+
+              {/* Pagination Dots (● ● ━ ● ●) */}
+              <div
+                className="mt-4 sm:mt-5 flex justify-center items-center gap-1.5"
+                role="tablist"
+                aria-label="Carousel pagination"
+              >
+                {Array.from({ length: totalDots }).map((_, idx) => {
+                  const isActive = idx === activeDotIndex;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      role="tab"
+                      aria-selected={isActive}
+                      aria-label={`Go to AI tools slide ${idx + 1}`}
+                      onClick={() => scrollToDot(idx)}
+                      className={`transition-all duration-300 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#1f0a77] ${
+                        isActive
+                          ? "h-2 w-6 sm:w-7 rounded-full bg-[#1f0a77] shadow-sm"
+                          : "h-2 w-2 rounded-full bg-[#1f0a77]/25 hover:bg-[#1f0a77]/50"
+                      }`}
+                    />
+                  );
+                })}
+              </div>
+            </>
           )}
         </div>
       </div>
@@ -964,7 +979,7 @@ function ProgramSection() {
   });
 
   const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
-  const startDate = "Tuesday, 22 September 2026";
+  const startDate = "Saturday, October 3, 2026";
   const classTime = "8:30 PM IST";
   const offerPrice = "999";
   const wasPrice = "2,499";
@@ -972,7 +987,7 @@ function ProgramSection() {
   return (
     <section
       id="program"
-      className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20"
+      className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20 overflow-hidden"
     >
       <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <SectionHeader
@@ -982,101 +997,98 @@ function ProgramSection() {
         />
 
         <FadeIn delay={0.1}>
-          <div className="mx-auto max-w-5xl xl:max-w-[1360px] mt-8 md:mt-12">
-            {/* Unified Program Specifications Card */}
-            <div className="grid grid-cols-1 md:grid-cols-[1.02fr_1fr] gap-4 md:gap-0 rounded-[26px] overflow-hidden md:bg-[linear-gradient(102deg,#1f0a77_0%,#2a1194_46%,#3216a8_74%,#4b2dd6_100%)] shadow-[0_20px_60px_-15px_rgba(31,10,119,0.25)] border border-primary/20 md:border-white/10">
-              {/* Left Column / Top Mobile Panel: Program Details */}
-              <div className="flex flex-col justify-center gap-1 p-6 sm:p-8 md:p-10 lg:p-11 bg-[#1f0a77] md:bg-transparent rounded-[24px] md:rounded-none border border-white/10 md:border-0 md:border-r md:border-white/10">
-                <div className="text-[12.5px] font-bold tracking-[0.05em] uppercase text-[#a79ce0] mb-3 md:mb-4">
-                  Program Details
-                </div>
-                <div className="py-4 md:py-5 border-b border-white/[0.13]">
-                  <span className="block text-[14px] font-medium text-[#a79ce0]">Starts</span>
-                  <span className="block text-[22px] sm:text-[24px] md:text-[26px] font-extrabold text-[#f1edff] tracking-[-0.03em] mt-1.5 leading-snug">
-                    {startDate}
-                  </span>
-                </div>
-                <div className="pt-4 md:pt-5">
-                  <span className="block text-[14px] font-medium text-[#a79ce0]">Class time</span>
-                  <span className="block text-[22px] sm:text-[24px] md:text-[26px] font-extrabold text-[#f1edff] tracking-[-0.03em] mt-1.5 leading-snug">
-                    {classTime}
-                    <small className="block text-[13.5px] font-medium text-[#a79ce0] mt-1.5 tracking-normal">
-                      Every evening, 1 hour
-                    </small>
-                  </span>
-                </div>
-              </div>
+          <div className="mt-8 md:mt-12 mx-auto max-w-[1400px] xl:max-w-[1440px]">
+            {/* Unified Large Program Card */}
+            <div className="relative overflow-hidden rounded-[28px] sm:rounded-[36px] md:rounded-[40px] border border-white/15 bg-[radial-gradient(ellipse_80%_80%_at_20%_-20%,rgba(120,80,255,0.28),transparent),linear-gradient(135deg,#0d0436_0%,#180860_45%,#260d8b_100%)] p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 shadow-[0_25px_60px_-15px_rgba(20,5,80,0.4)]">
+              {/* Subtle ambient glow behind card */}
+              <div className="pointer-events-none absolute -right-20 -top-20 h-[350px] w-[350px] rounded-full bg-violet-600/15 blur-3xl" />
+              <div className="pointer-events-none absolute -left-20 -bottom-20 h-[350px] w-[350px] rounded-full bg-indigo-600/15 blur-3xl" />
 
-              {/* Right Column / Bottom Mobile Panel: Fee & CTA */}
-              <div className="relative overflow-hidden p-6 sm:p-8 md:p-9 lg:p-10 bg-[#3216a8] md:bg-transparent rounded-[24px] md:rounded-none border border-white/15 md:border-0 flex flex-col justify-center">
-                {/* Background Geometric Lattice SVG */}
-                <svg
-                  className="absolute -right-10 -top-10 md:-right-14 md:-top-14 w-[300px] h-[300px] md:w-[330px] md:h-[330px] opacity-45 pointer-events-none"
-                  viewBox="0 0 300 300"
-                  aria-hidden="true"
-                >
-                  <g stroke="#fff" strokeOpacity="0.16" strokeWidth="1" fill="none">
-                    <path d="M40 60 L120 30 L210 78 L268 40" />
-                    <path d="M40 60 L96 140 L210 78" />
-                    <path d="M96 140 L180 190 L268 40" />
-                    <path d="M180 190 L240 262 L120 30" />
-                    <path d="M96 140 L36 228 L240 262" />
-                    <path d="M210 78 L282 152 L240 262" />
-                  </g>
-                  <g fill="#fff" fillOpacity="0.5">
-                    <circle cx="40" cy="60" r="3.5" />
-                    <circle cx="120" cy="30" r="3.5" />
-                    <circle cx="210" cy="78" r="4.5" />
-                    <circle cx="268" cy="40" r="3" />
-                    <circle cx="96" cy="140" r="4.5" />
-                    <circle cx="180" cy="190" r="3.5" />
-                    <circle cx="240" cy="262" r="3" />
-                    <circle cx="36" cy="228" r="3" />
-                    <circle cx="282" cy="152" r="3.5" />
-                  </g>
-                </svg>
-
-                <div className="relative z-10 flex flex-col">
-                  {/* AI Prompt Pill */}
-                  <div className="flex items-center gap-2.5 bg-white/[0.08] border border-white/[0.17] rounded-[14px] px-4 py-3 shadow-inner">
-                    <svg
-                      viewBox="0 0 24 24"
-                      className="w-4 h-4 shrink-0 fill-white opacity-85"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 2l2.4 6.1L20.5 10l-6.1 2.4L12 18.5l-2.4-6.1L3.5 10l6.1-1.9L12 2z" />
-                    </svg>
-                    <p className="text-[14px] sm:text-[14.5px] font-medium text-[#ddd6ff] tracking-[-0.01em]">
-                      What does it cost to join?
-                      <span className="inline-block w-[2px] h-4 bg-white align-[-3px] ml-1 animate-pulse" />
-                    </p>
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1.4fr_1fr] xl:grid-cols-[1.5fr_1fr] gap-8 lg:gap-12 items-center">
+                {/* Left Side: Program Information */}
+                <div className="flex flex-col justify-center">
+                  {/* LIVE PROGRAM Badge */}
+                  <div className="inline-flex w-fit items-center gap-2 rounded-full bg-white/10 border border-white/15 px-3.5 py-1 text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white/90 backdrop-blur-sm shadow-sm">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>LIVE PROGRAM</span>
                   </div>
 
-                  {/* Pricing Display */}
-                  <div className="flex items-start gap-3 mt-5">
-                    <svg
-                      className="w-5 h-5 shrink-0 fill-white mt-3.5"
-                      viewBox="0 0 24 24"
-                      aria-hidden="true"
-                    >
-                      <path d="M12 2l2.4 6.1L20.5 10l-6.1 2.4L12 18.5l-2.4-6.1L3.5 10l6.1-1.9L12 2z" />
-                    </svg>
-                    <div className="flex items-start gap-2 sm:gap-2.5">
-                      <span className="text-[24px] sm:text-[26px] font-bold text-white mt-2">
-                        ₹
+                  {/* Main Heading */}
+                  <h3 className="mt-3.5 sm:mt-4 text-[26px] sm:text-[32px] md:text-[38px] lg:text-[42px] xl:text-[44px] font-black tracking-tight text-white uppercase leading-[1.12]">
+                    1 MILLION AI SUPERSTARS PROGRAM
+                  </h3>
+
+                  {/* Program Description */}
+                  <p className="mt-3.5 sm:mt-4 text-[15px] sm:text-[16px] md:text-[17px] text-white/80 leading-relaxed max-w-2xl font-normal">
+                    Learn AI from the basics through 10 live classes in Malayalam, with practical tools and real-world applications for work, business, and everyday life.
+                  </p>
+
+                  {/* Date & Time Row */}
+                  <div className="mt-7 sm:mt-8 pt-6 sm:pt-7 border-t border-white/15 flex flex-col sm:flex-row sm:items-center gap-5 sm:gap-8 lg:gap-10">
+                    {/* Starts */}
+                    <div className="flex items-start sm:items-center gap-3.5">
+                      <div className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-white shadow-inner">
+                        <Calendar className="h-5 w-5 sm:h-6 sm:w-6" />
+                      </div>
+                      <div>
+                        <span className="block text-[11px] sm:text-xs uppercase tracking-wider text-white/60 font-semibold">
+                          Starts
+                        </span>
+                        <span className="block text-[16px] sm:text-[18px] md:text-[19px] font-extrabold text-white mt-0.5 leading-snug">
+                          {startDate}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="hidden sm:block h-10 w-[1px] bg-white/15" />
+
+                    {/* Class time */}
+                    <div className="flex items-start sm:items-center gap-3.5">
+                      <div className="h-11 w-11 sm:h-12 sm:w-12 shrink-0 rounded-2xl bg-white/10 border border-white/15 flex items-center justify-center text-white shadow-inner">
+                        <Clock className="h-5 w-5 sm:h-6 sm:w-6" />
+                      </div>
+                      <div>
+                        <span className="block text-[11px] sm:text-xs uppercase tracking-wider text-white/60 font-semibold">
+                          Class time
+                        </span>
+                        <span className="block text-[16px] sm:text-[18px] md:text-[19px] font-extrabold text-white mt-0.5 leading-snug">
+                          {classTime}
+                        </span>
+                        <small className="block text-[12px] sm:text-[13px] text-white/65 font-medium mt-0.5 tracking-normal">
+                          Every evening, 1.5 hour
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Side: White Pricing Panel */}
+                <div className="w-full bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-100 flex flex-col justify-between">
+                  {/* Thumbnail */}
+                  <div className="rounded-xl sm:rounded-2xl overflow-hidden aspect-[16/9] w-full bg-slate-100 relative shadow-sm border border-slate-200/60">
+                    <img
+                      src={programThumbnail}
+                      alt="1 Million AI Superstars Program"
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Pricing */}
+                  <div className="mt-5 sm:mt-6">
+                    <div className="flex items-baseline gap-2.5">
+                      <span className="text-[32px] sm:text-[38px] font-black tracking-tight text-[#1f0a77] leading-none">
+                        ₹{offerPrice.replace(/[^0-9]/g, "") || "999"}
                       </span>
-                      <b className="text-[64px] sm:text-[74px] md:text-[80px] lg:text-[84px] font-extrabold tracking-[-0.055em] text-white leading-[0.92]">
-                        {offerPrice.replace(/[^0-9]/g, "") || "999"}
-                      </b>
-                      <span className="self-end text-[16px] sm:text-[18px] font-semibold text-[#9a8ade] mb-2 line-through decoration-[1.5px]">
+                      <span className="text-[17px] sm:text-[19px] font-semibold text-muted-foreground line-through decoration-[1.5px]">
                         ₹{wasPrice.replace(/[^0-9,]/g, "") || "2,499"}
                       </span>
                     </div>
+                    <p className="text-[12px] sm:text-[13px] text-muted-foreground mt-1.5 font-medium">
+                      Including GST. One payment, that's all.
+                    </p>
                   </div>
-
-                  <p className="text-[13.5px] sm:text-[14.5px] font-medium text-[#ddd6ff] mt-2.5 pl-8">
-                    Including GST. One payment, that's all.
-                  </p>
 
                   {/* CTA Button */}
                   <a
@@ -1084,9 +1096,10 @@ function ProgramSection() {
                     onClick={() =>
                       trackEvent("register_click", { location: "program_specifications" })
                     }
-                    className="block w-full mt-5 bg-white text-[#1f0a77] rounded-[14px] py-3.5 sm:py-4 text-[16px] sm:text-[17px] font-extrabold tracking-[-0.015em] text-center transition-all duration-200 hover:bg-[#ece8ff] hover:shadow-xl active:scale-[0.99] shadow-lg shadow-black/20"
+                    className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-[#1f0a77] via-[#2f139e] to-[#4b2dd6] py-3.5 sm:py-4 px-6 text-[16px] sm:text-[17px] font-bold text-white shadow-[0_8px_20px_-4px_rgba(31,10,119,0.35)] transition-all duration-200 hover:shadow-[0_12px_28px_-4px_rgba(31,10,119,0.5)] hover:scale-[1.01] active:scale-[0.99] text-center"
                   >
-                    Take my seat
+                    <span>Take my seat</span>
+                    <ArrowRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-1" />
                   </a>
                 </div>
               </div>

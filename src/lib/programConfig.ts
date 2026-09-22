@@ -11,13 +11,13 @@ export type Mentor = {
 export const programConfig = {
   siteUrl: "https://onemillionaisuperstars-seniorpathway.lovable.app",
   siteName: "1 Million AI Superstars",
-  registrationUrl: "https://learn.edapt.me/web/checkout/6a967e61c1c9e459746b664a",
+  registrationUrl: "https://learn.edapt.me/web/checkout/6ab13804767fc049f60448bd",
   batch: {
     batchName: "Batch 13",
-    startDate: "22 Sep 2026",
-    endDate: "22 Sep 2026",
-    displayRange: "September 22, 2026",
-    displayStart: "September 22, 2026",
+    startDate: "3 Oct 2026",
+    endDate: "3 Oct 2026",
+    displayRange: "October 3, 2026",
+    displayStart: "October 3, 2026",
     classTime: "08:30 PM",
     sessions: 10,
     language: "Malayalam",
