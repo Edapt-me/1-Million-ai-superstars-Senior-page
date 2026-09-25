@@ -78,6 +78,10 @@ export async function getWebsiteSettings(): Promise<WebsiteSettings | null> {
     course_registration_link: programConfig.registrationUrl,
     course_fee: programConfig.pricing.fee,
     course_offer_price: programConfig.pricing.offerPrice,
+    hero_trust_counter:
+      data.hero_trust_counter && !data.hero_trust_counter.includes("5000")
+        ? data.hero_trust_counter
+        : "10K+ Learners",
   };
 }
 

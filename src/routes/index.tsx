@@ -87,7 +87,7 @@ const DEFAULT_SETTINGS = {
   hero_image: "",
   hero_primary_button_text: "ഇപ്പോൾ തന്നെ Join ചെയ്യൂ",
   hero_secondary_button_text: "View Curriculum",
-  hero_trust_counter: "5000+ Students are part of the program",
+  hero_trust_counter: "10K+ Learners",
   course_batch_name: programConfig.batch.batchName,
   course_start_date: programConfig.batch.displayStart,
   course_duration: `${programConfig.batch.sessions} Days`,
@@ -451,13 +451,20 @@ function Hero() {
                 </div>
               </div>
 
-              {/* 6. 5000+ Learners */}
+              {/* 6. 10K+ Learners */}
               <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3">
                 <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
                   <Users className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
                 <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
-                  {settings?.hero_trust_counter?.replace(/[^0-9+]/g, "") || "5,000+"}
+                  {(() => {
+                    const counter = settings?.hero_trust_counter;
+                    if (!counter || counter.includes("5000") || counter.includes("5,000")) {
+                      return "10K+";
+                    }
+                    const match = counter.match(/[\d,]+\s*[kK]?\s*\+/);
+                    return match ? match[0].trim() : "10K+";
+                  })()}
                   <br />
                   Learners
                 </div>
