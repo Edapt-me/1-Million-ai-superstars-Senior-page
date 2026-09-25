@@ -79,9 +79,12 @@ export async function getWebsiteSettings(): Promise<WebsiteSettings | null> {
     course_fee: programConfig.pricing.fee,
     course_offer_price: programConfig.pricing.offerPrice,
     hero_trust_counter:
-      data.hero_trust_counter && !data.hero_trust_counter.includes("5000")
+      data.hero_trust_counter &&
+      !data.hero_trust_counter.includes("5000") &&
+      !data.hero_trust_counter.includes("5,000") &&
+      !data.hero_trust_counter.includes("10K")
         ? data.hero_trust_counter
-        : "10K+ Learners",
+        : "10,000+ Learners",
   };
 }
 
