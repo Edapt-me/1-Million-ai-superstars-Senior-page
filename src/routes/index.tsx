@@ -62,7 +62,7 @@ import {
 } from "@/lib/cms";
 import { optimizedImage } from "@/services/media";
 import { trackEvent } from "@/lib/analytics";
-import { ExploreCoursesSection } from "@/components/courses/ExploreCoursesSection";
+// import { ExploreCoursesSection } from "@/components/courses/ExploreCoursesSection";
 
 export const Route = createFileRoute("/")({
   component: LandingPage,
@@ -87,7 +87,7 @@ const DEFAULT_SETTINGS = {
   hero_image: "",
   hero_primary_button_text: "ഇപ്പോൾ തന്നെ Join ചെയ്യൂ",
   hero_secondary_button_text: "View Curriculum",
-  hero_trust_counter: "10K+ Learners",
+  hero_trust_counter: "5000+ Students are part of the program",
   course_batch_name: programConfig.batch.batchName,
   course_start_date: programConfig.batch.displayStart,
   course_duration: `${programConfig.batch.sessions} Days`,
@@ -132,7 +132,7 @@ function LandingPage() {
         <ToolsSection />
         <ProgramSection />
         <WhoCanJoinSection />
-        <ExploreCoursesSection />
+        {/* <ExploreCoursesSection /> */}
         <ContactSection />
         <FAQSection />
       </main>
@@ -415,15 +415,15 @@ function Hero() {
                 </div>
               </div>
 
-              {/* 3. 1-Year Access */}
+              {/* 3. 1 Year Record Access */}
               <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3">
                 <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
                   <PlayCircle className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
                 <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
-                  1-Year
+                  1 Year
                   <br />
-                  Access
+                  Record Access
                 </div>
               </div>
 
@@ -439,32 +439,27 @@ function Hero() {
                 </div>
               </div>
 
-              {/* 5. Official Certificate */}
+              {/* 5. Certification by IIT Madras Pravartak Partner */}
               <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3 border-r border-border/60 md:border-r-0">
                 <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
                   <ShieldCheck className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
-                <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
-                  Official
+                <div className="text-[11px] sm:text-[12px] md:text-[13px] font-medium leading-tight text-foreground/90">
+                  Certification by
                   <br />
-                  Certificate
+                  IIT Madras
+                  <br />
+                  Pravartak Partner
                 </div>
               </div>
 
-              {/* 6. 10K+ Learners */}
+              {/* 6. 5000+ Learners */}
               <div className="flex flex-col items-center justify-start text-center px-1.5 md:px-3">
                 <span className="grid h-10 w-10 sm:h-12 sm:w-12 place-items-center rounded-full bg-primary/10 text-primary mb-2 sm:mb-3">
                   <Users className="h-5 w-5 sm:h-6 sm:w-6" />
                 </span>
                 <div className="text-[12px] sm:text-[13px] md:text-[14px] font-medium leading-tight text-foreground/90">
-                  {(() => {
-                    const counter = settings?.hero_trust_counter;
-                    if (!counter || counter.includes("5000") || counter.includes("5,000")) {
-                      return "10K+";
-                    }
-                    const match = counter.match(/[\d,]+\s*[kK]?\s*\+/);
-                    return match ? match[0].trim() : "10K+";
-                  })()}
+                  {settings?.hero_trust_counter?.replace(/[^0-9+]/g, "") || "5,000+"}
                   <br />
                   Learners
                 </div>
@@ -590,7 +585,7 @@ function AboutSection() {
                 വലിയ കമ്പ്യൂട്ടർ അറിവുകളോ വിദ്യാഭ്യാസ യോഗ്യതയോ ഇല്ലാത്ത ഏതൊരു സാധാരണക്കാരനും വളരെ ലളിതമായി പഠിച്ചെടുക്കാനും, സ്വന്തം നിത്യജീവിതത്തിൽ ഒരു സഹായിയെപ്പോലെ AI എങ്ങനെ ഉപയോഗിക്കാമെന്ന് പഠിപ്പിച്ചു തരുന്ന രീതിയിലാണ് ഈ പദ്ധതി രൂപകൽപ്പന ചെയ്തിരിക്കുന്നത്.
               </p>
               <p>
-                അടിസ്ഥാന അറിവുകളിൽ നിന്ന് തുടങ്ങി ഓരോ ദിവസം കഴിയുന്തോറും നിങ്ങളെ ഒരു AI Literate ആക്കി മാറ്റുന്ന രീതിയിലാണ് പദ്ധതി ഡിസൈൻ ചെയ്തിട്ടുള്ളത്.
+                അടിസ്ഥാന അറിവുകളിൽ നിന്ന് തുടങ്ങി ഓരോ ദിവസം കഴിയുന്തോറും നിങ്ങളെ AI പ്രായോഗികമായി ഉപയോഗിക്കാൻ പ്രാപ്തമാക്കുന്ന രീതിയിലാണ് പദ്ധതി ഡിസൈൻ ചെയ്തിട്ടുള്ളത്.
               </p>
             </div>
           </div>
@@ -997,14 +992,8 @@ function ProgramSection() {
       className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20 overflow-hidden"
     >
       <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
-        <SectionHeader
-          eyebrow="Program Details"
-          title="Program Specifications"
-          subtitle="Everything you need to know at a glance."
-        />
-
         <FadeIn delay={0.1}>
-          <div className="mt-8 md:mt-12 mx-auto max-w-[1400px] xl:max-w-[1440px]">
+          <div className="mx-auto max-w-[1400px] xl:max-w-[1440px]">
             {/* Unified Large Program Card */}
             <div className="relative overflow-hidden rounded-[28px] sm:rounded-[36px] md:rounded-[40px] border border-white/15 bg-[radial-gradient(ellipse_80%_80%_at_20%_-20%,rgba(120,80,255,0.28),transparent),linear-gradient(135deg,#0d0436_0%,#180860_45%,#260d8b_100%)] p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 shadow-[0_25px_60px_-15px_rgba(20,5,80,0.4)]">
               {/* Subtle ambient glow behind card */}
