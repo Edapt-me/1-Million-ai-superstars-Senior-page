@@ -725,7 +725,6 @@ function CurriculumSection() {
           title={<>ഈ പദ്ധതിയിലൂടെ നിങ്ങൾ എന്തെല്ലാം പഠിച്ചെടുക്കും?</>}
           malayalamTitle
           titleMaxWidth="max-w-4xl xl:max-w-5xl"
-          subtitle="Live sessions covering practical AI skills you need in daily life & work."
         />
 
         <div className="relative mt-5 md:mt-8 max-w-[1360px] mx-auto">
@@ -1135,7 +1134,6 @@ function WhoCanJoinSection() {
       <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
         <SectionHeader
           title="Who Can Join?"
-          subtitle="This program is designed for anyone curious about AI, regardless of background."
         />
         <div className="mt-8 md:mt-10 grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 lg:grid-cols-3 max-w-6xl xl:max-w-[1360px] mx-auto">
           {AUDIENCES.map((a, i) => {
