@@ -18,6 +18,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { programConfig } from "@/lib/programConfig";
 import { getWebsiteSettings } from "@/lib/cms";
 import { trackPageView, trackEvent, initGA } from "@/lib/analytics";
+import { MobileStickyCTA } from "@/components/common/MobileStickyCTA";
 
 function NotFoundComponent() {
   return (
@@ -184,31 +185,6 @@ fbq('track', 'PageView');
   );
 }
 
-function FloatingCTA() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-
-  // Do not show on the Contact page
-  if (pathname === "/contact" || pathname === "/contact/") return null;
-
-  return (
-    <a
-      href={programConfig.registrationUrl}
-      onClick={() => {
-        trackEvent("register_click", { location: "floating_cta" });
-      }}
-      className="sticky-cta-float fixed left-1/2 z-50 inline-flex items-center justify-center rounded-full bg-[#22c55e] px-4 py-3 text-sm font-semibold text-white shadow-[0_10px_30px_-8px_rgba(34,197,94,0.55)] backdrop-blur-sm md:hidden transition-transform active:scale-95"
-      style={{
-        bottom: "calc(20px + env(safe-area-inset-bottom))",
-        width: "75vw",
-        left: "50%",
-        transform: "translateX(-50%)",
-      }}
-    >
-      Join Now
-    </a>
-  );
-}
-
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -233,12 +209,12 @@ function RootComponent() {
         </motion.main>
       </AnimatePresence>
       <SiteFooter />
-      <FloatingCTA />
+      <MobileStickyCTA />
 
       <style>{`
           .wa-float-pos {
             right: 18px;
-            bottom: calc(82px + env(safe-area-inset-bottom));
+            bottom: calc(128px + env(safe-area-inset-bottom));
           }
           @media (min-width: 768px) {
             .wa-float-pos {

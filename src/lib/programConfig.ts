@@ -40,7 +40,7 @@ export const programConfig = {
     phone: "+91 81380 10166",
     phoneHref: "tel:+918138010166",
     whatsappNumber: "918138010166",
-    whatsappUrl: "https://wa.me/918138010166",
+    whatsappUrl: "https://chat.1millionaisuperstars.com/",
     // Placeholder — official support email to be provided.
     email: "info@1millionaisuperstars.com",
     adminEmail: "edapt.me@gmail.com",

@@ -62,6 +62,7 @@ import {
 } from "@/lib/cms";
 import { optimizedImage } from "@/services/media";
 import { trackEvent } from "@/lib/analytics";
+import { FloatingEnrollBox } from "@/components/common/FloatingEnrollBox";
 // import { ExploreCoursesSection } from "@/components/courses/ExploreCoursesSection";
 
 export const Route = createFileRoute("/")({
@@ -107,6 +108,7 @@ const DEFAULT_SETTINGS = {
 
 function LandingPage() {
   const { scrollYProgress } = useScroll();
+  const [isEnrollBoxMinimized, setIsEnrollBoxMinimized] = useState(false);
 
   const { data: settings = DEFAULT_SETTINGS } = useQuery({
     queryKey: ["website-settings"],
@@ -117,7 +119,11 @@ function LandingPage() {
   const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
 
   return (
-    <div className="relative min-h-screen bg-background text-foreground">
+    <div
+      className={`relative min-h-screen bg-background text-foreground ${
+        isEnrollBoxMinimized ? "enroll-minimized" : "enroll-expanded"
+      }`}
+    >
       <motion.div
         style={{ scaleX: scrollYProgress }}
         className="fixed left-0 right-0 top-0 z-[60] h-1 origin-left gradient-bg"
@@ -136,6 +142,13 @@ function LandingPage() {
         <ContactSection />
         <FAQSection />
       </main>
+
+      {/* Floating Enrollment Box on Desktop */}
+      <FloatingEnrollBox
+        registrationUrl={regUrl}
+        isMinimized={isEnrollBoxMinimized}
+        onToggleMinimize={setIsEnrollBoxMinimized}
+      />
     </div>
   );
 }
@@ -248,7 +261,7 @@ function Hero() {
         <div className="absolute -left-20 bottom-[-5%] h-[320px] w-[320px] sm:h-[480px] sm:w-[480px] rounded-full bg-[radial-gradient(circle,rgba(238,232,255,0.45)_0%,transparent_65%)] blur-2xl" />
       </div>
 
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+      <div className="section-container">
         {/* Top 2-Column Hero Composition */}
         <div className="grid grid-cols-1 items-center gap-8 md:grid-cols-12 md:gap-6 lg:gap-8 xl:gap-10">
           {/* LEFT SIDE: Text Content & Primary CTA */}
@@ -491,7 +504,7 @@ function InitiativeBySection() {
       id="initiative-by"
       className="relative border-t border-border/60 bg-white py-10 sm:py-12 md:py-14"
     >
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+      <div className="section-container">
         <FadeIn>
           <div className="flex flex-col items-center justify-center text-center">
             {/* Header with flanking decorative lines matching reference */}
@@ -570,7 +583,7 @@ function AboutSection() {
         <div className="hidden md:block absolute right-[5%] top-[15%] h-[480px] w-[480px] rounded-full bg-[radial-gradient(circle,rgba(224,216,255,0.45)_0%,transparent_70%)] blur-3xl" />
       </div>
 
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+      <div className="section-container">
         <div className="grid grid-cols-1 items-center gap-10 md:gap-12 lg:grid-cols-12 lg:gap-12 xl:gap-16">
           {/* LEFT SIDE: Badge, Main Heading & Paragraphs */}
           <div className="col-span-1 lg:col-span-6 xl:col-span-6 flex flex-col items-start text-left z-10">
@@ -580,19 +593,14 @@ function AboutSection() {
               <span>Why AI, Why Now</span>
             </div>
 
-            {/* Main Malayalam Heading */}
-            <h2
-              className="text-[24px] sm:text-[28px] md:text-[32px] lg:text-[34px] xl:text-[36px] font-extrabold text-foreground !leading-[1.28] tracking-tight"
-              lang="ml"
-            >
-              ഇന്ന് ലോകം മുഴുവൻ മാറ്റിമറിച്ചുകൊണ്ടിരിക്കുന്ന സാങ്കേതികവിദ്യയാണ് AI.
-            </h2>
-
             {/* Supporting Malayalam Paragraphs */}
             <div
               className="mt-4 sm:mt-5 md:mt-6 space-y-3.5 sm:space-y-4 text-[15px] sm:text-[16px] md:text-[16.5px] text-slate-700 !leading-[1.75]"
               lang="ml"
             >
+              <h2 className="text-[15px] sm:text-[16px] md:text-[16.5px] font-normal text-slate-700 !leading-[1.75]">
+                ഇന്ന് ലോകം മുഴുവൻ മാറ്റിമറിച്ചുകൊണ്ടിരിക്കുന്ന സാങ്കേതികവിദ്യയാണ് AI
+              </h2>
               <p>
                 വലിയ കമ്പ്യൂട്ടർ അറിവുകളോ വിദ്യാഭ്യാസ യോഗ്യതയോ ഇല്ലാത്ത ഏതൊരു സാധാരണക്കാരനും വളരെ ലളിതമായി പഠിച്ചെടുക്കാനും, സ്വന്തം നിത്യജീവിതത്തിൽ ഒരു സഹായിയെപ്പോലെ AI എങ്ങനെ ഉപയോഗിക്കാമെന്ന് പഠിപ്പിച്ചു തരുന്ന രീതിയിലാണ് ഈ പദ്ധതി രൂപകൽപ്പന ചെയ്തിരിക്കുന്നത്.
               </p>
@@ -687,7 +695,7 @@ function CurriculumSection() {
       id="curriculum"
       className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white pb-12 pt-6 md:pb-16 md:pt-10"
     >
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+      <div className="section-container">
         <SectionHeader
           eyebrow="Curriculum"
           eyebrowExtra={
@@ -885,7 +893,7 @@ function ToolsSection() {
 
   return (
     <section id="tools" className="relative pt-6 pb-10 md:pt-8 md:pb-14 overflow-hidden">
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-3 sm:px-6 lg:px-8">
+      <div className="section-container">
         <SectionHeader
           title="പഠിക്കുന്ന പ്രധാന AI Tools"
           malayalamTitle
@@ -1002,9 +1010,9 @@ function ProgramSection() {
       id="program"
       className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20 overflow-hidden"
     >
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+      <div className="section-container">
         <FadeIn delay={0.1}>
-          <div className="mx-auto max-w-[1400px] xl:max-w-[1440px]">
+          <div className="w-full">
             {/* Unified Large Program Card */}
             <div className="relative overflow-hidden rounded-[28px] sm:rounded-[36px] md:rounded-[40px] border border-white/15 bg-[radial-gradient(ellipse_80%_80%_at_20%_-20%,rgba(120,80,255,0.28),transparent),linear-gradient(135deg,#0d0436_0%,#180860_45%,#260d8b_100%)] p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 shadow-[0_25px_60px_-15px_rgba(20,5,80,0.4)]">
               {/* Subtle ambient glow behind card */}
@@ -1131,7 +1139,7 @@ const AUDIENCES = [
 function WhoCanJoinSection() {
   return (
     <section className="relative bg-gradient-to-b from-white via-[#f7f5fd] to-white py-12 md:py-20">
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+      <div className="section-container">
         <SectionHeader
           title="Who Can Join?"
         />
@@ -1170,12 +1178,12 @@ function FAQSection() {
 
   return (
     <section id="faq" className="relative py-12 md:py-20">
-      <div className="mx-auto max-w-4xl xl:max-w-5xl px-4 sm:px-8 lg:px-12">
+      <div className="section-container">
         <SectionHeader
           title="Frequently Asked Questions"
           subtitle="Everything you need to know before you register."
         />
-        <div className="mt-8 md:mt-10 space-y-3">
+        <div className="mt-8 md:mt-10 space-y-3 max-w-4xl mx-auto">
           {faqs.map((f, i) => {
             const isOpen = open === i;
             return (
@@ -1231,12 +1239,16 @@ function ContactSection() {
 
   const phone = settings?.contact_phone || "+91 81380 10166";
   const phoneHref = `tel:${phone.replace(/\s+/g, "")}`;
-  const whatsapp = settings?.contact_whatsapp || "918138010166";
-  const whatsappUrl = `https://wa.me/${whatsapp}`;
+  const whatsappUrl =
+    settings?.contact_whatsapp &&
+    (settings.contact_whatsapp.startsWith("http://") ||
+      settings.contact_whatsapp.startsWith("https://"))
+      ? settings.contact_whatsapp
+      : programConfig.contact.whatsappUrl;
 
   return (
     <section id="contact" className="relative py-14 md:py-20">
-      <div className="mx-auto max-w-[1400px] xl:max-w-[1440px] px-4 sm:px-8 lg:px-12">
+      <div className="section-container">
         <FadeIn>
           <div className="group relative overflow-hidden rounded-[28px] border border-[#ECEEF5] bg-white shadow-[var(--shadow-soft)] transition-shadow hover:shadow-[var(--shadow-glow)] max-w-5xl xl:max-w-6xl mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-[40%_60%] lg:grid-cols-[35%_65%]">
