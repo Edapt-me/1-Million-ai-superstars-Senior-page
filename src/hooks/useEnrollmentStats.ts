@@ -42,8 +42,8 @@ export function useEnrollmentStats(): EnrollmentStats {
       setEnrolledText(`${enrolledNum.toLocaleString()}+`);
 
       // 3. Next Batch Countdown logic:
-      // Target: October 3, 2026 at 8:30 PM IST (from programConfig)
-      const targetTime = new Date("2026-10-03T20:30:00+05:30").getTime();
+      // Target: 14 October 2026 at 8:30 PM IST (from programConfig)
+      const targetTime = new Date("2026-10-14T20:30:00+05:30").getTime();
       const diffBatch = Math.max(0, targetTime - currentTime);
       const days = Math.floor(diffBatch / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diffBatch / (1000 * 60 * 60)) % 24);
