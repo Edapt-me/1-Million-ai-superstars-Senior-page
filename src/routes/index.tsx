@@ -1000,7 +1000,7 @@ function ProgramSection() {
   });
 
   const regUrl = settings?.course_registration_link || programConfig.registrationUrl;
-  const startDate = "14 October 2026";
+  const startDate = settings?.course_start_date || programConfig.batch.displayStart;
   const classTime = "8:30 PM IST";
   const offerPrice = "999";
   const wasPrice = "2,499";
