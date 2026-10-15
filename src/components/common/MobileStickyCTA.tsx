@@ -35,7 +35,10 @@ export function MobileStickyCTA() {
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
             <span>
-              Today Registration: <strong className="font-bold text-emerald-700">{todayCount}</strong>
+              Today Registration:{" "}
+              <strong suppressHydrationWarning className="font-bold text-emerald-700">
+                {todayCount}
+              </strong>
             </span>
           </div>
 
@@ -45,7 +48,10 @@ export function MobileStickyCTA() {
           <div className="flex items-center gap-1.5 shrink-0">
             <Users className="h-3.5 w-3.5 text-[#1f0a77] shrink-0" />
             <span>
-              Enrolled: <strong className="font-bold text-slate-900">{enrolledText}</strong>
+              Enrolled:{" "}
+              <strong suppressHydrationWarning className="font-bold text-slate-900">
+                {enrolledText}
+              </strong>
             </span>
           </div>
         </div>

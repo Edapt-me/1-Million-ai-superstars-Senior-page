@@ -128,7 +128,10 @@ export function FloatingEnrollBox({
               {/* Countdown boxes matching reference design */}
               <div className="mt-2 grid grid-cols-4 gap-1 xl:gap-1.5">
                 <div className="rounded-lg border border-slate-100 bg-slate-50/90 py-1.5 text-center">
-                  <span className="block font-mono text-[14px] xl:text-[15px] font-extrabold text-teal-600 leading-none">
+                  <span
+                    suppressHydrationWarning
+                    className="block font-mono text-[14px] xl:text-[15px] font-extrabold text-teal-600 leading-none"
+                  >
                     {countdown.days}
                   </span>
                   <span className="mt-0.5 block text-[9px] font-semibold uppercase tracking-wider text-slate-400">
@@ -136,7 +139,10 @@ export function FloatingEnrollBox({
                   </span>
                 </div>
                 <div className="rounded-lg border border-slate-100 bg-slate-50/90 py-1.5 text-center">
-                  <span className="block font-mono text-[14px] xl:text-[15px] font-extrabold text-teal-600 leading-none">
+                  <span
+                    suppressHydrationWarning
+                    className="block font-mono text-[14px] xl:text-[15px] font-extrabold text-teal-600 leading-none"
+                  >
                     {countdown.hours}
                   </span>
                   <span className="mt-0.5 block text-[9px] font-semibold uppercase tracking-wider text-slate-400">
@@ -144,7 +150,10 @@ export function FloatingEnrollBox({
                   </span>
                 </div>
                 <div className="rounded-lg border border-slate-100 bg-slate-50/90 py-1.5 text-center">
-                  <span className="block font-mono text-[14px] xl:text-[15px] font-extrabold text-teal-600 leading-none">
+                  <span
+                    suppressHydrationWarning
+                    className="block font-mono text-[14px] xl:text-[15px] font-extrabold text-teal-600 leading-none"
+                  >
                     {countdown.mins}
                   </span>
                   <span className="mt-0.5 block text-[9px] font-semibold uppercase tracking-wider text-slate-400">
@@ -152,7 +161,10 @@ export function FloatingEnrollBox({
                   </span>
                 </div>
                 <div className="rounded-lg border border-slate-100 bg-slate-50/90 py-1.5 text-center">
-                  <span className="block font-mono text-[14px] xl:text-[15px] font-extrabold text-teal-600 leading-none">
+                  <span
+                    suppressHydrationWarning
+                    className="block font-mono text-[14px] xl:text-[15px] font-extrabold text-teal-600 leading-none"
+                  >
                     {countdown.secs}
                   </span>
                   <span className="mt-0.5 block text-[9px] font-semibold uppercase tracking-wider text-slate-400">
@@ -179,7 +191,10 @@ export function FloatingEnrollBox({
                 </span>
                 <span className="inline-block h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               </div>
-              <span className="mt-0.5 inline-block text-[12.5px] font-extrabold text-emerald-600">
+              <span
+                suppressHydrationWarning
+                className="mt-0.5 inline-block text-[12.5px] font-extrabold text-emerald-600"
+              >
                 {todayCount} Registrations Today
               </span>
             </div>
@@ -194,7 +209,10 @@ export function FloatingEnrollBox({
               <span className="block text-[12.5px] xl:text-[13px] font-bold text-slate-900">
                 Enrolled Participants
               </span>
-              <span className="mt-0.5 block text-[15px] xl:text-[16px] font-black tracking-tight text-slate-900">
+              <span
+                suppressHydrationWarning
+                className="mt-0.5 block text-[15px] xl:text-[16px] font-black tracking-tight text-slate-900"
+              >
                 {enrolledText}
               </span>
             </div>
