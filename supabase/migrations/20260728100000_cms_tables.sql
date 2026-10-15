@@ -129,7 +129,7 @@ INSERT INTO public.website_settings (
   'View Curriculum',
   '5000+ Students are part of the program',
   'Batch 15',
-  '27 October 2026',
+  '31 October 2026',
   '10 sessions',
   'https://learn.edapt.me/web/checkout/6acf65ee72596af1b58116c4',
   '999',
